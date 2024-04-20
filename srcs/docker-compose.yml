@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  webserv:
+    container_name: webserv
+    build:
+      context: ./web/
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./web/www/:/usr/share/nginx/html
+    networks:
+      - transcendence
+    restart: always
+    depends_on:
+      - backend
+    env_file:
+    - .env
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/backend:/backend/backend
+    networks:
+      - transcendence
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    networks:
+      - transcendence
+    restart: always
+    env_file:
+      - .env
+
+networks:
+  transcendence:
+    driver: bridge

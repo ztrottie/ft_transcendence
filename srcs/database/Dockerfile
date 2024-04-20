@@ -1,3 +1,3 @@
-FROM python:3.12.3-alpine
+FROM postgres:16.2-alpine
 
-
+EXPOSE 5432
