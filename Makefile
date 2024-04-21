@@ -12,5 +12,7 @@ nuke:
 
 re: fclean all
 
-.PHONY:
-	all stop fclean re nuke
+testbuild:
+	docker-compose -f "./srcs/docker-compose-test.yml" -p test up --abort-on-container-exit
+
+.PHONY: all stop fclean re nuke
