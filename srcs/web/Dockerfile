@@ -1,12 +1,15 @@
 FROM nginx:1.25-alpine
 
-COPY tools/start.sh /start.sh
+RUN apk update && apk add openssl
+
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY www/ /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 443
 
-# RUN chmod +x /start.sh
-# ENTRYPOINT [ "/start.sh" ]
+RUN mkdir -p /etc/nginx/ssl
+RUN openssl req -x509 -newkey rsa:4096 -keyout /etc/nginx/ssl/key.key -out /etc/nginx/ssl/cert.crt -sha256 -days 3650 -nodes -subj "/C=CA/ST=Quebec/L=Quebec/O=42/OU=ztrottie/CN=localhost"
 
-CMD [ "nginx", "-g", "daemon off;" ]
+COPY tools/start.sh /start.sh
+RUN chmod +x /start.sh
+ENTRYPOINT [ "/start.sh" ]

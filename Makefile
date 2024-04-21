@@ -3,9 +3,9 @@ all:
 	docker-compose -f "./srcs/docker-compose.yml" -p transcendence up
 
 stop:
-	@docker-compose -f "./srcs/docker-compose.yml" down --rmi all
+	docker-compose -f "./srcs/docker-compose.yml" down --rmi all
 
-fclean: stop nuke
+fclean: nuke stop
 
 nuke:
 	./docker-utils.sh
@@ -13,4 +13,4 @@ nuke:
 re: fclean all
 
 .PHONY:
-	all clean fclean re nuke
+	all stop fclean re nuke

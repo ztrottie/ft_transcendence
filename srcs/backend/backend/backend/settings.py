@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'health_check',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +80,7 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB', 'mydatabase'),
         'USER': os.environ.get('POSTGRES_USER', 'mydatabaseuser'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'mypassword'),
-        "HOST": "postgres",
+        "HOST": "database",
         "PORT": "5432",
     }
 }

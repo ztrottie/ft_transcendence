@@ -1,0 +1,48 @@
+<mxfile host="65bd71144e">
+    <diagram id="z4XVWXrGCQkVdxE7Um6a" name="Page-1">
+        <mxGraphModel dx="1601" dy="967" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="Transcendence Network" style="whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;fontSize=20;strokeWidth=3;perimeterSpacing=0;fillColor=none;horizontal=1;spacingTop=0;spacingBottom=-35;" vertex="1" parent="1">
+                    <mxGeometry x="84" y="380" width="660" height="310" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" style="edgeStyle=none;html=1;fontSize=20;" edge="1" parent="1" source="4" target="12">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="Postgres" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="481.25" width="120" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" style="edgeStyle=none;html=1;fontSize=20;" edge="1" parent="1" source="5" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Django" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="354" y="481.25" width="120" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=none;html=1;fontSize=20;" edge="1" parent="1" source="6" target="5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=20;" edge="1" parent="1" source="6" target="14">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="nginx" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=3;fontSize=20;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="560" y="482.5" width="120" height="117.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=20;" edge="1" parent="1" target="6">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="620" y="310" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" value="DB volume" style="fontColor=#0066CC;verticalAlign=top;verticalLabelPosition=bottom;labelPosition=center;align=center;html=1;outlineConnect=0;fillColor=#CCCCCC;strokeColor=#6881B3;gradientColor=none;gradientDirection=north;strokeWidth=2;shape=mxgraph.networks.storage;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="130" y="850" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="web page&lt;br&gt;" style="fontColor=#0066CC;verticalAlign=top;verticalLabelPosition=bottom;labelPosition=center;align=center;html=1;outlineConnect=0;fillColor=#CCCCCC;strokeColor=#6881B3;gradientColor=none;gradientDirection=north;strokeWidth=2;shape=mxgraph.networks.storage;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="570" y="850" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="web&lt;br&gt;" style="fontColor=#0066CC;verticalAlign=top;verticalLabelPosition=bottom;labelPosition=center;align=center;html=1;outlineConnect=0;fillColor=#CCCCCC;strokeColor=#6881B3;gradientColor=none;gradientDirection=north;strokeWidth=2;shape=mxgraph.networks.pc;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="570" y="210" width="100" height="70" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

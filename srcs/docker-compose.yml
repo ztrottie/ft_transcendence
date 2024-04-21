@@ -7,7 +7,7 @@ services:
       context: ./web/
       dockerfile: Dockerfile
     ports:
-      - 80:80
+      - 443:443
     volumes:
       - ./web/www/:/usr/share/nginx/html
     networks:
@@ -35,15 +35,20 @@ services:
 
   database:
     container_name: database
-    build:
-      context: ./database
-      dockerfile: Dockerfile
+    image: postgres:16.2-alpine
     networks:
       - transcendence
     restart: always
+    ports:
+      - 5432
     env_file:
       - .env
+    volumes:
+      - database:/var/lib/postgresql/data
 
 networks:
   transcendence:
     driver: bridge
+
+volumes:
+  database:
