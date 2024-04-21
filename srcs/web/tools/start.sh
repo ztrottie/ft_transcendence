@@ -15,5 +15,5 @@ while ! is_backend_ready; do
     sleep 5
 done
 
-echo "launching nginx server.."
+echo "launching nginx server..."
 nginx -g "daemon off;"
