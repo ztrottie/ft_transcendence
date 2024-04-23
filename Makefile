@@ -5,14 +5,15 @@ all:
 stop:
 	docker-compose -f "./srcs/docker-compose.yml" down --rmi all
 
-fclean: nuke stop
+fclean: stop nuke
 
 nuke:
-	./docker-utils.sh
+	echo "y\r" | ./docker-utils.sh
 
 re: fclean all
 
-testbuild:
-	docker-compose -f "./srcs/docker-compose-test.yml" -p test up --abort-on-container-exit
+testbuild: re
+	docker-compose -f "./srcs/docker-compose.yml" -p transcendence up -d
+	./buildTest.sh
 
 .PHONY: all stop fclean re nuke
