@@ -8,7 +8,7 @@ stop:
 fclean: nuke stop
 
 nuke:
-	echo "\r" | ./docker-utils.sh
+	echo "y\r" | ./docker-utils.sh
 
 re: fclean all
 
