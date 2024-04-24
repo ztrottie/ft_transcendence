@@ -14,6 +14,6 @@ re: fclean all
 
 test: fclean
 	docker-compose -f "./srcs/docker-compose-test.yml" -p transcendence-test up -d
-	# ./buildTest.sh
+	./buildTest.sh
 
 .PHONY: all stop fclean re nuke
