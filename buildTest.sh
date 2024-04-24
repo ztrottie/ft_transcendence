@@ -1,7 +1,8 @@
 #!/bin/bash
 
-running="$(docker-compose ps -f "./srcs/docker-compose.yml" --services --filter "status=running")"
-services="$(docker-compose ps -f "./srcs/docker-compose.yml" --services)"
+sleep 300
+running="$(docker-compose ps -f "./srcs/docker-compose-test.yml" --services --filter "status=running")"
+services="$(docker-compose ps -f "./srcs/docker-compose-test.yml" --services)"
 if [ "$running" != "$services" ]; then
     echo "Following services are not running:" 
     # Bash specific
