@@ -1,6 +1,5 @@
 #!/bin/bash
 
-sleep 180
 running="$(docker-compose -f "./srcs/docker-compose-test.yml" -p transcendence-test ps --services --filter "status=running")"
 services="$(docker-compose -f "./srcs/docker-compose-test.yml" -p transcendence-test ps --services)"
 if [ "$running" != "$services" ]; then
