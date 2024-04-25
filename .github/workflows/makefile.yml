@@ -1,8 +1,6 @@
 name: Makefile CI
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -14,8 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install dependencies
+    - name: building docker app
       run: make test
 
-    - name: test
+    - name: test docker container run
       run: ./buildTest.sh
