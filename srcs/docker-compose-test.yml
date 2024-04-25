@@ -8,8 +8,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 443:443
-    volumes:
-      - ./web/www/:/usr/share/nginx/html
     networks:
       - transcendence
     depends_on:
@@ -22,8 +20,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    volumes:
-      - ./backend/backend:/backend/backend
     networks:
       - transcendence
     env_file:
