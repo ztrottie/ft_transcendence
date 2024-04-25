@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  ci_testing:
     name: CI tests
     runs-on: self-hosted
 
