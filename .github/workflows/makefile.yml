@@ -17,3 +17,16 @@ jobs:
 
     - name: test docker container run
       run: ./buildTest.sh
+
+    - name: Set status check
+      uses: actions/github-script@v4
+      with:
+        script: |
+          github.repos.createCommitStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            sha: github.context.sha,
+            state: 'success',
+            description: 'Tests passed!',
+            context: 'Makefile CI'
+          })
