@@ -1,0 +1,4 @@
+Pour se connecter a la DB, il faut faire docker container ls,
+pogner le port du container database, pas le 5432, l'autre
+Et le mettre dans Le PostgreSQL 16, properties, connection, le port
+Connecter
