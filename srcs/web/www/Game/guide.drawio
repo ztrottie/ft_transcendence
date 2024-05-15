@@ -1,0 +1,25 @@
+<mxfile host="65bd71144e">
+    <diagram id="q6gnI9gW14h0YwswJAdQ" name="Page-1">
+        <mxGraphModel dx="932" dy="571" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="Paddle" style="whiteSpace=wrap;html=1;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;strokeWidth=4;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Ball" style="whiteSpace=wrap;html=1;fillColor=#76608a;strokeColor=#432D57;fontColor=#ffffff;strokeWidth=4;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="Colision" style="whiteSpace=wrap;html=1;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;strokeWidth=4;" vertex="1" parent="1">
+                    <mxGeometry x="340" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Score" style="whiteSpace=wrap;html=1;strokeWidth=4;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" vertex="1" parent="1">
+                    <mxGeometry x="490" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Game State" style="whiteSpace=wrap;html=1;strokeWidth=4;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" vertex="1" parent="1">
+                    <mxGeometry x="640" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
