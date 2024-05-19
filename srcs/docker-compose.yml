@@ -24,7 +24,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./backend/backend:/backend/backend
+      - ./backend:/backend
     networks:
       - transcendence
     restart: always
