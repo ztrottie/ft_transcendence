@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: start ft_transcendence
-      run: make
+      run: make test
 
     - name: test container up
       run: ./buildTest.sh
