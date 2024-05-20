@@ -14,6 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: stopping all container
+      run: make fclean
+
     - name: start ft_transcendence
       run: make test
 
