@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main", "Develop" ]
+  push:
+    branches: [ "devops-*" ]
+
+jobs:
+  ci_testing:
+    name: CI tests
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: start ft_transcendence
+      run: make
+
+    - name: test container up
+      run: ./buildTest.sh
+
+    - name: clean dockers
+      run: make fclean
