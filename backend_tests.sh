@@ -1,2 +1,4 @@
-docker container exec -it backend python manage.py test --no-input
+#!/bin/sh
+
+docker container exec backend python manage.py test --force-input
 exit $?
