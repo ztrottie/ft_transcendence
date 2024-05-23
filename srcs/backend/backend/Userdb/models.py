@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+class StatusType(models.Model):
+	StatusTypeId = models.AutoField(primary_key=True)
+	Description = models.CharField(max_length=20, null=True)
+	
+	def __str__(self):
+		return self.Description
 
 class UserManager(BaseUserManager):
     def create_user(self, Email, Name, Login42, is_admin=False, is_staff=False, password=None):
@@ -40,6 +46,7 @@ class User(AbstractBaseUser):
     Status_type_id = models.SmallIntegerField(default=0)
     Admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    StatusTypeId = models.ForeignKey(StatusType, on_delete=models.CASCADE, default="2")
 
     objects = UserManager()
 
