@@ -5,7 +5,7 @@ from Userdb.models import StatusType
 
 @receiver(post_migrate)
 def add_initial_data(sender, **kwargs):
-	if sender.name == 'UserExtensionDB':
+	if sender.name == 'RelationDB':
 		if not RelationType.objects.exists():
 			RelationType.objects.create(Description="Friend")
 			RelationType.objects.create(Description="Blocked")

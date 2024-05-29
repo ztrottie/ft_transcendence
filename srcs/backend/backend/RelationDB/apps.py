@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class UserextensiondbConfig(AppConfig):
+class RelationDBConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'UserExtensionDB'
+    name = 'RelationDB'
 
     def ready(self):
-        import UserExtensionDB.signals
+        import RelationDB.signals
