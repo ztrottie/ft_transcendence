@@ -29,14 +29,16 @@
 			</div>
 			<div class="modal-body">
 				<form>
-					<label for="numberOfLife" data-i18n="number_of_life"></label>&emsp;
-					<input type="range" min="1" max="10" step="1" name="numberOfLife" value="3" id="numberOfLife" class="mx-1 w-75" oninput="this.nextElementSibling.value = this.value">
-					<output>3</output>
-					<br>
-					<label for="numberOfGame" data-i18n="number_of_games"></label>&emsp;
-					<input type="range" min="1" max="10" step="1" name="numberOfGame" value="3" id="numberOfGame" class="mx-1 w-75" oninput="this.nextElementSibling.value = this.value">
-					<output>3</output>
-					<br>
+					<div class="row">
+						<label for="numberOfLife" class="col-4" data-i18n="number_of_life"></label>
+						<input  class="col-7" type="range" min="1" max="10" step="1" name="numberOfLife" value="3" id="numberOfLife" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">3</output>
+					</div>
+					<div class="row">
+						<label for="numberOfGame" class="col-4" data-i18n="number_of_games"></label>
+						<input class="col-7" type="range" min="1" max="10" step="1" name="numberOfGame" value="3" id="numberOfGame" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">3</output>
+					</div>
 					<input type="button" value="submit" data-bs-toggle="modal" data-bs-target="#lobby">
 				</form>
 			</div>

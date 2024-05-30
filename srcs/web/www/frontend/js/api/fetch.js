@@ -1,7 +1,10 @@
 export const loadContent = async (id, filePath) => {
 	try {
-		const html = await (await fetch(filePath)).text();
-		let container = document.getElementById(id).innerHTML += html
+		let file = await fetch(filePath);
+		while (!file.ok)
+			file = await fetch(filePath);
+		const html = await file.text();
+		let container = document.getElementById(id).innerHTML = html
 	} catch (error) {
 		console.error(`Error : ${filePath} -> `, error);
 	}
