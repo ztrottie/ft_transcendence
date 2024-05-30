@@ -3,9 +3,9 @@ import * as THREE from "three";
 export class Board {
 	constructor(_x, _y, _z) {
 		this.position = new THREE.Vector3(_x, _y, _z);
-		this.width = 20;
+		this.width = 10;
 		this.height = 0;
-		this.depth = 10;
+		this.depth = 8;
 		this.center = new THREE.Vector3(
 			_x + this.width / 2,
 			_y + this.height,

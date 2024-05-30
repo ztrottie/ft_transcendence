@@ -17,7 +17,7 @@ export class Ball {
 
 		//physics
 		this.minSpeed = 0.01; // Minimum speed
-		this.maxSpeed = 0.08; // Maximum speed
+		this.maxSpeed = 0.03; // Maximum speed
 		this.speed = 0; // Current speed
 		this.acceleration = 0.01; // Acceleration value
 		this.friction = 0.0; // Friction value
@@ -36,11 +36,22 @@ export class Ball {
 	}
 
 	checkPaddleCollision(paddle) {
-		
+		const zone = paddle.ballColision(this.mesh.position, this.radius);
+		switch(zone){
+			case "left":
+			case "right":
+				this.direction.x *= -1;
+				break;
+			case "top":
+			case "bottom":
+				this.direction.z *= -1;
+				break;
+		}
+		this.direction.normalize();
+		if (zone)
+			console.log("test:", zone);
 	}
 	
-	
-
 	applyAcceleration() {
 		if (this.speed < this.maxSpeed) {
 			this.speed += this.acceleration;
@@ -76,7 +87,7 @@ export class Ball {
 	}
 
 	update(board) {
-		this.printValue();
+		// this.printValue();
 		this.applyAcceleration();
 		this.applyFriction();
 		this.updateDirection();

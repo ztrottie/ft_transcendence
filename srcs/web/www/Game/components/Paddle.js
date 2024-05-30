@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { isInRectangle } from "./utils.js"
 
 export class Paddle {
 	constructor(_name, _x, _y, _z, _width, _height, _depth, _col) {
@@ -32,6 +33,34 @@ export class Paddle {
 		scene.add(this.mesh);
 	}
 
+	ballColision(position, radius) {
+		const halfWidth = this.width / 2;
+		const halfHeight = this.depth / 2; // Utilisation de la profondeur (depth) pour l'axe z
+	
+		// Vérification des côtés
+		const left = isInRectangle(position, { x: this.mesh.position.x - halfWidth - (radius/2), z: this.mesh.position.z }, radius, this.depth);
+		const right = isInRectangle(position, { x: this.mesh.position.x + halfWidth + (radius/2), z: this.mesh.position.z }, radius, this.depth);
+		const top = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z - halfHeight - (radius/2) }, this.width, radius);
+		const bottom = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z + halfHeight + (radius/2) }, this.width, radius);
+	
+		let side = null;
+		if (left) {
+			side = 'left';
+		} else if (right) {
+			side = 'right';
+		} else if (top) {
+			side = 'top';
+		} else if (bottom) {
+			side = 'bottom';
+		}
+	
+		if (side) {
+			return side;
+		}
+	
+		return null;
+	}
+	
 	moveUp() {
 		this.mesh.position.z -= 0.1; // Adjust the movement speed as needed
 	}

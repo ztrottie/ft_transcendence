@@ -38,4 +38,23 @@ function createTimer(delay) {
 	};
 }
 
-export { pointDistance, pointDirection, moveInDirection, createTimer };
+function isInRectangle(pos, rectCenter, rectWidth, rectHeight) {
+	const halfWidth = rectWidth / 2;
+	const halfHeight = rectHeight / 2;
+
+	const left = rectCenter.x - halfWidth;
+	const right = rectCenter.x + halfWidth;
+	const top = rectCenter.z - halfHeight;
+	const bottom = rectCenter.z + halfHeight;
+
+	return (
+		pos.x >= left &&
+		pos.x <= right &&
+		pos.z >= top &&
+		pos.z <= bottom
+	);
+}
+
+
+
+export { pointDistance, pointDirection, moveInDirection, createTimer, isInRectangle };
