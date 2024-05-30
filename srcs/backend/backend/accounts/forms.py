@@ -10,16 +10,16 @@ class RegisterForm(forms.ModelForm):
 
     password = forms.CharField(widget=forms.PasswordInput)
     password_2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
-    Email = forms.EmailField(max_length=254)
+    email = forms.EmailField(max_length=254)
 
     class Meta:
         model = User
-        fields = ['Name', 'Email', 'Login42']
+        fields = ['name', 'email', 'login42']
     
     def clean_email(self):
         """Checker si le email est deja existant dans la db"""
 
-        email = self.cleaned_data.get('Email')
+        email = self.cleaned_data.get('email')
         qs = User.objects.filter(email=email)
         if qs.exists():
             raise forms.ValidationError("This email is already taken")
@@ -28,7 +28,7 @@ class RegisterForm(forms.ModelForm):
     def clean_name(self):
         """Checker si le email est deja existant dans la db"""
 
-        name = self.cleaned_data.get('Name')
+        name = self.cleaned_data.get('name')
         qs = User.objects.filter(name=name)
         if qs.exists():
             raise forms.ValidationError("This name is already taken")
@@ -60,7 +60,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['Name', 'Email', 'Login42']
+        fields = ['name', 'email', 'login42']
 
     def clean(self):
         """Checker si les deux mdp match"""
@@ -89,7 +89,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['Name', 'Email', 'Login42', 'Admin']
+        fields = ['name', 'email', 'login42', 'admin']
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
