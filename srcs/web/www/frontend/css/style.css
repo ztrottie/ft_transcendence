@@ -1,0 +1,29 @@
+.infiniteModal {
+	.modal-dialog {
+		max-width: none !important;
+	}
+}
+
+.modal-backdrop {
+	display: none !important;
+}
+
+.modal-dialog-scrollable {
+	max-height: 65%;
+}
+
+.friendBtn {
+	width: 30% !important;
+	.modal-body {
+		height: 1000px;
+	}
+}
+
+.miniLogo {
+	width: 32px;
+	height: 32px;
+}
+
+.paddle.modal-body {
+	height: 500px;
+}
