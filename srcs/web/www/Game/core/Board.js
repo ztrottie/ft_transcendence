@@ -23,12 +23,25 @@ export class Board {
 		scene.add(plane);
 	}
 
-	inBoard(position) {
+	inBoard(position, gap = 0) {
 		return (
-			position.x > this.position.x &&
-			position.x < this.position.x + this.width &&
-			position.z > this.position.z &&
-			position.z < this.position.z + this.depth
+			position.x > (this.position.x + gap) &&
+			position.x < (this.position.x + this.width - gap) &&
+			position.z > (this.position.z + gap) &&
+			position.z < (this.position.z + this.depth - gap)
 		);
+	}
+
+	sideTouched(position, gap = 0) {
+		if (position.x <= (this.position.x + gap)) {
+			return "left";
+		} else if (position.x >= (this.position.x + this.width - gap)) {
+			return "right";
+		} else if (position.z <= (this.position.z + gap)) {
+			return "top";
+		} else if (position.z >= (this.position.z + this.depth - gap)) {
+			return "bottom";
+		}
+		return null; // Inside the board
 	}
 }

@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Ball } from "../components/Ball.js";
 import { Board } from "./Board.js";
 import { Paddle } from "../components/Paddle.js";
-// import { GameState } from './GameState.js';
+import { GameState } from "./GameState.js";
 
 export class Game {
 	constructor() {
@@ -14,6 +14,9 @@ export class Game {
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.shadowMap.enabled = true;
 		document.body.appendChild(this.renderer.domElement);
+
+		// State
+		//this.gameState = new GameState();
 
 		// Board
 		this.board = new Board(4, 2, 0);
@@ -45,7 +48,8 @@ export class Game {
 
 		//padle
 		this.paddle1 = new Paddle(
-			this.board.center.x - this.board.width / 2 + 0.5,
+			"paddle1",
+			this.board.center.x - this.board.width / 2 + 2,
 			this.board.center.y + 0.2,
 			this.board.center.z,
 			0.4,
@@ -54,7 +58,8 @@ export class Game {
 			0xff0000
 		);
 		this.paddle2 = new Paddle(
-			this.board.center.x + this.board.width / 2 - 0.5,
+			"paddle2",
+			this.board.center.x + this.board.width / 2 - 2,
 			this.board.center.y + 0.2,
 			this.board.center.z,
 			0.4,
@@ -88,7 +93,7 @@ export class Game {
 		this.scene.add(axesHelper);
 		//
 
-		// this.gameState = new GameState();
+		this.gameState = new GameState();
 
 		window.addEventListener("resize", () => this.onWindowResize(), false);
 	}
@@ -99,6 +104,9 @@ export class Game {
 
 	animate() {
 		requestAnimationFrame(() => this.animate());
+
+		//state update
+		this.gameState.update(this);
 
 		//update movement
 		this.controls.update();
