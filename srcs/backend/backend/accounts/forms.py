@@ -13,7 +13,7 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['Name', 'Email', 'Login42']
-    
+
     def clean_email(self):
         """Checker si le email est deja existant dans la db"""
 
@@ -22,7 +22,7 @@ class RegisterForm(forms.ModelForm):
         if qs.exists():
             raise forms.ValidationError("This email is already taken")
         return email
-    
+
     def clean_name(self):
         """Checker si le email est deja existant dans la db"""
 

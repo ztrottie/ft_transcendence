@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import RegisterForm
+from .tokenSerializer import TokenPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView 
 
 
 def signup(request):
@@ -13,3 +15,6 @@ def signup(request):
     else:
         form = RegisterForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+class TokenSerializer(TokenObtainPairView):
+    serializer_class = TokenPairSerializer
