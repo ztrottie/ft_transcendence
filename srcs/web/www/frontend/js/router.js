@@ -25,7 +25,7 @@ const routeHandlers = {
 	'': renderTemplate,
 	'#/': renderHome,
 	'#/login': renderLogin,
-	'default': renderTemplate
+	'default': renderNotFound
 };
 
 function handleRoutes() {
