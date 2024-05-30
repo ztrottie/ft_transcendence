@@ -38,11 +38,17 @@ export class Paddle {
 		const halfHeight = this.depth / 2; // Utilisation de la profondeur (depth) pour l'axe z
 	
 		// Vérification des côtés
-		const left = isInRectangle(position, { x: this.mesh.position.x - halfWidth - (radius/2), z: this.mesh.position.z }, radius, this.depth);
-		const right = isInRectangle(position, { x: this.mesh.position.x + halfWidth + (radius/2), z: this.mesh.position.z }, radius, this.depth);
-		const top = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z - halfHeight - (radius/2) }, this.width, radius);
-		const bottom = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z + halfHeight + (radius/2) }, this.width, radius);
+		const left = isInRectangle(position, { x: this.mesh.position.x - radius, z: this.mesh.position.z }, this.width, this.depth);
+		const right = isInRectangle(position, { x: this.mesh.position.x + radius, z: this.mesh.position.z }, this.width, this.depth);
+		const top = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z - radius }, this.width, this.depth);
+		const bottom = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z + radius }, this.width, this.depth);
 	
+		const topLeft = isInRectangle(position, { x: this.mesh.position.x - radius, z: this.mesh.position.z - radius }, this.width, this.depth);
+		const topRight = isInRectangle(position, { x: this.mesh.position.x + radius, z: this.mesh.position.z - radius }, this.width, this.depth);
+		const bottomLeft = isInRectangle(position, { x: this.mesh.position.x - radius, z: this.mesh.position.z + radius }, this.width, this.depth);
+		const bottomRight = isInRectangle(position, { x: this.mesh.position.x + radius, z: this.mesh.position.z + radius }, this.width, this.depth);
+	
+
 		let side = null;
 		if (left) {
 			side = 'left';
@@ -52,6 +58,14 @@ export class Paddle {
 			side = 'top';
 		} else if (bottom) {
 			side = 'bottom';
+		} else if (topLeft) {
+			side = 'topLeft';
+		} else if (topRight) {
+			side = 'topRight';
+		} else if (bottomLeft) {
+			side = 'bottomLeft';
+		} else if (bottomRight) {
+			side = 'bottomRight';
 		}
 	
 		if (side) {

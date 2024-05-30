@@ -1,11 +1,13 @@
-function pointDistance(v1, v2) {
+import * as THREE from "three";
+
+export function pointDistance(v1, v2) {
 	let dx = v2.x - v1.x;
 	let dy = v2.z - v1.z;
 
 	return Math.sqrt(dx * dx + dz * dz);
 }
 
-function pointDirection(point1, point2) {
+export function pointDirection(point1, point2) {
 	let dx = point2.x - point1.x;
 	let dz = point2.z - point1.z;
 	
@@ -20,13 +22,13 @@ function pointDirection(point1, point2) {
 	return angleDegrees;
 }
 
-function moveInDirection(pos, speed, direction) {
+export function moveInDirection(pos, speed, direction) {
 	let angleRadians = (direction + 90) * (Math.PI / 180.0);
 	pos.x -= speed * Math.cos(angleRadians);
 	pos.z -= speed * Math.sin(angleRadians);
 }
 
-function createTimer(delay) {
+export function createTimer(delay) {
 	let lastTime = 0;
 	return function() {
 		const currentTime = performance.now();
@@ -38,7 +40,7 @@ function createTimer(delay) {
 	};
 }
 
-function isInRectangle(pos, rectCenter, rectWidth, rectHeight) {
+export function isInRectangle(pos, rectCenter, rectWidth, rectHeight) {
 	const halfWidth = rectWidth / 2;
 	const halfHeight = rectHeight / 2;
 
@@ -54,7 +56,3 @@ function isInRectangle(pos, rectCenter, rectWidth, rectHeight) {
 		pos.z <= bottom
 	);
 }
-
-
-
-export { pointDistance, pointDirection, moveInDirection, createTimer, isInRectangle };
