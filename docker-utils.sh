@@ -52,7 +52,7 @@ clean_images() {
 	if [ -z "$(docker images -q)" ]; then
 		echo -e "${Red}No images found${Reset}"
 	else
-		docker rmi $(docker images -q) > /dev/null 2>&1
+		docker rmi -f $(docker images -q) > /dev/null 2>&1
 		if [ $? == 1 ]; then
 			echo -e "${Red}Error happened, image is probably tied to container${Reset}"
 		else

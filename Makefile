@@ -19,7 +19,7 @@ nuke:
 re: fclean all
 
 #this method is for the ci/cd tester
-test: fclean
+test:
 	@echo "Launching the tester version of the transcendence..."
 	@docker-compose -f "./srcs/docker-compose-test.yml" -p transcendence-test up -d
 

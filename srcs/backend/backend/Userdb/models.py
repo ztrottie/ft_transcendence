@@ -20,13 +20,12 @@ class UserManager(BaseUserManager):
         if not password:
             raise ValueError("Users must have an password")
         user_obj = self.model(
-            Email = self.normalize_email(email)
+            email=self.normalize_email(email),
+            name=name,
+            login42=login42,
+            admin=is_admin,
+            is_staff=is_staff,
         )
-        password = make_password(password)
-        user_obj.name = name
-        user_obj.login42 = login42
-        user_obj.admin = is_admin
-        user_obj.is_staff = is_staff
         user_obj.set_password(password)
         user_obj.save(using=self._db)
         return user_obj
@@ -57,13 +56,13 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.name
     def get_login42(self):
-        return self.name
+        return self.login42
     def get_avatar(self):
-        return self.name
+        return self.avatar
     def get_name_in_tournement(self):
-        return self.name
+        return self.name_in_tournement
     def get_status_type_id(self):
-        return self.name
+        return self.status_type_id
     def has_perm(self, perm, obj=None):
         return self.admin
     def has_module_perms(self, app_label):

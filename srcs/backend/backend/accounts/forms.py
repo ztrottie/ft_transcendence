@@ -46,7 +46,7 @@ class RegisterForm(forms.ModelForm):
     
     def save(self, commit=True):
         """Save the user with the hashed password"""
-        
+
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password"])
         if commit:

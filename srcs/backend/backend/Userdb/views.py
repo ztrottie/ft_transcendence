@@ -35,9 +35,9 @@ def user_details(request, pk):
 
 
 @api_view((['GET']))
-def user_details_name(request, pk):
+def user_details_name(request, name):
 	try:
-		user = User.objects.get(name=pk)
+		user = User.objects.get(name=name)
 	except User.DoesNotExist:
 		return Response(status=status.HTTP_404_NOT_FOUND)
 	if request.method == 'GET':
@@ -52,6 +52,6 @@ def user_login(request):
 	if request.user.is_authenticated:
 		user = request.user
 		data = {'name': user.name, 'email': user.email, 'pk': user.pk}
-		return Response(data)
+		return Response(data, status=200)
 	else:
 		return Response({'error': 'User is not authenticated'}, status=403)
