@@ -30,17 +30,29 @@ export class Paddle {
 
 	addToScene(scene) {
 		scene.add(this.mesh);
-	}	
+	}
+
+	placeMeeting(origin, pos) {
+		return (
+			pos.x >= origin.x - this.width / 2 &&
+			pos.x <= origin.x + this.width / 2 &&
+			pos.z >= origin.z - this.depth / 2 &&
+			pos.z <= origin.z + this.depth / 2 &&
+			pos.y >= origin.y - this.height / 2 &&
+			pos.y <= origin.y + this.height / 2
+		);
+	}
 
 	ballColision(position, radius) {
 		const halfWidth = this.width / 2;
 		const halfHeight = this.depth / 2; // Utilisation de la profondeur (depth) pour l'axe z
 	
 		// Vérification des côtés
-		const left = isInRectangle(position, { x: this.mesh.position.x - radius, z: this.mesh.position.z }, this.width, this.depth);
-		const right = isInRectangle(position, { x: this.mesh.position.x + radius, z: this.mesh.position.z }, this.width, this.depth);
-		const top = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z - radius }, this.width, this.depth);
-		const bottom = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z + radius }, this.width, this.depth);
+
+		const left = this.placeMeeting({ x: this.mesh.position.x - radius, y: this.mesh.position.y, z: this.mesh.position.z }, position);
+		const right = this.placeMeeting({ x: this.mesh.position.x + radius, y: this.mesh.position.y, z: this.mesh.position.z }, position);
+		const top = this.placeMeeting({ x: this.mesh.position.x, y: this.mesh.position.y, z: this.mesh.position.z - radius }, position);
+		const bottom = this.placeMeeting({ x: this.mesh.position.x, y: this.mesh.position.y, z: this.mesh.position.z + radius }, position);
 
 		let side = null;
 		if (left) {

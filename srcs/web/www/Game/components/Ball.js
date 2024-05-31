@@ -37,46 +37,55 @@ export class Ball {
 		scene.add(this.light);
 	}
 
+	removeFromScene(scene) {
+		scene.remove(this.mesh);
+		scene.remove(this.light);
+		this.mesh.geometry.dispose();
+		this.mesh.material.dispose();
+		this.light = null;
+		this.mesh = null;
+	}
+
 	applyForce(forceVector) {
 		this.direction.add(forceVector);
 	}	
 
 	checkPaddleCollision(paddle) {
-		//if (this.cooldown < 100){
-		//	const zone = paddle.ballColision(this.mesh.position, this.radius);
-		//	switch(zone){
-		//		case "left":
-		//		case "right":
-		//			this.direction.x *= -1;
-		//			break;
-		//			case "top":
-		//				this.direction.z *= -1;
-		//				if (this.direction.x > 0)
-		//					this.applyForce(new THREE.Vector3(0, 0, -2));
-		//				break;
-		//			case "bottom":
-		//				this.direction.z *= -1;
-		//				this.applyForce(new THREE.Vector3(0, 0, 2));
-		//				break;
-		//		case 'topLeft':
-		//		case 'topRight':
-		//		case 'bottomLeft':
-		//		case 'bottomRight':
-		//			this.direction.x *= -1;
-		//			this.direction.z *= -1;
-		//			break;
-		//		default:
-		//			break;
-		//	}
-		//	if (zone === "top" || zone === "bottom") {
-		//		this.direction.x = Math.sign(this.direction.x) * Math.max(Math.abs(this.direction.x), 0.5);
-		//	}
-		//	this.direction.normalize();
-		//	if (zone)
-		//		console.log("test:", zone);
-		//	this.cooldown = 0;
-		//}
-		//this.cooldown++;
+		if (this.cooldown < 100){
+			const zone = paddle.ballColision(this.mesh.position, this.radius);
+			switch(zone){
+				case "left":
+				case "right":
+					this.direction.x *= -1;
+					break;
+					case "top":
+						this.direction.z *= -1;
+						if (this.direction.x > 0)
+							this.applyForce(new THREE.Vector3(0, 0, -2));
+						break;
+					case "bottom":
+						this.direction.z *= -1;
+						this.applyForce(new THREE.Vector3(0, 0, 2));
+						break;
+				case 'topLeft':
+				case 'topRight':
+				case 'bottomLeft':
+				case 'bottomRight':
+					this.direction.x *= -1;
+					this.direction.z *= -1;
+					break;
+				default:
+					break;
+			}
+			if (zone === "top" || zone === "bottom") {
+				this.direction.x = Math.sign(this.direction.x) * Math.max(Math.abs(this.direction.x), 0.5);
+			}
+			this.direction.normalize();
+			if (zone)
+				console.log("test:", zone);
+			this.cooldown = 0;
+		}
+		this.cooldown++;
 	}
 	
 	applyAcceleration() {
@@ -124,8 +133,11 @@ export class Ball {
 		if (side) {
 			if (side === "top" || side === "bottom") {
 				this.direction.z *= -1;
+			} else if (side === "left" || side === "right") {
+				this.direction.x *= -1;
 			} else {
 				this.direction.x *= -1;
+				this.direction.z *= -1;
 			}
 		}
 		if (this.curveDuration > 0) {

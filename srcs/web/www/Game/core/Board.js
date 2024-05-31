@@ -3,7 +3,7 @@ import * as THREE from "three";
 export class Board {
 	constructor(_x, _y, _z) {
 		this.position = new THREE.Vector3(_x, _y, _z);
-		this.width = 10;
+		this.width = 8;
 		this.height = 0;
 		this.depth = 8;
 		this.center = new THREE.Vector3(
@@ -33,7 +33,15 @@ export class Board {
 	}
 
 	sideTouched(position, gap = 0) {
-		if (position.x <= (this.position.x + gap)) {
+		if (position.x <= (this.position.x + gap) && position.z <= (this.position.z + gap)) {
+			return "topLeft";
+		} else if (position.x >= (this.position.x + this.width - gap) && position.z <= (this.position.z + gap)) {
+			return "topRight";
+		} else if (position.x <= (this.position.x + gap) && position.z >= (this.position.z + this.depth - gap)) {
+			return "bottomLeft";
+		} else if (position.x >= (this.position.x + this.width - gap) && position.z >= (this.position.z + this.depth - gap)) {
+			return "bottomRight";
+		} else if (position.x <= (this.position.x + gap)) {
 			return "left";
 		} else if (position.x >= (this.position.x + this.width - gap)) {
 			return "right";
