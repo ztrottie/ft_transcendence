@@ -49,20 +49,20 @@ export class Game {
 		//padle
 		this.paddle1 = new Paddle(
 			"paddle1",
-			this.board.center.x - this.board.width / 2 + 2,
-			this.board.center.y + 0.2,
+			this.board.center.x - this.board.width / 2 + 0.5,
+			this.board.center.y + 0.3,
 			this.board.center.z,
-			1,
+			0.4,
 			0.5,
 			3,
 			0xff0000
 		);
 		this.paddle2 = new Paddle(
 			"paddle2",
-			this.board.center.x + this.board.width / 2 - 2,
+			this.board.center.x + this.board.width / 2 - 0.5,
 			this.board.center.y + 0.2,
 			this.board.center.z,
-			1,
+			0.4,
 			0.5,
 			3,
 			0x0000ff

@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import { isInRectangle } from "./utils.js"
-
+import {isInRectangle} from "./utils.js";
 export class Paddle {
 	constructor(_name, _x, _y, _z, _width, _height, _depth, _col) {
 		//properties
@@ -31,7 +30,7 @@ export class Paddle {
 
 	addToScene(scene) {
 		scene.add(this.mesh);
-	}
+	}	
 
 	ballColision(position, radius) {
 		const halfWidth = this.width / 2;
@@ -42,12 +41,6 @@ export class Paddle {
 		const right = isInRectangle(position, { x: this.mesh.position.x + radius, z: this.mesh.position.z }, this.width, this.depth);
 		const top = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z - radius }, this.width, this.depth);
 		const bottom = isInRectangle(position, { x: this.mesh.position.x, z: this.mesh.position.z + radius }, this.width, this.depth);
-	
-		const topLeft = isInRectangle(position, { x: this.mesh.position.x - radius, z: this.mesh.position.z - radius }, this.width, this.depth);
-		const topRight = isInRectangle(position, { x: this.mesh.position.x + radius, z: this.mesh.position.z - radius }, this.width, this.depth);
-		const bottomLeft = isInRectangle(position, { x: this.mesh.position.x - radius, z: this.mesh.position.z + radius }, this.width, this.depth);
-		const bottomRight = isInRectangle(position, { x: this.mesh.position.x + radius, z: this.mesh.position.z + radius }, this.width, this.depth);
-	
 
 		let side = null;
 		if (left) {
@@ -58,14 +51,6 @@ export class Paddle {
 			side = 'top';
 		} else if (bottom) {
 			side = 'bottom';
-		} else if (topLeft) {
-			side = 'topLeft';
-		} else if (topRight) {
-			side = 'topRight';
-		} else if (bottomLeft) {
-			side = 'bottomLeft';
-		} else if (bottomRight) {
-			side = 'bottomRight';
 		}
 	
 		if (side) {
@@ -86,4 +71,6 @@ export class Paddle {
 	update() {
 		this.mesh.position.add(this.movement);
 	}
+
+	
 }

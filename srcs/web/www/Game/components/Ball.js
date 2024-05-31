@@ -42,41 +42,41 @@ export class Ball {
 	}	
 
 	checkPaddleCollision(paddle) {
-		if (this.cooldown < 100){
-			const zone = paddle.ballColision(this.mesh.position, this.radius);
-			switch(zone){
-				case "left":
-				case "right":
-					this.direction.x *= -1;
-					break;
-					case "top":
-						this.direction.z *= -1;
-						if (this.direction.x > 0)
-							this.applyForce(new THREE.Vector3(0, 0, -2));
-						break;
-					case "bottom":
-						this.direction.z *= -1;
-						this.applyForce(new THREE.Vector3(0, 0, 2));
-						break;
-				case 'topLeft':
-				case 'topRight':
-				case 'bottomLeft':
-				case 'bottomRight':
-					this.direction.x *= -1;
-					this.direction.z *= -1;
-					break;
-				default:
-					break;
-			}
-			if (zone === "top" || zone === "bottom") {
-				this.direction.x = Math.sign(this.direction.x) * Math.max(Math.abs(this.direction.x), 0.5);
-			}
-			this.direction.normalize();
-			if (zone)
-				console.log("test:", zone);
-			this.cooldown = 0;
-		}
-		this.cooldown++;
+		//if (this.cooldown < 100){
+		//	const zone = paddle.ballColision(this.mesh.position, this.radius);
+		//	switch(zone){
+		//		case "left":
+		//		case "right":
+		//			this.direction.x *= -1;
+		//			break;
+		//			case "top":
+		//				this.direction.z *= -1;
+		//				if (this.direction.x > 0)
+		//					this.applyForce(new THREE.Vector3(0, 0, -2));
+		//				break;
+		//			case "bottom":
+		//				this.direction.z *= -1;
+		//				this.applyForce(new THREE.Vector3(0, 0, 2));
+		//				break;
+		//		case 'topLeft':
+		//		case 'topRight':
+		//		case 'bottomLeft':
+		//		case 'bottomRight':
+		//			this.direction.x *= -1;
+		//			this.direction.z *= -1;
+		//			break;
+		//		default:
+		//			break;
+		//	}
+		//	if (zone === "top" || zone === "bottom") {
+		//		this.direction.x = Math.sign(this.direction.x) * Math.max(Math.abs(this.direction.x), 0.5);
+		//	}
+		//	this.direction.normalize();
+		//	if (zone)
+		//		console.log("test:", zone);
+		//	this.cooldown = 0;
+		//}
+		//this.cooldown++;
 	}
 	
 	applyAcceleration() {
@@ -110,11 +110,11 @@ export class Ball {
 	}
 
 	printValue(){
-		console.log("speed:", this.speed,"curve duration:", this.curveDuration, "side touched", this.lastSide);
+		console.log("speed:", this.speed, "dir X:", this.direction.x, "side touched", this.lastSide);
 	}
 
 	update(board) {
-		// this.printValue();
+		 this.printValue();
 		this.applyAcceleration();
 		this.applyFriction();
 		this.updateDirection();

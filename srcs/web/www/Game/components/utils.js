@@ -10,9 +10,9 @@ export function pointDistance(v1, v2) {
 export function pointDirection(point1, point2) {
 	let dx = point2.x - point1.x;
 	let dz = point2.z - point1.z;
-	
+
 	let angleRadians = Math.atan2(dz, dx);
-	
+
 	let angleDegrees = angleRadians * (180.0 / Math.PI);
 	angleDegrees -= 90.0;
 	if (angleDegrees < 0) {
@@ -30,7 +30,7 @@ export function moveInDirection(pos, speed, direction) {
 
 export function createTimer(delay) {
 	let lastTime = 0;
-	return function() {
+	return function () {
 		const currentTime = performance.now();
 		if (currentTime - lastTime >= delay) {
 			lastTime = currentTime;
@@ -49,10 +49,17 @@ export function isInRectangle(pos, rectCenter, rectWidth, rectHeight) {
 	const top = rectCenter.z - halfHeight;
 	const bottom = rectCenter.z + halfHeight;
 
-	return (
-		pos.x >= left &&
-		pos.x <= right &&
-		pos.z >= top &&
-		pos.z <= bottom
-	);
+	return pos.x >= left && pos.x <= right && pos.z >= top && pos.z <= bottom;
 }
+
+//placeMeeting(pos) {
+//	box = this;
+//	return (
+//		pos.x >= this.mesh.position.x - this.width / 2 &&
+//		pos.x <= this.mesh.position.x + this.width / 2 &&
+//		pos.z >= this.mesh.position.z - this.depth / 2 &&
+//		pos.z <= this.mesh.position.z + this.depth / 2 &&
+//		pos.y >= this.mesh.position.y - this.height / 2 &&
+//		pos.y <= this.mesh.position.y + this.height / 2
+//	);
+//}
