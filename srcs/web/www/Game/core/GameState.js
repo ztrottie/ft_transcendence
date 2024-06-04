@@ -21,16 +21,16 @@ export class GameState {
 	update(game) {
 		// Update paddles based on key presses
 		if (this.isKeyPressed('w')) {
-			game.paddle1.moveUp();
+			game.paddle1.moveUp(game.board);
 		}
 		if (this.isKeyPressed('s')) {
-			game.paddle1.moveDown();
+			game.paddle1.moveDown(game.board);
 		}
 		if (this.isKeyPressed('ArrowUp')) {
-			game.paddle2.moveUp();
+			game.paddle2.moveUp(game.board);
 		}
 		if (this.isKeyPressed('ArrowDown')) {
-			game.paddle2.moveDown();
+			game.paddle2.moveDown(game.board);
 		}
 	}
 }

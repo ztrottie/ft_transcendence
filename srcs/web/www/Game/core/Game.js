@@ -52,7 +52,7 @@ export class Game {
 			this.board.center.x - this.board.width / 2 + 0.5,
 			this.board.center.y + 0.3,
 			this.board.center.z,
-			0.4,
+			0.1,
 			0.5,
 			3,
 			0xff0000
@@ -62,7 +62,7 @@ export class Game {
 			this.board.center.x + this.board.width / 2 - 0.5,
 			this.board.center.y + 0.2,
 			this.board.center.z,
-			0.4,
+			0.1,
 			0.5,
 			3,
 			0x0000ff

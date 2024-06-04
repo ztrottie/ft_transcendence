@@ -22,10 +22,11 @@ export class Paddle {
 		//physics
 		this.minSpeed = 0.01; // Minimum speed
 		this.maxSpeed = 0.08; // Maximum speed
-		this.speed = 0; // Current speed
+		this.speed = 0.1; // Current speed
 		this.acceleration = 0.01; // Acceleration value
 		this.friction = 0.0; // Friction value
 		this.direction = new THREE.Vector3(1, 0, 1); // Initial direction
+		this.nextPosition = new THREE.Vector3(1, 0, 1);
 	}
 
 	addToScene(scene) {
@@ -72,17 +73,25 @@ export class Paddle {
 		return null;
 	}
 	
-	moveUp() {
-		this.mesh.position.z -= 0.1; // Adjust the movement speed as needed
-	}
-
-	moveDown() {
-		this.mesh.position.z += 0.1; // Adjust the movement speed as needed
-	}
-
-	update() {
-		this.mesh.position.add(this.movement);
-	}
-
+	moveUp(board) {
+		const newPosition = this.mesh.position.clone();
+		newPosition.z -= this.speed; // Adjust the movement speed as needed
 	
+		if (board.isValidPaddlePosition(newPosition, this.depth + 1)) {
+			this.mesh.position.z = newPosition.z;
+		}
+	}
+	
+	moveDown(board) {
+		const newPosition = this.mesh.position.clone();
+		newPosition.z += this.speed; // Adjust the movement speed as needed
+	
+		if (board.isValidPaddlePosition(newPosition, this.depth + 1)) {
+			this.mesh.position.z = newPosition.z;
+		}
+	}
+	
+	update() {
+
+	}
 }

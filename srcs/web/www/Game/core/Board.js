@@ -32,6 +32,13 @@ export class Board {
 		);
 	}
 
+	isValidPaddlePosition(position, paddleHeight) {
+		return (
+			position.z - paddleHeight / 2 >= this.position.z &&
+			position.z + paddleHeight / 2 <= this.position.z + this.depth
+		);
+	}	
+
 	sideTouched(position, gap = 0) {
 		if (position.x <= (this.position.x + gap) && position.z <= (this.position.z + gap)) {
 			return "topLeft";

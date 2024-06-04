@@ -87,7 +87,15 @@ export class Ball {
 			  paddle.mesh.position.x - paddle.width / 2 - this.width / 2 :
 			  paddle.mesh.position.x + paddle.width / 2 + this.width / 2;
 		  }
-		  
+	  
+		  if (this.nextPosition.y < paddle.mesh.position.y - paddle.height / 2 || this.nextPosition.y > paddle.mesh.position.y + paddle.height / 2) {
+			this.direction.y *= -1;
+			// Positionner la balle juste à l'extérieur du paddle
+			this.mesh.position.y = this.nextPosition.y < paddle.mesh.position.y ? 
+			  paddle.mesh.position.y - paddle.height / 2 - this.height / 2 :
+			  paddle.mesh.position.y + paddle.height / 2 + this.height / 2;
+		  }
+	  
 		  if (this.nextPosition.z < paddle.mesh.position.z - paddle.depth / 2 || this.nextPosition.z > paddle.mesh.position.z + paddle.depth / 2) {
 			this.direction.z *= -1;
 			// Positionner la balle juste à l'extérieur du paddle
@@ -97,6 +105,7 @@ export class Ball {
 		  }
 		}
 	  }
+	  
 	
 	applyAcceleration() {
 		if (this.speed < this.maxSpeed) {
