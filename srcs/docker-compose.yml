@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   webserv:
     container_name: webserv

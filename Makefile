@@ -1,13 +1,16 @@
 
 all:
-	@echo "Launching the transcendence..."
-	@docker-compose -f "./srcs/docker-compose.yml" -p transcendence up -d
+	docker compose -f "./srcs/docker-compose.yml" -p transcendence up -d
+	@echo "Pour te connecter a la DB, tu dois mettre le port: " && docker ps --filter "name=database" --format "{{.Ports}}" | grep '\->' | cut -d ':' -f 2 | cut -d '-' -f 1
 
+# 
 stop:
-	@echo "Stopping the transcendence..."
-	@docker-compose -f "./srcs/docker-compose.yml" down --rmi all
+	echo "Removing database..."
+	@docker stop database
+	@docker rm database
+	docker-compose -f "./srcs/docker-compose.yml" down --rmi all
 
-fclean: nuke stop
+fclean: nuke
 
 nuke:
 	@echo "NUKE the transcendence"
