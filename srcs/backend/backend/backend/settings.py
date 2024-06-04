@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'Userdb',
     'RelationDB',
     'accounts',
+	'match',
 ]
 
 AUTH_USER_MODEL = 'Userdb.User'
