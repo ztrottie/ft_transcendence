@@ -1,5 +1,4 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from .models import User
 
@@ -8,7 +7,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ('otp', 'otp-expiry-time', 'email', 'password')
 
-class MyTokenObtainPairSerializer(MyTokenObtainPairSerializer):
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)

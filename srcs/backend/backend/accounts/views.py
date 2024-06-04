@@ -8,11 +8,12 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from Userdb.models import User
-from .serializer import UserProfileSerializer
-
+import random
+import string
 
 def random_digit_gen(n=6):
-    return "".join(map(str, random_sample(range(0, 10)), n))
+    return ''.join(random.choices(string.digits, k=n))
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -31,11 +32,11 @@ def login(request):
         user_profile_otp = verification_code
         user_profile_otp_expiry_time = timezone.now() + timedelta(hours=1)
         user_profile.save()
-        #send the email to the user 
+        #send the email to the user
         send_mail(
-            'Ft_transcendence verification code', #subject
-            'backEndWantYourLocation@backEnd.com',#from email..............
-            [email],#recipient email
+            'Ft_transcendence verification code',#subject
+            'backEndWantYourLocation@backEnd.com',#the from email
+            [email],#the recipient email
             fail_silently=False,#if false, send_email will raise a exception if an error occurs
         )
 
@@ -65,7 +66,7 @@ def verify(request):
         user_profile.otp_expiry_time > timezone.now
     ):
         #generate token for the user
-        refresh = RefreshToken.for_user(user)
+        refresh = RefreshToken.for_user(user);
         access_token = str(refresh.access_token)
         #reset the otp in the db so its ready for the next one
         user_profile.otp = '';
@@ -75,6 +76,3 @@ def verify(request):
         return Response({'access_token': access_token, 'refresh_token': str(refresh)}, status=status.HTTP_200_OK)
 
     return Response({'detail': 'Invalid verification code or credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-        
