@@ -25,7 +25,7 @@ export class Ball {
 
 		// curve
 		this.curveStrength = 0.02; // Adjust this value to control the curve effect
-		this.curveAxis = new THREE.Vector3(0, 0, 0).normalize(); // Curve around the Y-axis
+		this.curveAxis = new THREE.Vector3(0, 0, 1).normalize(); // Curve around the Y-axis
 		this.curveDuration = 0; // Duration for which the curve effect is active
 		this.maxCurveDuration = 50; // Maximum duration for the curve effect
 
@@ -51,31 +51,30 @@ export class Ball {
 	}	
 
 	checkPaddleCollision(paddle) {
-		if (this.cooldown < 100){
-			const zone = paddle.ballColision(this.mesh.position, this.radius);
+		if (this.cooldown >= 5){
+			const nextPosition = new THREE.Vector3().addVectors(this.mesh.position, this.direction.clone().normalize().multiplyScalar(this.speed));
+			const zone = paddle.ballColision(nextPosition, this.radius);
 			switch(zone){
 				case "left":
 				case "right":
 					this.direction.x *= -1;
 					break;
-					case "top":
-						this.direction.z *= -1;
-						if (this.direction.x > 0)
-							this.applyForce(new THREE.Vector3(0, 0, -2));
-						break;
-					case "bottom":
-						this.direction.z *= -1;
-						this.applyForce(new THREE.Vector3(0, 0, 2));
-						break;
-				case 'topLeft':
-				case 'topRight':
-				case 'bottomLeft':
-				case 'bottomRight':
-					this.direction.x *= -1;
-					this.direction.z *= -1;
-					break;
-				default:
-					break;
+					// case "top":
+					// 	this.direction.z *= -1;
+					// 	if (this.direction.x > 0)
+					// 		this.applyForce(new THREE.Vector3(0, 0, -4));
+					// 	break;
+					// case "bottom":
+					// 	this.direction.z *= -1;
+					// 	this.applyForce(new THREE.Vector3(0, 0, 4));
+					// 	break;
+				// case 'topLeft':
+				// case 'topRight':
+				// case 'bottomLeft':
+				// case 'bottomRight':
+				// 	this.direction.x *= -1;
+				// 	this.direction.z *= -1;
+				// 	break;
 			}
 			if (zone === "top" || zone === "bottom") {
 				this.direction.x = Math.sign(this.direction.x) * Math.max(Math.abs(this.direction.x), 0.5);
@@ -110,12 +109,22 @@ export class Ball {
 			quaternion.setFromAxisAngle(this.curveAxis, this.curveStrength);
 			this.direction.applyQuaternion(quaternion);
 		}
+	
+		// Ensure the direction is not (0, 0, 1)
+		const epsilon = 0.2;
+		if (Math.abs(this.direction.x) < epsilon && Math.abs(this.direction.y) < epsilon && Math.abs(this.direction.z - 1) < epsilon) {
+			this.direction.x += epsilon;
+			this.direction.z -= epsilon;
+			this.direction.normalize();
+		}
+	
 		this.direction.normalize();
 	}
 
 	updatePosition() {
 		const displacement = this.direction.clone().normalize().multiplyScalar(this.speed);
 		this.mesh.position.add(displacement);
+
 	}
 
 	printValue(){
@@ -123,7 +132,7 @@ export class Ball {
 	}
 
 	update(board) {
-		 this.printValue();
+		//  this.printValue();
 		this.applyAcceleration();
 		this.applyFriction();
 		this.updateDirection();
