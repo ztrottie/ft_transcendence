@@ -1,0 +1,66 @@
+<button type="button" class="position-absolute start-50 top-50 translate-middle" data-bs-toggle="modal" data-bs-target="#play" data-i18n="press_to_play">
+
+</button>
+
+
+<!-- play modal -->
+<div class="modal" id="play" tabindex="-1" data-bs-backdrop="static" aria-labelledby="play" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" data-i18n="number_of_players"> </h5>
+				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<button type="button" value="2" class="w-100 mb-2" data-bs-toggle="modal" data-bs-target="#life">2</button>
+				<button type="button" value="4" class="w-100 mb-2" data-bs-toggle="modal" data-bs-target="#life">4</button>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<!-- life modal -->
+<div class="modal" id="life" tabindex="-1" data-bs-backdrop="static" aria-labelledby="life" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" data-i18n="">Life</h5>
+				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="row">
+						<label for="numberOfLife" class="col-4" data-i18n="number_of_life"></label>
+						<input  class="col-7" type="range" min="1" max="10" step="1" name="numberOfLife" value="3" id="numberOfLife" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">3</output>
+					</div>
+					<div class="row">
+						<label for="numberOfGame" class="col-4" data-i18n="number_of_games"></label>
+						<input class="col-7" type="range" min="1" max="10" step="1" name="numberOfGame" value="3" id="numberOfGame" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">3</output>
+					</div>
+					<input type="button" value="submit" data-bs-toggle="modal" data-bs-target="#lobby">
+				</form>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<!-- lobby modal -->
+<div class="modal" id="lobby" tabindex="-1" data-bs-backdrop="static" aria-labelledby="lobby" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" data-i18n="lobby"></h5>
+				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body paddle">
+				<h3 class="w-auto position-absolute start-50 top-50 translate-middle" data-i18n="choose_spot"></h3>
+				<button type="button" class="position-absolute start-0 top-50 w-25 h-25 translate-middle-y">1</button>
+				<button type="button" class="position-absolute start-50 top-0 w-25 h-25 translate-middle-x">2</button>
+				<button type="button" class="position-absolute end-0 top-50 w-25 h-25 translate-middle-y">3</button>
+				<button type="button" class="position-absolute start-50 bottom-0 w-25 h-25 translate-middle-x">4</button>
+			</div>
+		</div>
+	</div> 
+</div>
