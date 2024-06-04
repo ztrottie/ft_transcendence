@@ -40,6 +40,9 @@ class User(AbstractBaseUser):
     Status_type_id = models.SmallIntegerField(default=0)
     Admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    otp = models.CharField(max_length=6, blank=True)
+    otp_expiry_time = models.DateTimeField(blank=True, null=True)
+    verification_code = models.CharField(max_length=6, blank=True)
 
     objects = UserManager()
 
