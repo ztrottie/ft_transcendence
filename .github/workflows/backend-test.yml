@@ -6,7 +6,7 @@ on:
 
 jobs:
   backend_testing:
-    name: bakcned-testing
+    name: backend-testing
     runs-on: self-hosted
 
     steps:
