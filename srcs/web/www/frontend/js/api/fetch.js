@@ -1,10 +1,17 @@
 export const loadContent = async (id, filePath) => {
 	try {
 		let file = await fetch(filePath);
-		while (!file.ok)
+		for (let i = 4; !file.ok && i > 0; i--)
 			file = await fetch(filePath);
-		const html = await file.text();
-		let container = document.getElementById(id).innerHTML = html
+		if (!file.ok) {
+			file = await fetch(`/frontend/js/pages/error/pageNotFound.html`);
+			const html = await file.text();
+			document.getElementById('body').innerHTML = html
+		}
+		else {
+			const html = await file.text();
+			document.getElementById(id).innerHTML = html
+		}
 	} catch (error) {
 		console.error(`Error : ${filePath} -> `, error);
 	}
@@ -66,4 +73,3 @@ const applyTranslations = (id, translations, lang) => {
 	});
 	document.documentElement.lang = lang;
 };
-

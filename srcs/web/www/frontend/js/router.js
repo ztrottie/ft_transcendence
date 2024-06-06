@@ -5,17 +5,72 @@ import { renderHeader } from "./components/header/header.js";
 import { renderFooter } from "./components/footer/footer.js";
 
 function debounce(func, delay) {
-    let timeoutId;
-    return function(...args) {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            func.apply(this, args);
-        }, delay);
-    };
+	let timeoutId;
+	return function(...args) {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => {
+			func.apply(this, args);
+		}, delay);
+	};
 }
 
-function renderTemplate() {
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getCookie(name) {
+    // Split cookie string and get all individual name=value pairs in an array
+    let cookieArr = document.cookie.split(";");
+    
+    // Loop through the array elements
+    for(let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        
+        /* Removing whitespace at the beginning of the cookie name
+        and compare it with the given string */
+        if(name == cookiePair[0].trim()) {
+            // Decode the cookie value and return
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    
+    // Return null if not found
+    return null;
+}
+
+async function renderTemplate() {
 	loadContent('content', '/frontend/js/pages/template/template.html');
+	await sleep(50);
+	const gameButton = document.querySelectorAll('#gameBtn');
+	gameButton.forEach(button => {
+		button.addEventListener('click', () => {
+			const jsonString = JSON.stringify({
+				'guest1': "a",
+				'guest2': "v",
+				'guest3': "s",
+				'winner': "s",
+				'date': "2020-12-01",
+				'tournement_id': 1,
+				'user': 1
+			});
+		
+			
+			const formData = new FormData();
+			formData.append('_content_type', 'application/json');
+			formData.append('_content', jsonString);
+			
+			
+			const options = {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${getCookie('csrftoken')}`
+				},
+				body: formData
+			}
+			postRequest('https://127.0.0.1/api/match/match/', options);
+			// getRequest('https://127.0.0.1/api/user/user_list/');
+		});
+});
 }
 
 function renderNotFound() {
@@ -38,6 +93,7 @@ function handleRoutes() {
 
 window.addEventListener('DOMContentLoaded', () => {
 	let lang = localStorage.getItem("lang");
+	handleRoutes();
 	renderFooter();
 	renderHeader();
 	loadContentLang('body', document.documentElement.lang, () => {
@@ -50,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		else
 			localStorage.setItem("lang", "en");
 	}
-	handleRoutes();
+	
 });
 
 window.addEventListener('hashchange', handleRoutes);
@@ -82,4 +138,34 @@ function attachEventListeners() {
 			button.classList.remove("btn-primary")
 		}
 	});
+}
+
+
+
+async function postRequest(url, options) {
+	// const lifeElement = document.getElementById("numberOfLife");
+	// const gameElement = document.getElementById("numberOfGame");
+	// const life = lifeElement.value;
+	// const game = gameElement.value;
+
+	fetch(url, options)
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			return console.log('Success:', data)
+		})
+		.catch(error => console.error('Error:', error));
+	
+}
+
+function getRequest(url) {
+	fetch(url)
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			return console.log('Success:', data)
+		})
+		.catch(error => console.error('Error:', error));
 }
