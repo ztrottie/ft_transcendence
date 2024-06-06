@@ -8,6 +8,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from Userdb.models import User
+from django.shortcuts import redirect, render
+from .forms import RegisterForm
+from django.contrib.auth import get_user_model
 import random
 import string
 
@@ -15,22 +18,34 @@ def random_digit_gen(n=6):
     return ''.join(random.choices(string.digits, k=n))
 
 
+def signupView(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, 'registration/signup.html', {'form': form})
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def login(request):
+def loginView(request):
     #get the user email and password from the request
-    email = request.data.query_params('email')
-    password = request.data.query_params('password')
+    email = request.data.get('email')
+    password = request.data.get('password')
     #check the user credentials with the db
+    #authenticate will hash the provided password ans compare it to the password in the data-base
     user = authenticate(request, email=email, password=password)
 
     if user is not None:
         #go to the user table and select the correct user
-        user_profile = User.objects.get(user=user)
+        user_profile = User.objects.get(email=email)
         #add the code to the user table so the user has his own code
         verification_code = random_digit_gen
-        user_profile_otp = verification_code
-        user_profile_otp_expiry_time = timezone.now() + timedelta(hours=1)
+        user_profile.otp = verification_code
+        user_profile.otp_expiry_time = timezone.now() + timedelta(hours=1)
         user_profile.save()
         #send the email to the user
         send_mail(
@@ -49,9 +64,9 @@ def login(request):
 @permission_classes([AllowAny])
 def verify(request):
     #get the email password otp from the request
-    email = request.data.querry_params('email')
-    password = request.data.querry_params('password')
-    otp = request.data.querry_params('otp')
+    email = request.data.get('email')
+    password = request.data.get('password')
+    otp = request.data.get('otp')
     #check the user's credentials with the db
     user = authenticate(request, email=email, password=password)
 
@@ -61,7 +76,7 @@ def verify(request):
 
     if (
         #check if the verification code is valid
-        user_profile.verification_code == otp and
+        user_profile.otp == otp and
         user_profile.otp_expiry_time is not None and
         user_profile.otp_expiry_time > timezone.now
     ):

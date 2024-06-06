@@ -49,7 +49,6 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     otp = models.CharField(max_length=6, blank=True)
     otp_expiry_time = models.DateTimeField(blank=True, null=True)
-    verification_code = models.CharField(max_length=6, blank=True)
     statusTypeId = models.ForeignKey(StatusType, on_delete=models.CASCADE, default="2")
 
     objects = UserManager()
