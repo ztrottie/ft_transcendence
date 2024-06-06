@@ -6,49 +6,39 @@ export class Ball {
 		this.width = this.radius * 2;
 		this.height = this.radius * 2;
 		this.depth = this.radius * 2;
-
+		
 		// Mesh
 		this.geometry = new THREE.SphereGeometry(this.radius, 32, 32);
 		this.material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.position.set(_x, _y, _z);
-
+		
 		// Light
 		this.light = new THREE.PointLight(0xf44336, 30, 100);
 		this.light.position.set(_x, _y, _z);
-
+		
 		//physics
-		this.minSpeed = 0.01; // Minimum speed
-		this.maxSpeed = 0.1; // Maximum speed
-		this.speed = 0; // Current speed
-		this.acceleration = 0.01; // Acceleration value
-		this.friction = 0.0; // Friction value
-		this.direction = new THREE.Vector3(1, 0, 1); // Initial direction
+		this.minSpeed = 0.01;
+		this.maxSpeed = 0.1;
+		this.speed = 0;
+		this.acceleration = 0.01;
+		this.friction = 0.0;
+		this.direction = new THREE.Vector3(1, 0, 1);
+		this.firstPosition = new THREE.Vector3(_x, _y, _z);
 		this.nextPosition = new THREE.Vector3(1, 0, 1);
-
-		// curve
-		// this.curveStrength = 0.02; // Adjust this value to control the curve effect
-		// this.curveAxis = new THREE.Vector3(0, 0, 1).normalize(); // Curve around the Y-axis
-		// this.curveDuration = 0; // Duration for which the curve effect is active
-		// this.maxCurveDuration = 50; // Maximum duration for the curve effect
-
-		this.cooldown = 0;
 	}
-
+	
 	addToScene(scene) {
 		scene.add(this.mesh);
 		scene.add(this.light);
 	}
-
+	
 	removeFromScene(scene) {
 		scene.remove(this.mesh);
 		scene.remove(this.light);
-		this.mesh.geometry.dispose();
-		this.mesh.material.dispose();
-		this.light = null;
-		this.mesh = null;
+		this.mesh.position = firstPosition;
 	}
-
+	
 	applyForce(forceVector) {
 		this.direction.add(forceVector);
 	}
@@ -73,39 +63,31 @@ export class Ball {
 	checkPaddleCollision(paddle) {
 		// Calculer la position future de la balle
 		this.nextPosition.copy(this.mesh.position).add(this.direction.clone().normalize().multiplyScalar(this.speed));
-	  
+	
 		// Vérifier la collision avec la future position
 		const a = this.collides(this.nextPosition, paddle);
 		if (a) {
-		  console.log("Collision detected!");
-	  
-		  // Ajuster la direction de la balle en fonction de la direction de collision
-		  if (this.nextPosition.x < paddle.mesh.position.x - paddle.width / 2 || this.nextPosition.x > paddle.mesh.position.x + paddle.width / 2) {
-			this.direction.x *= -1;
-			// Positionner la balle juste à l'extérieur du paddle
-			this.mesh.position.x = this.nextPosition.x < paddle.mesh.position.x ? 
-			  paddle.mesh.position.x - paddle.width / 2 - this.width / 2 :
-			  paddle.mesh.position.x + paddle.width / 2 + this.width / 2;
-		  }
-	  
-		  if (this.nextPosition.y < paddle.mesh.position.y - paddle.height / 2 || this.nextPosition.y > paddle.mesh.position.y + paddle.height / 2) {
-			this.direction.y *= -1;
-			// Positionner la balle juste à l'extérieur du paddle
-			this.mesh.position.y = this.nextPosition.y < paddle.mesh.position.y ? 
-			  paddle.mesh.position.y - paddle.height / 2 - this.height / 2 :
-			  paddle.mesh.position.y + paddle.height / 2 + this.height / 2;
-		  }
-	  
-		  if (this.nextPosition.z < paddle.mesh.position.z - paddle.depth / 2 || this.nextPosition.z > paddle.mesh.position.z + paddle.depth / 2) {
-			this.direction.z *= -1;
-			// Positionner la balle juste à l'extérieur du paddle
-			this.mesh.position.z = this.nextPosition.z < paddle.mesh.position.z ? 
-			  paddle.mesh.position.z - paddle.depth / 2 - this.depth / 2 :
-			  paddle.mesh.position.z + paddle.depth / 2 + this.depth / 2;
-		  }
+			console.log("Collision detected!");
+			
+
+			// Ajuster la direction de la balle en fonction de la direction de collision
+			if (paddle.orientation == "vertical" && (this.nextPosition.x < paddle.mesh.position.x - paddle.width / 2 || this.nextPosition.x > paddle.mesh.position.x + paddle.width / 2)) {
+				this.direction.x *= -1;
+				// Positionner la balle juste à l'extérieur du paddle
+				this.mesh.position.x = this.nextPosition.x < paddle.mesh.position.x ? 
+				paddle.mesh.position.x - paddle.width / 2 - this.width / 2 :
+				paddle.mesh.position.x + paddle.width / 2 + this.width / 2;
+			}
+
+			if (paddle.orientation == "horizontal" && (this.nextPosition.z < paddle.mesh.position.z - paddle.depth / 2 || this.nextPosition.z > paddle.mesh.position.z + paddle.depth / 2)) {
+				this.direction.z *= -1;
+				// Positionner la balle juste à l'extérieur du paddle
+				this.mesh.position.z = this.nextPosition.z < paddle.mesh.position.z ? 
+				paddle.mesh.position.z - paddle.depth / 2 - this.depth / 2 :
+				paddle.mesh.position.z + paddle.depth / 2 + this.depth / 2;
+			}
 		}
-	  }
-	  
+	}
 	
 	applyAcceleration() {
 		if (this.speed < this.maxSpeed) {
@@ -122,57 +104,42 @@ export class Ball {
 		}
 	}
 
-	updateDirection() {
-		if (this.curveDuration > 0) {
-			// Apply the curve effect by rotating the direction vector around the Y-axis
-			const quaternion = new THREE.Quaternion();
-			quaternion.setFromAxisAngle(this.curveAxis, this.curveStrength);
-			this.direction.applyQuaternion(quaternion);
-		}
-	
-		// Ensure the direction is not (0, 0, 1)
-		const epsilon = 0.2;
-		if (Math.abs(this.direction.x) < epsilon && Math.abs(this.direction.y) < epsilon && Math.abs(this.direction.z - 1) < epsilon) {
-			this.direction.x += epsilon;
-			this.direction.z -= epsilon;
-			this.direction.normalize();
-		}
-	
-		this.direction.normalize();
-	}
-
 	updatePosition() {
 		const displacement = this.direction.clone().normalize().multiplyScalar(this.speed);
 		this.mesh.position.add(displacement);
 		this.nextPosition = new THREE.Vector3().addVectors(this.mesh.position, this.direction.clone().normalize().multiplyScalar(this.speed));
-
-	}
-
-	printValue(){
-		console.log("speed:", this.speed, "dir X:", this.direction.x);
 	}
 
 	update(board) {
-		//  this.printValue();
 		this.applyAcceleration();
 		this.applyFriction();
-		// this.updateDirection();
 		this.updatePosition();
 		this.light.position.copy(this.mesh.position);
 		const side = board.sideTouched(this.mesh.position, this.radius*2);
 		if (side) {
-			if (side === "top" || side === "bottom") {
+			if (side === "top"){
 				this.direction.z *= -1;
-			} else if (side === "left" || side === "right") {
+				const btop = board.center.z - board.depth / 2;
+				this.mesh.position.z = btop + this.radius * 2;
+			}
+			else if (side === "bottom") {
+				this.direction.z *= -1;
+				const btop = board.center.z + board.depth / 2;
+				this.mesh.position.z = btop - this.radius * 2;
+			} else if (side === "left"){
 				this.direction.x *= -1;
+				const bleft = board.center.x - board.width / 2;
+				this.mesh.position.x = bleft + this.radius * 2;
+				console.log("die");
+			}else if (side === "right") {
+				this.direction.x *= -1;
+				const bright = board.center.x + board.width / 2;
+				this.mesh.position.x = bright - this.radius * 2;
 				console.log("die");
 			} else {
 				this.direction.x *= -1;
 				this.direction.z *= -1;
 			}
 		}
-		// if (this.curveDuration > 0) {
-		// 	this.curveDuration--;
-		// }
 	}
 }

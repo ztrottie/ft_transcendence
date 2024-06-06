@@ -27,7 +27,7 @@ export class Game {
 			75,
 			window.innerWidth / window.innerHeight,
 			0.1,
-			1000
+			10000
 		);
 		this.camera.position.set(
 			this.board.center.x,
@@ -67,8 +67,35 @@ export class Game {
 			3,
 			0x0000ff
 		);
+
+		this.paddle3 = new Paddle(
+			"paddle3",
+			this.board.center.x,
+			this.board.center.y + 0.3,
+			this.board.center.z - this.board.depth / 2 + 0.5,
+			3,
+			0.5,
+			0.1,
+			0x00FFFF,
+			"horizontal"
+		);
+
+		this.paddle4 = new Paddle(
+			"paddle3",
+			this.board.center.x,
+			this.board.center.y + 0.3,
+			this.board.center.z + this.board.depth / 2 - 0.5,
+			3,
+			0.5,
+			0.1,
+			0xFFFF00,
+			"horizontal"
+		);
+
 		this.paddle1.addToScene(this.scene);
 		this.paddle2.addToScene(this.scene);
+		this.paddle3.addToScene(this.scene);
+		this.paddle4.addToScene(this.scene);
 
 		// Ball
 		this.ball = new Ball(
@@ -111,9 +138,20 @@ export class Game {
 		//update movement
 		this.controls.update();
 
+		//paddles
+		this.paddle1.update(this.board);
+		this.paddle2.update(this.board);
+		this.paddle3.update(this.board);
+		this.paddle4.update(this.board);
+
+		//ball
 		this.ball.checkPaddleCollision(this.paddle1);
 		this.ball.checkPaddleCollision(this.paddle2);
+		this.ball.checkPaddleCollision(this.paddle3);
+		this.ball.checkPaddleCollision(this.paddle4);
 		this.ball.update(this.board);
+		
+		//renderer
 		this.renderer.render(this.scene, this.camera);
 	}
 

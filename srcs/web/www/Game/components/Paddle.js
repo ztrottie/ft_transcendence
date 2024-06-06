@@ -1,97 +1,100 @@
 import * as THREE from "three";
-import {isInRectangle} from "./utils.js";
-export class Paddle {
-	constructor(_name, _x, _y, _z, _width, _height, _depth, _col) {
-		//properties
-		this.name = _name;
-		this.width = _width;
-		this.height = _height;
-		this.depth = _depth;
-		this.col = _col;
+import { isInRectangle } from "./utils.js";
 
-		//mesh
-		this.geometry = new THREE.BoxGeometry(
-			this.width,
-			this.height,
-			this.depth
-		);
+export class Paddle {
+	constructor(_name, _x, _y, _z, _width, _height, _depth, _col, _orientation = "vertical") {
+		// Properties
+		this.orientation = _orientation;
+		this.height = _height;
+		this.width = _width;
+		this.depth = _depth;
+		this.name = _name;
+		this.col = _col;
+		this.isMoving = false;
+
+		// Mesh
+		this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
 		this.material = new THREE.MeshToonMaterial({ color: _col });
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.position.set(_x, _y, _z);
 
-		//physics
+		// Physics
 		this.minSpeed = 0.01; // Minimum speed
 		this.maxSpeed = 0.08; // Maximum speed
-		this.speed = 0.1; // Current speed
+		this.speed = 0.0; // Current speed
 		this.acceleration = 0.01; // Acceleration value
-		this.friction = 0.0; // Friction value
-		this.direction = new THREE.Vector3(1, 0, 1); // Initial direction
-		this.nextPosition = new THREE.Vector3(1, 0, 1);
+		this.friction = 0.005; // Friction value
+		this.direction = new THREE.Vector3(0, 0, 0); // Initial direction
 	}
 
 	addToScene(scene) {
 		scene.add(this.mesh);
 	}
 
-	placeMeeting(origin, pos) {
-		return (
-			pos.x >= origin.x - this.width / 2 &&
-			pos.x <= origin.x + this.width / 2 &&
-			pos.z >= origin.z - this.depth / 2 &&
-			pos.z <= origin.z + this.depth / 2 &&
-			pos.y >= origin.y - this.height / 2 &&
-			pos.y <= origin.y + this.height / 2
-		);
+	move(direction) {
+		// Update direction vector based on the input direction
+		switch (direction) {
+			case 'up':
+				this.direction.set(0, 0, -1);
+				break;
+			case 'down':
+				this.direction.set(0, 0, 1);
+				break;
+			case 'left':
+				this.direction.set(-1, 0, 0);
+				break;
+			case 'right':
+				this.direction.set(1, 0, 0);
+				break;
+			default:
+				console.error('Direction inconnue:', direction);
+				return;
+		}
+
+		// Mark that the paddle is moving
+		this.isMoving = true;
+
+		// Apply acceleration
+		this.applyAcceleration();
 	}
 
-	ballColision(position, radius) {
-		const halfWidth = this.width / 2;
-		const halfHeight = this.depth / 2; // Utilisation de la profondeur (depth) pour l'axe z
-	
-		// Vérification des côtés
-
-		const left = this.placeMeeting({ x: this.mesh.position.x - radius, y: this.mesh.position.y, z: this.mesh.position.z }, position);
-		const right = this.placeMeeting({ x: this.mesh.position.x + radius, y: this.mesh.position.y, z: this.mesh.position.z }, position);
-		const top = this.placeMeeting({ x: this.mesh.position.x, y: this.mesh.position.y, z: this.mesh.position.z - radius }, position);
-		const bottom = this.placeMeeting({ x: this.mesh.position.x, y: this.mesh.position.y, z: this.mesh.position.z + radius }, position);
-
-		let side = null;
-		if (left) {
-			side = 'left';
-		} else if (right) {
-			side = 'right';
-		} else if (top) {
-			side = 'top';
-		} else if (bottom) {
-			side = 'bottom';
-		}
-	
-		if (side) {
-			return side;
-		}
-	
-		return null;
-	}
-	
-	moveUp(board) {
-		const newPosition = this.mesh.position.clone();
-		newPosition.z -= this.speed; // Adjust the movement speed as needed
-	
-		if (board.isValidPaddlePosition(newPosition, this.depth + 1)) {
-			this.mesh.position.z = newPosition.z;
+	applyAcceleration() {
+		if (this.speed < this.maxSpeed) {
+			this.speed += this.acceleration;
+		} else if (this.speed > this.maxSpeed) {
+			this.speed = this.maxSpeed;
 		}
 	}
-	
-	moveDown(board) {
-		const newPosition = this.mesh.position.clone();
-		newPosition.z += this.speed; // Adjust the movement speed as needed
-	
-		if (board.isValidPaddlePosition(newPosition, this.depth + 1)) {
-			this.mesh.position.z = newPosition.z;
+
+	applyFriction() {
+		if (this.speed > this.minSpeed) {
+			this.speed -= this.friction;
+			if (this.speed < this.minSpeed) {
+				this.speed = this.minSpeed;
+			}
+		} else {
+			this.speed = 0;
 		}
 	}
-	
-	update() {
 
+	update(board) {
+		// Apply friction only if the paddle is not moving
+		if (!this.isMoving) {
+			this.applyFriction();
+		}
+
+		// Calculate new position
+		const displacement = this.direction.clone().multiplyScalar(this.speed);
+		const newPosition = this.mesh.position.clone().add(displacement);
+
+		// Check if the new position is valid
+		if (board.isValidPaddlePosition(newPosition, this.orientation === "vertical" ? this.depth + 1 : this.width + 1, this.orientation)) {
+			this.mesh.position.copy(newPosition);
+		} else {
+			this.speed = 0; // Reset speed if the new position is invalid
+		}
+
+		// Reset the moving flag
+		this.isMoving = false;
 	}
 }

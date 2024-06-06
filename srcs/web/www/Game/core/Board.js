@@ -23,21 +23,20 @@ export class Board {
 		scene.add(plane);
 	}
 
-	inBoard(position, gap = 0) {
-		return (
-			position.x > (this.position.x + gap) &&
-			position.x < (this.position.x + this.width - gap) &&
-			position.z > (this.position.z + gap) &&
-			position.z < (this.position.z + this.depth - gap)
-		);
+	isValidPaddlePosition(position, paddleSize, orientation) {
+		if (orientation === "vertical") {
+			return (
+				position.z - paddleSize / 2 >= this.position.z &&
+				position.z + paddleSize / 2 <= this.position.z + this.depth
+			);
+		} else if (orientation === "horizontal") {
+			return (
+				position.x - paddleSize / 2 >= this.position.x &&
+				position.x + paddleSize / 2 <= this.position.x + this.width
+			);
+		}
+		return false;
 	}
-
-	isValidPaddlePosition(position, paddleHeight) {
-		return (
-			position.z - paddleHeight / 2 >= this.position.z &&
-			position.z + paddleHeight / 2 <= this.position.z + this.depth
-		);
-	}	
 
 	sideTouched(position, gap = 0) {
 		if (position.x <= (this.position.x + gap) && position.z <= (this.position.z + gap)) {

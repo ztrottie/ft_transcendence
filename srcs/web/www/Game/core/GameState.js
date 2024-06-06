@@ -19,18 +19,39 @@ export class GameState {
 	}
 
 	update(game) {
-		// Update paddles based on key presses
+		// Update paddles based on key
+
+		//player 1
 		if (this.isKeyPressed('w')) {
-			game.paddle1.moveUp(game.board);
+			game.paddle1.move("up");
 		}
 		if (this.isKeyPressed('s')) {
-			game.paddle1.moveDown(game.board);
+			game.paddle1.move("down");
 		}
+
+		//player 2
 		if (this.isKeyPressed('ArrowUp')) {
-			game.paddle2.moveUp(game.board);
+			game.paddle2.move("up");
 		}
 		if (this.isKeyPressed('ArrowDown')) {
-			game.paddle2.moveDown(game.board);
+			game.paddle2.move("down");
+		}
+
+		//player 3
+		if (this.isKeyPressed('o')) {
+			game.paddle3.move("left");
+		}
+		if (this.isKeyPressed('p')) {
+			game.paddle3.move("right");
+		}
+
+
+		//player 4
+		if (this.isKeyPressed('x')) {
+			game.paddle4.move("left");
+		}
+		if (this.isKeyPressed('c')) {
+			game.paddle4.move("right");
 		}
 	}
 }
