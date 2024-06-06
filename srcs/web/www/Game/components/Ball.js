@@ -115,7 +115,7 @@ export class Ball {
 		this.applyFriction();
 		this.updatePosition();
 		this.light.position.copy(this.mesh.position);
-		const side = board.sideTouched(this.mesh.position, this.radius*2);
+		const side = board.sideTouched(this.mesh.position, this.radius);
 		if (side) {
 			if (side === "top"){
 				this.direction.z *= -1;

@@ -39,15 +39,7 @@ export class Board {
 	}
 
 	sideTouched(position, gap = 0) {
-		if (position.x <= (this.position.x + gap) && position.z <= (this.position.z + gap)) {
-			return "topLeft";
-		} else if (position.x >= (this.position.x + this.width - gap) && position.z <= (this.position.z + gap)) {
-			return "topRight";
-		} else if (position.x <= (this.position.x + gap) && position.z >= (this.position.z + this.depth - gap)) {
-			return "bottomLeft";
-		} else if (position.x >= (this.position.x + this.width - gap) && position.z >= (this.position.z + this.depth - gap)) {
-			return "bottomRight";
-		} else if (position.x <= (this.position.x + gap)) {
+		if (position.x <= (this.position.x + gap)) {
 			return "left";
 		} else if (position.x >= (this.position.x + this.width - gap)) {
 			return "right";
@@ -56,6 +48,6 @@ export class Board {
 		} else if (position.z >= (this.position.z + this.depth - gap)) {
 			return "bottom";
 		}
-		return null; // Inside the board
+		return null;
 	}
 }

@@ -54,7 +54,7 @@ export class Game {
 			this.board.center.z,
 			0.1,
 			0.5,
-			3,
+			2,
 			0xff0000
 		);
 		this.paddle2 = new Paddle(
@@ -64,7 +64,7 @@ export class Game {
 			this.board.center.z,
 			0.1,
 			0.5,
-			3,
+			2,
 			0x0000ff
 		);
 
@@ -73,7 +73,7 @@ export class Game {
 			this.board.center.x,
 			this.board.center.y + 0.3,
 			this.board.center.z - this.board.depth / 2 + 0.5,
-			3,
+			2,
 			0.5,
 			0.1,
 			0x00FFFF,
@@ -85,7 +85,7 @@ export class Game {
 			this.board.center.x,
 			this.board.center.y + 0.3,
 			this.board.center.z + this.board.depth / 2 - 0.5,
-			3,
+			2,
 			0.5,
 			0.1,
 			0xFFFF00,
