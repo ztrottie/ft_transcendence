@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.utils import timezone
-from django.contrib.auth import authenticate, login as django_login
+from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -10,7 +10,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from Userdb.models import User
 from django.shortcuts import redirect, render
 from .forms import RegisterForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import check_password
+from django.http import JsonResponse
+import json
 import random
 import string
 
@@ -32,30 +34,34 @@ def signupView(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def loginView(request):
-    #get the user email and password from the request
-    email = request.data.get('email')
-    password = request.data.get('password')
-    #check the user credentials with the db
-    #authenticate will hash the provided password ans compare it to the password in the data-base
-    user = authenticate(request, email=email, password=password)
+    #get the user email and password from the request'
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_email = data.get('email')
+        password = data.get('password')
+    try:
+        user = User.objects.get(email=user_email)
+        print(user)
+    except User.DoesNotExist:
+        return Response({'details': 'Invalid email!'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    if user is not None:
-        #go to the user table and select the correct user
-        user_profile = User.objects.get(email=email)
-        #add the code to the user table so the user has his own code
-        verification_code = random_digit_gen
-        user_profile.otp = verification_code
-        user_profile.otp_expiry_time = timezone.now() + timedelta(hours=1)
-        user_profile.save()
-        #send the email to the user
-        send_mail(
-            'Ft_transcendence verification code',#subject
-            'backEndWantYourLocation@backEnd.com',#the from email
-            [email],#the recipient email
-            fail_silently=False,#if false, send_email will raise a exception if an error occurs
-        )
-
-        return Response({'detail': 'Verification code sent successfully.'}, status=status.HTTP_200_OK)
+    else:
+        if check_password(password, user.password):
+            #go to the user table and select the correct user
+            user_profile = User.objects.get(email=user_email)
+            #add the code to the user table so the user has his own code
+            verification_code = random_digit_gen
+            user_profile.otp = verification_code
+            user_profile.otp_expiry_time = timezone.now() + timedelta(hours=1)
+            user_profile.save()
+            #send the email to the user
+            send_mail(
+                'Ft_transcendence verification code',#subject
+                'backEndWantYourLocation@backEnd.com',#the from email
+                [user_email],#the recipient email
+                fail_silently=False,#if false, send_email will raise a exception if an error occurs
+            )
+            return Response({'detail': 'Verification code sent successfully.'}, status=status.HTTP_200_OK)
 
     return Response({'detail': 'Invalid credentials!.'}, status=status.HTTP_401_UNAUTHORIZED)
 
