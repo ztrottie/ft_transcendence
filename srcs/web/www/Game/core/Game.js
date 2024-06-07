@@ -6,7 +6,7 @@ import { Paddle } from "../components/Paddle.js";
 import { GameState } from "./GameState.js";
 
 export class Game {
-	constructor() {
+	constructor(_lifeNumber = 1, _roundNumber = 3) {
 		// Scene and renderer
 		this.scene = new THREE.Scene();
 		this.renderer = new THREE.WebGLRenderer();
@@ -15,8 +15,10 @@ export class Game {
 		this.renderer.shadowMap.enabled = true;
 		document.body.appendChild(this.renderer.domElement);
 
-		// State
-		//this.gameState = new GameState();
+		// Properties
+		this.lifeNumber = _lifeNumber;
+		this.roundNumber = _roundNumber;
+
 
 		// Board
 		this.board = new Board(4, 2, 0);
@@ -42,7 +44,7 @@ export class Game {
 		this.scene.add(this.light, pointLightHelper);
 		this.light.position.set(
 			this.board.center.x,
-			this.board.center.y + 10,
+			this.board.center.y + 5,
 			this.board.center.z
 		);
 
@@ -50,7 +52,7 @@ export class Game {
 		this.paddle1 = new Paddle(
 			"paddle1",
 			this.board.center.x - this.board.width / 2 + 0.5,
-			this.board.center.y + 0.3,
+			this.board.center.y + 0.25,
 			this.board.center.z,
 			0.1,
 			0.5,
@@ -60,7 +62,7 @@ export class Game {
 		this.paddle2 = new Paddle(
 			"paddle2",
 			this.board.center.x + this.board.width / 2 - 0.5,
-			this.board.center.y + 0.2,
+			this.board.center.y + 0.25,
 			this.board.center.z,
 			0.1,
 			0.5,
@@ -71,7 +73,7 @@ export class Game {
 		this.paddle3 = new Paddle(
 			"paddle3",
 			this.board.center.x,
-			this.board.center.y + 0.3,
+			this.board.center.y + 0.25,
 			this.board.center.z - this.board.depth / 2 + 0.5,
 			2,
 			0.5,
@@ -83,7 +85,7 @@ export class Game {
 		this.paddle4 = new Paddle(
 			"paddle3",
 			this.board.center.x,
-			this.board.center.y + 0.3,
+			this.board.center.y + 0.25,
 			this.board.center.z + this.board.depth / 2 - 0.5,
 			2,
 			0.5,
