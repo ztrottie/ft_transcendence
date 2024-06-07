@@ -19,58 +19,46 @@ function sleep(ms) {
 }
 
 function getCookie(name) {
-    // Split cookie string and get all individual name=value pairs in an array
-    let cookieArr = document.cookie.split(";");
-    
-    // Loop through the array elements
-    for(let i = 0; i < cookieArr.length; i++) {
-        let cookiePair = cookieArr[i].split("=");
-        
-        /* Removing whitespace at the beginning of the cookie name
-        and compare it with the given string */
-        if(name == cookiePair[0].trim()) {
-            // Decode the cookie value and return
-            return decodeURIComponent(cookiePair[1]);
-        }
-    }
-    
-    // Return null if not found
-    return null;
+	const value = `; ${document.cookie}`;
+	const parts = value.split(`; ${name}=`);
+	if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 async function renderTemplate() {
 	loadContent('content', '/frontend/js/pages/template/template.html');
-	await sleep(50);
+	await sleep(1000);
 	const gameButton = document.querySelectorAll('#gameBtn');
 	gameButton.forEach(button => {
-		button.addEventListener('click', () => {
-			const jsonString = JSON.stringify({
-				'guest1': "a",
-				'guest2': "v",
-				'guest3': "s",
-				'winner': "s",
-				'date': "2020-12-01",
-				'tournement_id': 1,
-				'user': 1
-			});
-		
-			
-			const formData = new FormData();
-			formData.append('_content_type', 'application/json');
-			formData.append('_content', jsonString);
+		button.addEventListener('click', async () => {
+			// const jsonString = JSON.stringify({
+			// 	'guest1': "a",
+			// 	'guest2': "v",
+			// 	'guest3': "s",
+			// 	'winner': "s",
+			// 	'date': "2020-12-01",
+			// 	'tournement_id': 1,
+			// 	'user': 1
+			// });
 			
 			
-			const options = {
-				method: 'POST',
-				headers: {
-					'Authorization': `Bearer ${getCookie('csrftoken')}`
-				},
-				body: formData
-			}
-			postRequest('https://127.0.0.1/api/match/match/', options);
-			// getRequest('https://127.0.0.1/api/user/user_list/');
+			// const formData = new FormData();
+			// formData.append('_content_type', 'application/json');
+			// formData.append('_content', jsonString);
+			
+			// const options = {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Authorization': `Bearer ${getCookie('jwt')}`,
+			// 		'X-CSRFToken': `${getCookie('csrftoken')}`
+			// 	},
+			// 	body: formData
+			// }
+			// postRequest('https://127.0.0.1/api/match/match/', options);
+			let test = await getRequest('https://127.0.0.1/api/user/user_list/');
+			console.log(test);
 		});
-});
+	});
+	changeLanguage(localStorage.getItem("lang"));
 }
 
 function renderNotFound() {
@@ -91,11 +79,43 @@ function handleRoutes() {
 	changeLanguage(localStorage.getItem("lang"));
 }
 
+async function showFriend() {
+	let user = await getRequest('https://127.0.0.1/api/user/user_login/');
+	console.log('User', user);
+	let id = await getRequest('https://127.0.0.1/api/user/user_details/', user['name']);
+	console.log('User Id', id);
+	let friend = await getRequest('https://127.0.0.1/api/user/user_relation/', id['id']);
+	console.log('Friends list', friend);
+	let nbOfFriend = friend['length'];
+	console.log('Number of friends:', nbOfFriend);
+	let divFriend = document.getElementById('friendList');
+	let p = document.createElement('p');
+	for (let i = 0; i < nbOfFriend; i++) { //create row with [name			button remove friend]
+		let text = '';
+		let friendName = '';
+		if (friend[i]['User2Id'] != id['id']) {
+			friendName = await getRequest('https://127.0.0.1/api/user/user_details/', friend[i]['User2Id']);
+			text = document.createTextNode(friendName['name']);
+			console.log('friend: ', friend[i]['User2Id']);
+		}
+		else {
+			friendName = await getRequest('https://127.0.0.1/api/user/user_details/', friend[i]['User1Id']);
+			text = document.createTextNode(friendName['name']);
+			console.log('friend: ', friend[i]['User1Id']);
+		}
+		p.appendChild(text);
+		divFriend.appendChild(p);
+	}
+
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 	let lang = localStorage.getItem("lang");
 	handleRoutes();
 	renderFooter();
 	renderHeader();
+	showFriend();
+
 	loadContentLang('body', document.documentElement.lang, () => {
 		attachEventListeners();
 	});
@@ -106,7 +126,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		else
 			localStorage.setItem("lang", "en");
 	}
-	
+	changeLanguage(localStorage.getItem("lang"));
 });
 
 window.addEventListener('hashchange', handleRoutes);
@@ -140,8 +160,6 @@ function attachEventListeners() {
 	});
 }
 
-
-
 async function postRequest(url, options) {
 	// const lifeElement = document.getElementById("numberOfLife");
 	// const gameElement = document.getElementById("numberOfGame");
@@ -159,13 +177,7 @@ async function postRequest(url, options) {
 	
 }
 
-function getRequest(url) {
-	fetch(url)
-		.then(response => {
-			return response.json()
-		})
-		.then(data => {
-			return console.log('Success:', data)
-		})
-		.catch(error => console.error('Error:', error));
+async function getRequest(url, options = '') {
+	const test = await fetch(url + options);
+	return await test.json();
 }
