@@ -6,6 +6,7 @@ export class Ball {
 		this.width = this.radius * 2;
 		this.height = this.radius * 2;
 		this.depth = this.radius * 2;
+		this.lastPaddle = null;
 		
 		// Mesh
 		this.geometry = new THREE.SphereGeometry(this.radius, 32, 32);
@@ -21,9 +22,9 @@ export class Ball {
 		this.minSpeed = 0.01;
 		this.maxSpeed = 0.1;
 		this.speed = 0;
-		this.acceleration = 0.01;
+		this.acceleration = 0.001;
 		this.friction = 0.0;
-		this.direction = new THREE.Vector3(1, 0, 1);
+		this.direction = this.getRandomDirection();
 		this.firstPosition = new THREE.Vector3(_x, _y, _z);
 		this.nextPosition = new THREE.Vector3(1, 0, 1);
 	}
@@ -36,9 +37,21 @@ export class Ball {
 	removeFromScene(scene) {
 		scene.remove(this.mesh);
 		scene.remove(this.light);
-		this.mesh.position = firstPosition;
-	}
+		this.mesh.geometry.dispose();
+		this.mesh.material.dispose();
+	}	
 	
+	getRandomDirection() {
+		let direction;
+		do {
+			const randomX = (Math.random() - 0.5) * 2;
+			const randomY = 0; // Assuming 2D plane, you can change this if 3D
+			const randomZ = (Math.random() - 0.5) * 2;
+			direction = new THREE.Vector3(randomX, randomY, randomZ).normalize();
+		} while (Math.abs(direction.x) < 0.2 || Math.abs(direction.z) < 0.2);
+		return direction;
+	}	
+
 	applyForce(forceVector) {
 		this.direction.add(forceVector);
 	}
@@ -61,33 +74,52 @@ export class Ball {
 	}
 
 	checkPaddleCollision(paddle) {
-		// Calculer la position future de la balle
+		this.lastPaddle = paddle.name;
 		this.nextPosition.copy(this.mesh.position).add(this.direction.clone().normalize().multiplyScalar(this.speed));
 	
-		// Vérifier la collision avec la future position
-		const a = this.collides(this.nextPosition, paddle);
-		if (a) {
-			console.log("Collision detected!");
-			
-
-			// Ajuster la direction de la balle en fonction de la direction de collision
+		if (this.collides(this.nextPosition, paddle)) {
+	
+			// Add some randomness to the direction after collision
+			const randomFactor = 0.4;
+			const randomX = (Math.random() - 0.5) * randomFactor;
+			const randomZ = (Math.random() - 0.5) * randomFactor;
+	
+			const influenceFactor = 0.4; // Adjust this value to control the amount of influence from the paddle's movement
+	
 			if (paddle.orientation == "vertical" && (this.nextPosition.x < paddle.mesh.position.x - paddle.width / 2 || this.nextPosition.x > paddle.mesh.position.x + paddle.width / 2)) {
 				this.direction.x *= -1;
-				// Positionner la balle juste à l'extérieur du paddle
-				this.mesh.position.x = this.nextPosition.x < paddle.mesh.position.x ? 
-				paddle.mesh.position.x - paddle.width / 2 - this.width / 2 :
-				paddle.mesh.position.x + paddle.width / 2 + this.width / 2;
+				this.direction.x += randomX; // Add randomness
+	
+				// If the paddle is moving up or down, adjust the ball's Z direction
+				if (paddle.direction.z !== 0) {
+					this.direction.z = paddle.direction.z * influenceFactor;
+				} else {
+					this.direction.z += randomZ; // Add randomness
+				}
+	
+				this.mesh.position.x = this.nextPosition.x < paddle.mesh.position.x ?
+					paddle.mesh.position.x - paddle.width / 2 - this.width / 2 :
+					paddle.mesh.position.x + paddle.width / 2 + this.width / 2;
 			}
-
+	
 			if (paddle.orientation == "horizontal" && (this.nextPosition.z < paddle.mesh.position.z - paddle.depth / 2 || this.nextPosition.z > paddle.mesh.position.z + paddle.depth / 2)) {
 				this.direction.z *= -1;
-				// Positionner la balle juste à l'extérieur du paddle
-				this.mesh.position.z = this.nextPosition.z < paddle.mesh.position.z ? 
-				paddle.mesh.position.z - paddle.depth / 2 - this.depth / 2 :
-				paddle.mesh.position.z + paddle.depth / 2 + this.depth / 2;
+				this.direction.z += randomZ; // Add randomness
+	
+				// If the paddle is moving left or right, adjust the ball's X direction
+				if (paddle.direction.x !== 0) {
+					this.direction.x = paddle.direction.x * influenceFactor;
+				} else {
+					this.direction.x += randomX; // Add randomness
+				}
+	
+				this.mesh.position.z = this.nextPosition.z < paddle.mesh.position.z ?
+					paddle.mesh.position.z - paddle.depth / 2 - this.depth / 2 :
+					paddle.mesh.position.z + paddle.depth / 2 + this.depth / 2;
 			}
 		}
 	}
+	
 	
 	applyAcceleration() {
 		if (this.speed < this.maxSpeed) {
@@ -104,13 +136,19 @@ export class Ball {
 		}
 	}
 
+	reset() {
+		this.mesh.position.copy(this.firstPosition);
+		this.direction = this.getRandomDirection();
+		this.speed = 0;
+	}	
+
 	updatePosition() {
 		const displacement = this.direction.clone().normalize().multiplyScalar(this.speed);
 		this.mesh.position.add(displacement);
 		this.nextPosition = new THREE.Vector3().addVectors(this.mesh.position, this.direction.clone().normalize().multiplyScalar(this.speed));
 	}
 
-	update(board) {
+	update(game, board) {
 		this.applyAcceleration();
 		this.applyFriction();
 		this.updatePosition();
@@ -121,21 +159,25 @@ export class Ball {
 				this.direction.z *= -1;
 				const btop = board.center.z - board.depth / 2;
 				this.mesh.position.z = btop + this.radius * 2;
+				if (game.playerNumber >= 3){
+					this.reset();
+				}	
 			}
 			else if (side === "bottom") {
 				this.direction.z *= -1;
 				const btop = board.center.z + board.depth / 2;
 				this.mesh.position.z = btop - this.radius * 2;
+				if (game.playerNumber >= 3) this.reset();
 			} else if (side === "left"){
 				this.direction.x *= -1;
 				const bleft = board.center.x - board.width / 2;
 				this.mesh.position.x = bleft + this.radius * 2;
-				console.log("die");
+				if (game.playerNumber >= 2) this.reset();
 			}else if (side === "right") {
 				this.direction.x *= -1;
 				const bright = board.center.x + board.width / 2;
 				this.mesh.position.x = bright - this.radius * 2;
-				console.log("die");
+				if (game.playerNumber >= 2) this.reset();
 			} else {
 				this.direction.x *= -1;
 				this.direction.z *= -1;

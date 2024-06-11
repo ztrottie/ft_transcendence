@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { isInRectangle } from "./utils.js";
 
 export class Paddle {
 	constructor(_name, _x, _y, _z, _width, _height, _depth, _col, _orientation = "vertical") {
@@ -11,6 +10,7 @@ export class Paddle {
 		this.name = _name;
 		this.col = _col;
 		this.isMoving = false;
+		this.life = 3;
 
 		// Mesh
 		this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
@@ -25,10 +25,17 @@ export class Paddle {
 		this.acceleration = 0.01; // Acceleration value
 		this.friction = 0.005; // Friction value
 		this.direction = new THREE.Vector3(0, 0, 0); // Initial direction
+		this.firstPosition = new THREE.Vector3(_x, _y, _z);
 	}
 
 	addToScene(scene) {
 		scene.add(this.mesh);
+	}
+
+	removeFromScene(scene) {
+		scene.remove(this.mesh);
+		this.mesh.geometry.dispose();
+		this.mesh.material.dispose();
 	}
 
 	move(direction) {
