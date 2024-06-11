@@ -157,7 +157,7 @@
 		<div class="modal-content rounded-0 border">
 			<div class="modal-header d-flex justify-content-between">
 				<h6 class="modal-title" data-i18n="friend_list"></h6>
-				<button type="button" data-bs-toggle="modal" data-bs-target="#addFriend" class="btn">
+				<button type="button" data-bs-toggle="modal" data-bs-target="#addFriendModal" class="btn">
 					<img src="/frontend/img/person-fill-add.svg" alt="person fill add">
 				</button>
 			</div> 
@@ -172,7 +172,7 @@
 </div>
 
 <!-- add friend modal -->
-<div class="modal infiniteModal" id="addFriend" data-bs-backdrop="none" tabindex="-1" aria-labelledby="addFriend" aria-hidden="true">
+<div class="modal infiniteModal" id="addFriendModal" data-bs-backdrop="none" tabindex="-1" aria-labelledby="addFriendModal" aria-hidden="true">
 	<div class="friendBtn modal-dialog modal-dialog-scrollable position-absolute bottom-0 end-0 mb-0 me-0">
 		<div class="modal-content rounded-0 border">
 			<div class="modal-header d-flex justify-content-between">
@@ -182,6 +182,7 @@
 				</button>
 			</div> 
 			<div class="modal-body">
+				<div id="addFriend"></div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

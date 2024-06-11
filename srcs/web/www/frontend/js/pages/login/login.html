@@ -1,9 +1,11 @@
-<form method="post">
-	<div class="formbuilder-email form-group field-email row mt-3">
-		<label for="email" class="formbuilder-email-label col-3">Email:</label>
-		<div class="col-9">
-		<input id="email" type="email" class="form-control border-dark border-3" name="email" aria-required="true" autocomplete="active ">
-		</div>
+<form method="post" action="/api/accounts/login/" class="position-absolute top-50">
+	<div>
+		<input id='csrfmiddlewaretoken' type="hidden" name="csrfmiddlewaretoken">
+		<label for="id_username">Email:</label>
+		<input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="255" required="" id="id_username">
+		<label for="id_password">Password:</label>
+		<input type="password" name="password" autocomplete="current-password" required="" id="id_password">
+		<button type="submit">Log In</button>
 	</div>
 </form>
 <!-- modal -->

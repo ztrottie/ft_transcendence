@@ -1,44 +1,35 @@
-<button type="button" class="position-absolute start-50 top-50 translate-middle" data-bs-toggle="modal" data-bs-target="#play" data-i18n="press_to_play">
+<button type="button" class="position-absolute start-50 top-50 translate-middle" data-bs-toggle="modal" data-bs-target="#gameSetting" data-i18n="press_to_play">
 
 </button>
 
-
-<!-- play modal -->
-<div class="modal" id="play" tabindex="-1" data-bs-backdrop="static" aria-labelledby="play" aria-hidden="true">
+<!-- Game Setting modal -->
+<div class="modal" id="gameSetting" tabindex="-1" data-bs-backdrop="static" aria-labelledby="gameSetting" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" data-i18n="number_of_players"> </h5>
+				<h5 class="modal-title" data-i18n="">Game Setting</h5>
 				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<button type="button" value="2" class="w-100 mb-2" data-bs-toggle="modal" data-bs-target="#life">2</button>
-				<button type="button" value="4" class="w-100 mb-2" data-bs-toggle="modal" data-bs-target="#life">4</button>
-			</div>
-		</div>
-	</div> 
-</div>
-
-<!-- life modal -->
-<div class="modal" id="life" tabindex="-1" data-bs-backdrop="static" aria-labelledby="life" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" data-i18n="">Life</h5>
-				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<label for="numberOfLife" class="col-4" data-i18n="number_of_life"></label>
-					<input  class="col-7" type="range" min="1" max="10" step="1" id="numberOfLife" oninput="this.nextElementSibling.value = this.value">
-					<output class="col-1 text-end">6</output>
-				</div>
-				<div class="row">
-					<label for="numberOfGame" class="col-4" data-i18n="number_of_games"></label>
-					<input class="col-7" type="range" min="1" max="10" step="1" id="numberOfGame" oninput="this.nextElementSibling.value = this.value">
-					<output class="col-1 text-end">6</output>
-				</div>
-				<button type="button" id="gameBtn" data-bs-toggle="modal" data-bs-target="#lobby">submit</button>
+				<form>
+					<div class="row">
+						<label for="numberOfLife" class="col-4" data-i18n="number_of_life"></label>
+						<input  class="col-7" type="range" min="1" max="10" step="1" id="numberOfLife" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">6</output>
+					</div>
+					<div class="row">
+						<label for="numberOfGame" class="col-4" data-i18n="number_of_games"></label>
+						<input class="col-7" type="range" min="1" max="10" step="1" id="numberOfGame" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">6</output>
+					</div>
+					<div class="row d-flex justify-content-between mt-2 mb-2"> <!-- radio toggle button -->
+						<input type="radio" class="btn-check" name="options" id="option" checked>
+						<label class="btn btn-outline-secondary col-5 ms-2" for="option">2</label>
+						<input type="radio" class="btn-check" name="options" id="option1">
+						<label class="btn btn-outline-secondary col-5 me-2" for="option1">4</label>
+					</div>
+					<button type="button" id="gameBtn" data-bs-toggle="modal" data-bs-target="#lobby">submit</button>
+				</form>
 			</div>
 		</div>
 	</div> 
