@@ -14,7 +14,7 @@ export class Paddle {
 
 		// Mesh
 		this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
-		this.material = new THREE.MeshToonMaterial({ color: _col });
+		this.material = new THREE.MeshBasicMaterial({ color: _col });
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.position.set(_x, _y, _z);
 

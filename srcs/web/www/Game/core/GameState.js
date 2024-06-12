@@ -39,7 +39,6 @@ export class GameState {
 					game.paddle2.move("down");
 				}
 			}
-			
 			if (game.playerNumber == 4){
 
 				//player 3

@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper';
 import { Ball } from "../components/Ball.js";
 import { Board } from "./Board.js";
 import { Paddle } from "../components/Paddle.js";
@@ -20,6 +21,8 @@ export class Game {
 		this.roundNumber = 0;
 		this.playerNumber = 4;
 		this.idle = false;
+		this.cameraYmove = 4;
+		this.cameraYspeed = 0.003;
 
 		// Board
 		this.board = new Board(4, 2, 0);
@@ -34,20 +37,27 @@ export class Game {
 		);
 		this.camera.position.set(
 			this.board.center.x,
-			this.board.center.y + 5,
+			this.board.center.y + 5.5,
 			this.board.center.z
 		);
 		this.camera.lookAt(this.board.center);
 
-		// Light
-		this.light = new THREE.PointLight(0xf0f0f0, 2, 10);
-		const pointLightHelper = new THREE.PointLightHelper(this.light, 1);
-		this.scene.add(this.light, pointLightHelper);
-		this.light.position.set(
-			this.board.center.x,
-			this.board.center.y + 5,
-			this.board.center.z
-		);
+		const boxGeometry = new THREE.BoxGeometry(3, .4, 2);
+		const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x808080});
+		const box = new THREE.Mesh(boxGeometry, boxMaterial);
+		box.position.set(this.board.center.x, this.board.center.y + 5.21, this.board.center.z);
+		this.scene.add(box);
+
+		this.rectLight = new THREE.RectAreaLight( 0xffffff, 1,  3, 2 );
+		this.rectLight.position.set( this.board.center.x, this.board.center.y + 5, this.board.center.z );
+		this.rectLight.lookAt( this.board.center.x, this.board.center.y, this.board.center.z );
+		this.scene.add( this.rectLight )
+
+		const rectLightHelper = new RectAreaLightHelper( this.rectLight );
+		this.scene.add( rectLightHelper );
+
+		const ambientLight = new THREE.AmbientLight(0xFFF5E1, 1); // Couleur légèrement jaunâtre avec une intensité de 1
+		this.scene.add(ambientLight);
 
 		// Helper controls
 		this.controls = new OrbitControls(
@@ -153,19 +163,26 @@ export class Game {
 		this.animate();
 	}
 
-	reset() {
-		// Reset paddles
-		if (this.paddle1) this.paddle1.mesh.position.copy(this.paddle1.firstPosition);
-		if (this.paddle2) this.paddle2.mesh.position.copy(this.paddle2.firstPosition);
-		if (this.playerNumber >= 3 && this.paddle3) this.paddle3.mesh.position.copy(this.paddle3.firstPosition);
-		if (this.playerNumber === 4 && this.paddle4) this.paddle4.mesh.position.copy(this.paddle4.firstPosition);
-	
-		// Reset ball
-		if (this.ball) this.ball.reset();
-	}
-
 	animate() {
 		requestAnimationFrame(() => this.animate());
+
+		if (this.idle === true) {
+			const radius = 8;
+			const speed = 0.0005;
+			const time = Date.now() * speed;
+	
+			if (this.cameraYmove >= 8)
+				this.cameraYspeed *= -1;
+			else if (this.cameraYmove <= 4)
+				this.cameraYspeed *= -1;
+
+			this.camera.position.x = this.board.center.x + radius * Math.cos(time);
+			this.camera.position.z = this.board.center.z + radius * Math.sin(time);
+			this.camera.position.y = this.board.center.y + this.cameraYmove;
+	
+			this.camera.lookAt(this.board.center);
+			this.cameraYmove += this.cameraYspeed;
+		}
 
 		// State update
 		this.gameState.update(this);

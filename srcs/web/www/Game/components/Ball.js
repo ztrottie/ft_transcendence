@@ -15,8 +15,8 @@ export class Ball {
 		this.mesh.position.set(_x, _y, _z);
 		
 		// Light
-		this.light = new THREE.PointLight(0xf44336, 30, 100);
-		this.light.position.set(_x, _y, _z);
+		this.light = new THREE.PointLight(0xffff00, 1, 2);
+		this.light.position.set(_x, _y + 2, _z);
 		
 		//physics
 		this.minSpeed = 0.01;
@@ -153,31 +153,30 @@ export class Ball {
 		this.applyFriction();
 		this.updatePosition();
 		this.light.position.copy(this.mesh.position);
-		const side = board.sideTouched(this.mesh.position, this.radius);
+		const gap = this.radius*2 + 0.08;
+		const side = board.sideTouched(this.mesh.position, gap);
 		if (side) {
 			if (side === "top"){
 				this.direction.z *= -1;
 				const btop = board.center.z - board.depth / 2;
-				this.mesh.position.z = btop + this.radius * 2;
-				if (game.playerNumber >= 3){
-					this.reset();
-				}	
+				this.mesh.position.z = btop + gap ;
+				// if (game.playerNumber >= 3) this.reset();
 			}
 			else if (side === "bottom") {
 				this.direction.z *= -1;
 				const btop = board.center.z + board.depth / 2;
-				this.mesh.position.z = btop - this.radius * 2;
-				if (game.playerNumber >= 3) this.reset();
+				this.mesh.position.z = btop - gap;
+				// if (game.playerNumber >= 3) this.reset();
 			} else if (side === "left"){
 				this.direction.x *= -1;
 				const bleft = board.center.x - board.width / 2;
-				this.mesh.position.x = bleft + this.radius * 2;
-				if (game.playerNumber >= 2) this.reset();
+				this.mesh.position.x = bleft + gap;
+				// if (game.playerNumber >= 2) this.reset();
 			}else if (side === "right") {
 				this.direction.x *= -1;
 				const bright = board.center.x + board.width / 2;
-				this.mesh.position.x = bright - this.radius * 2;
-				if (game.playerNumber >= 2) this.reset();
+				this.mesh.position.x = bright - gap;
+				// if (game.playerNumber >= 2) this.reset();
 			} else {
 				this.direction.x *= -1;
 				this.direction.z *= -1;
