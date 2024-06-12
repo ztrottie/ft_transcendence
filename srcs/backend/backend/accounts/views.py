@@ -35,6 +35,7 @@ def signupView(request):
 @permission_classes([AllowAny])
 def loginView(request):
 
+    print (request.content_type)
     if request.content_type != 'application/json':
         return Response({'details':'Media type not supported, expected application/json!'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
     
