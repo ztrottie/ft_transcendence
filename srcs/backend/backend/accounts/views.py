@@ -34,34 +34,42 @@ def signupView(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def loginView(request):
-    #get the user email and password from the request'
-    if request.method == 'POST':
+
+    if request.content_type != 'application/json':
+        return Response({'details':'Media type not supported, expected application/json!'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+    
+    try:
         data = json.loads(request.body)
-        user_email = data.get('email')
-        password = data.get('password')
+    except json.JSONDecodeError:
+        return Response({'details':'Invalid Json!'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    user_email = data.get('email')
+    password = data.get('password')
+
+    if not user_email or password:
+        return Response({'details':'Email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+    
     try:
         user = User.objects.get(email=user_email)
-        print(user)
     except User.DoesNotExist:
-        return Response({'details': 'Invalid email!'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({'details':'Invalid email'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    else:
-        if check_password(password, user.password):
-            #go to the user table and select the correct user
-            user_profile = User.objects.get(email=user_email)
-            #add the code to the user table so the user has his own code
-            verification_code = random_digit_gen
-            user_profile.otp = verification_code
-            user_profile.otp_expiry_time = timezone.now() + timedelta(hours=1)
-            user_profile.save()
-            #send the email to the user
-            send_mail(
-                'Ft_transcendence verification code',#subject
-                'backEndWantYourLocation@backEnd.com',#the from email
-                [user_email],#the recipient email
-                fail_silently=False,#if false, send_email will raise a exception if an error occurs
-            )
-            return Response({'detail': 'Verification code sent successfully.'}, status=status.HTTP_200_OK)
+    if check_password(password, user.password):
+        #go to the user table and select the correct user
+        user_profile = User.objects.get(email=user_email)
+        #add the code to the user table so the user has his own code
+        verification_code = random_digit_gen
+        user_profile.otp = verification_code
+        user_profile.otp_expiry_time = timezone.now() + timedelta(hours=1)
+        user_profile.save()
+        #send the email to the user
+        send_mail(
+            'Ft_transcendence verification code',#subject
+            'backEndWantYourLocation@backEnd.com',#the from email
+            [user_email],#the recipient email
+            fail_silently=False,#if false, send_email will raise a exception if an error occurs
+        )
+        return Response({'detail': 'Verification code sent successfully.'}, status=status.HTTP_200_OK)
 
     return Response({'detail': 'Invalid credentials!.'}, status=status.HTTP_401_UNAUTHORIZED)
 
