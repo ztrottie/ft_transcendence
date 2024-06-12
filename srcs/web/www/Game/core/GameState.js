@@ -19,6 +19,9 @@ export class GameState {
 	}
 
 	update(game) {
+		if (this.isKeyPressed('r')) {
+			game.setIdle(!game.idle);
+		}
 		// Update paddles based on key
 		if (game.idle == false){
 			if (game.playerNumber >= 2){

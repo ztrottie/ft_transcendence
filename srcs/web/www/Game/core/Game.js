@@ -20,7 +20,7 @@ export class Game {
 		this.lifeNumber = 0;
 		this.roundNumber = 0;
 		this.playerNumber = 4;
-		this.idle = false;
+		this.idle = true;
 		this.cameraYmove = 4;
 		this.cameraYspeed = 0.003;
 
@@ -35,13 +35,25 @@ export class Game {
 			0.1,
 			10000
 		);
+
 		this.camera.position.set(
 			this.board.center.x,
 			this.board.center.y + 5.5,
 			this.board.center.z
 		);
+
 		this.camera.lookAt(this.board.center);
 
+		// Camera animation properties
+		this.cameraAnimating = false;
+		this.cameraStartPos = new THREE.Vector3();
+		this.cameraEndPos = new THREE.Vector3(this.board.center.x, this.board.center.y + 5.5, this.board.center.z);
+		this.cameraStartQuat = new THREE.Quaternion();
+		this.cameraEndQuat = new THREE.Quaternion();
+		this.cameraAnimationTime = 2000; // Temps de l'animation en millisecondes
+		this.cameraAnimationStart = null;
+
+		// Light
 		const boxGeometry = new THREE.BoxGeometry(3, .4, 2);
 		const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x808080});
 		const box = new THREE.Mesh(boxGeometry, boxMaterial);
@@ -56,7 +68,7 @@ export class Game {
 		const rectLightHelper = new RectAreaLightHelper( this.rectLight );
 		this.scene.add( rectLightHelper );
 
-		const ambientLight = new THREE.AmbientLight(0xFFF5E1, 1); // Couleur légèrement jaunâtre avec une intensité de 1
+		const ambientLight = new THREE.AmbientLight(0xFFF5E1, 1);
 		this.scene.add(ambientLight);
 
 		// Helper controls
@@ -67,11 +79,11 @@ export class Game {
 		this.controls.target.copy(this.board.center);
 		this.controls.update();
 
-		const gridHelper = new THREE.GridHelper(20, 20);
-		this.scene.add(gridHelper);
+		// const gridHelper = new THREE.GridHelper(20, 20);
+		// this.scene.add(gridHelper);
 
-		const axesHelper = new THREE.AxesHelper(5);
-		this.scene.add(axesHelper);
+		// const axesHelper = new THREE.AxesHelper(5);
+		// this.scene.add(axesHelper);
 
 		this.gameState = new GameState();
 
@@ -163,34 +175,49 @@ export class Game {
 		this.animate();
 	}
 
-	animate() {
-		requestAnimationFrame(() => this.animate());
+	setIdle(idle) {
+		this.idle = idle;
 
-		if (this.idle === true) {
-			const radius = 8;
-			const speed = 0.0005;
-			const time = Date.now() * speed;
-	
-			if (this.cameraYmove >= 8)
-				this.cameraYspeed *= -1;
-			else if (this.cameraYmove <= 4)
-				this.cameraYspeed *= -1;
-
-			this.camera.position.x = this.board.center.x + radius * Math.cos(time);
-			this.camera.position.z = this.board.center.z + radius * Math.sin(time);
-			this.camera.position.y = this.board.center.y + this.cameraYmove;
-	
-			this.camera.lookAt(this.board.center);
-			this.cameraYmove += this.cameraYspeed;
+		if (!idle) {
+			this.cameraAnimating = true;
+			this.cameraStartPos.copy(this.camera.position);
+			this.cameraEndPos.set(this.board.center.x, this.board.center.y + 5.5, this.board.center.z);
+			this.cameraAnimationStart = Date.now();
 		}
+		this.camera.lookAt(this.board.center);
+	}
 
-		// State update
-		this.gameState.update(this);
-
-		// Update movement
-		this.controls.update();
-
-		// Paddles
+	animateIdleCamera() {
+		const radius = 8;
+		const speed = 0.0005;
+		const time = Date.now() * speed;
+	
+		if (this.cameraYmove >= 8 || this.cameraYmove <= 4) {
+			this.cameraYspeed *= -1;
+		}
+	
+		this.camera.position.x = this.board.center.x + radius * Math.cos(time);
+		this.camera.position.z = this.board.center.z + radius * Math.sin(time);
+		this.camera.position.y = this.board.center.y + this.cameraYmove;
+	
+		this.camera.lookAt(this.board.center);
+		this.cameraYmove += this.cameraYspeed;
+	}
+	
+	animateCameraTransition() {
+		const elapsedTime = Date.now() - this.cameraAnimationStart;
+		const t = Math.min(elapsedTime / this.cameraAnimationTime, 1); // Interpolation factor
+	
+		this.camera.position.lerpVectors(this.cameraStartPos, this.cameraEndPos, t);
+		this.camera.lookAt(this.board.center);
+	
+		if (t >= 1) {
+			this.cameraAnimating = false;
+			this.ball.reset();
+		}
+	}
+	
+	updateMovements() {
 		if (this.playerNumber >= 2) {
 			this.paddle1.update(this.board);
 			this.paddle2.update(this.board);
@@ -201,8 +228,9 @@ export class Game {
 		if (this.playerNumber === 4) {
 			this.paddle4.update(this.board);
 		}
-
-		// Ball
+	}
+	
+	checkBoardCollisions() {
 		this.ball.checkPaddleCollision(this.paddle1);
 		this.ball.checkPaddleCollision(this.paddle2);
 		if (this.playerNumber >= 3) {
@@ -212,6 +240,25 @@ export class Game {
 			this.ball.checkPaddleCollision(this.paddle4);
 		}
 		this.ball.update(this, this.board);
+	}
+
+	animate() {
+		requestAnimationFrame(() => this.animate());
+
+		if (this.idle) {
+			this.animateIdleCamera();
+		} else if (this.cameraAnimating) {
+			this.animateCameraTransition();
+		}
+
+		// State update
+		this.gameState.update(this);
+
+		this.controls.update();
+		
+		// Update movement
+		this.updateMovements();
+		this.checkBoardCollisions();
 
 		// Render
 		this.renderer.render(this.scene, this.camera);
@@ -221,10 +268,5 @@ export class Game {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
-	}
-
-	setPlayerNumber(playerNumber) {
-		this.playerNumber = playerNumber;
-		this.setupPaddles(); // Re-setup paddles based on new player number
 	}
 }

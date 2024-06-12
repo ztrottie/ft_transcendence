@@ -17,7 +17,7 @@ export class Ball {
 		// Light
 		this.light = new THREE.PointLight(0xffff00, 1, 2);
 		this.light.position.set(_x, _y + 2, _z);
-		
+
 		//physics
 		this.minSpeed = 0.01;
 		this.maxSpeed = 0.1;
@@ -161,8 +161,7 @@ export class Ball {
 				const btop = board.center.z - board.depth / 2;
 				this.mesh.position.z = btop + gap ;
 				// if (game.playerNumber >= 3) this.reset();
-			}
-			else if (side === "bottom") {
+			}else if (side === "bottom") {
 				this.direction.z *= -1;
 				const btop = board.center.z + board.depth / 2;
 				this.mesh.position.z = btop - gap;
