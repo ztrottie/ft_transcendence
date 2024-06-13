@@ -7,5 +7,3 @@ export function renderFooter() {
 		console.error('Error fetching footer.html:', error);
 	}
 }
-
-

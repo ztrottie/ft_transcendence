@@ -12,7 +12,7 @@ def userRelation(request, pk):
 	try:
 		relation = Relation.objects.filter(Q(User1Id=pk) | Q(User2Id=pk))
 		if not relation.exists():
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response()
 		serializer = RelationSerializer(relation, many=True)
 		return Response(serializer.data)
 	except Relation.DoesNotExist:

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Userdb',
     'RelationDB',
     'accounts',
+	'match',
 ]
 
 REST_FRAMEWORK = {

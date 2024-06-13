@@ -1,9 +1,9 @@
-<form method="post">
-	<div class="formbuilder-email form-group field-email row mt-3">
-		<label for="email" class="formbuilder-email-label col-3">Email:</label>
-		<div class="col-9">
-		<input id="email" type="email" class="form-control border-dark border-3" name="email" aria-required="true" autocomplete="active ">
-		</div>
-	</div>
+<form id="myForm" class="position-absolute top-50 start-50 translate-middle-x">
+	<div id="csrftoken"></div>
+	<label for="id_username">Email:</label>
+	<input type="email" name="username" autocapitalize="none" autocomplete="on" maxlength="255" required="true" id="id_username"><br>
+	<label for="id_password">Password:</label>
+	<input type="password" autocomplete="on" name="password" required="true" id="id_password"><br>
+	<button type="submit">Log In</button>
+	<p>No account? <a href="#/signup">Create one</a></p>
 </form>
-<!-- modal -->
