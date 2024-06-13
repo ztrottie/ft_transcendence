@@ -1,11 +1,10 @@
 <form method="post" action="/api/accounts/login/" class="position-absolute top-50">
-	<div>
-		<input id='csrfmiddlewaretoken' type="hidden" name="csrfmiddlewaretoken">
-		<label for="id_username">Email:</label>
-		<input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="255" required="" id="id_username">
-		<label for="id_password">Password:</label>
-		<input type="password" name="password" autocomplete="current-password" required="" id="id_password">
-		<button type="submit">Log In</button>
+	<div id="csrftoken">
 	</div>
+	<label for="id_username">Email:</label>
+	<input type="email" name="username" autocapitalize="none" autocomplete="email" maxlength="255" required="true" id="id_username">
+	<label for="id_password">Password:</label>
+	<input type="password" name="password" autocomplete="current-password" required="true" id="id_password">
+	<button type="submit">Log In</button>
 </form>
 <!-- modal -->

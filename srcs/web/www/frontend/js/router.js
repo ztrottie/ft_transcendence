@@ -58,7 +58,7 @@ function handleRoutes() {
 async function showFriendList() {
 	try {
 		const user = await getRequest('https://127.0.0.1/api/user/user_login/');
-		if (!user)
+		if (!user.length)
 			return ;
 		const id = await getRequest('https://127.0.0.1/api/user/user_details/', user['name']);
 		const friend = await getRequest('https://127.0.0.1/api/user/user_relation/', id['id']);

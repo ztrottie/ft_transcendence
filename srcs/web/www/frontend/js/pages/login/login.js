@@ -7,7 +7,9 @@ export async function renderLogin() {
 	} catch (error) {
 		console.error('Error fetching login.html:', error);
 	}
+	loadContent('csrftoken', '/api/accounts/login/');
 	await sleep(1000);
-	let input = document.getElementById('csrfmiddlewaretoken');
-	input.setAttribute('value', getCookie('csrftoken'));
+	console.log(document.getElementById('csrftoken').children[0].value);
+	// let input = document.getElementById('csrfmiddlewaretoken');
+	// input.setAttribute('value', getCookie('csrftoken'));
 }
