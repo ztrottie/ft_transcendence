@@ -1,3 +1,4 @@
 {
-	"python.REPL.enableREPLSmartSend": false
+	"pylint.args": ["load-plugins=pylint_django"],
+	"python.REPL.enableREPLSmartSend": false,
 }

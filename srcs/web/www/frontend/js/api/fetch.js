@@ -1,12 +1,55 @@
 export const loadContent = async (id, filePath) => {
 	try {
 		let file = await fetch(filePath);
-		while (!file.ok)
+		for (let i = 4; !file.ok && i > 0; i--)
 			file = await fetch(filePath);
-		const html = await file.text();
-		let container = document.getElementById(id).innerHTML = html
+		if (!file.ok) {
+			file = await fetch(`/frontend/js/pages/error/pageNotFound.html`);
+			const html = await file.text();
+			document.getElementById('body').innerHTML = html
+		}
+		else {
+			const html = await file.text();
+			document.getElementById(id).innerHTML = html
+		}
 	} catch (error) {
 		console.error(`Error : ${filePath} -> `, error);
+	}
+}
+
+export async function postRequest(url, options = null) {
+	fetch(url, options)
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			return console.log('Success:', data)
+		})
+		.catch(error => console.error('Error:', error));
+}
+
+export async function postAuth(url, options = null) {
+	fetch(url, options)
+		.then(response => {
+			return response
+		})
+		.then(data => {
+			return console.log('Success:', data)
+		})
+		.catch(error => console.error('Error:', error));
+}
+
+export async function getRequest(url, options = '') {
+	try {
+		const test = await fetch(url + options);
+		if (!test.ok) {
+			console.log(url);
+			return [];
+		}
+		return await test.json();
+	}
+	catch (error) {
+		return [];
 	}
 }
 
@@ -66,4 +109,3 @@ const applyTranslations = (id, translations, lang) => {
 	});
 	document.documentElement.lang = lang;
 };
-
