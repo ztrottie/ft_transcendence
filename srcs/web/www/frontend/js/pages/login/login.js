@@ -1,5 +1,5 @@
-import { loadContent } from '../../api/fetch.js';
-import { getCookie, sleep } from '../../router.js';
+import { loadContent, postAuth } from '../../api/fetch.js';
+import { showFriendList, sleep } from '../../router.js';
 
 export async function renderLogin() {
 	try {
@@ -9,7 +9,39 @@ export async function renderLogin() {
 	}
 	loadContent('csrftoken', '/api/accounts/login/');
 	await sleep(1000);
-	console.log(document.getElementById('csrftoken').children[0].value);
-	// let input = document.getElementById('csrfmiddlewaretoken');
-	// input.setAttribute('value', getCookie('csrftoken'));
+	document.getElementById('myForm').addEventListener('submit', async function(event) {
+		event.preventDefault();
+
+		const formData = new FormData(this);
+
+		const options = {
+			method: 'POST',
+			headers: {
+				'X-CSRFToken': csrftoken
+			},
+			body: formData
+		}
+		postAuth('https://127.0.0.1/api/accounts/login/', options);
+		await sleep(1000);
+		showFriendList();
+		location.href = '#';
+	});
 }
+
+
+
+// const jsonString = JSON.stringify({
+		// 	'csrfmiddlewaretoken': document.getElementById('csrftoken').children[0].value,
+		// 	'email': "w@w.com",
+		// 	'password': "w"
+		// });
+
+	// console.log(formData.values())
+		// for (var pair of formData.entries()) {
+		// 	console.log(pair[0]+ ', ' + pair[1]); 
+		// }
+
+		// console.log(jsonString)
+
+		// let input = document.getElementById('csrfmiddlewaretoken');
+	// input.setAttribute('value', getCookie('csrftoken'));

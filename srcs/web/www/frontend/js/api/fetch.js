@@ -17,6 +17,42 @@ export const loadContent = async (id, filePath) => {
 	}
 }
 
+export async function postRequest(url, options = null) {
+	fetch(url, options)
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			return console.log('Success:', data)
+		})
+		.catch(error => console.error('Error:', error));
+}
+
+export async function postAuth(url, options = null) {
+	fetch(url, options)
+		.then(response => {
+			return response
+		})
+		.then(data => {
+			return console.log('Success:', data)
+		})
+		.catch(error => console.error('Error:', error));
+}
+
+export async function getRequest(url, options = '') {
+	try {
+		const test = await fetch(url + options);
+		if (!test.ok) {
+			console.log(url);
+			return [];
+		}
+		return await test.json();
+	}
+	catch (error) {
+		return [];
+	}
+}
+
 const translationsCache = {};
 let isLanguageChangePending = false;
 
