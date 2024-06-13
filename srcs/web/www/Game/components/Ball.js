@@ -45,7 +45,7 @@ export class Ball {
 		let direction;
 		do {
 			const randomX = (Math.random() - 0.5) * 2;
-			const randomY = 0; // Assuming 2D plane, you can change this if 3D
+			const randomY = 0;
 			const randomZ = (Math.random() - 0.5) * 2;
 			direction = new THREE.Vector3(randomX, randomY, randomZ).normalize();
 		} while (Math.abs(direction.x) < 0.2 || Math.abs(direction.z) < 0.2);
@@ -84,17 +84,18 @@ export class Ball {
 			const randomX = (Math.random() - 0.5) * randomFactor;
 			const randomZ = (Math.random() - 0.5) * randomFactor;
 	
-			const influenceFactor = 0.4; // Adjust this value to control the amount of influence from the paddle's movement
-	
+			// Adjust this value to control the amount of influence from the paddle's movement
+			const influenceFactor = 0.4;
+
 			if (paddle.orientation == "vertical" && (this.nextPosition.x < paddle.mesh.position.x - paddle.width / 2 || this.nextPosition.x > paddle.mesh.position.x + paddle.width / 2)) {
 				this.direction.x *= -1;
-				this.direction.x += randomX; // Add randomness
+				this.direction.x += randomX;
 	
 				// If the paddle is moving up or down, adjust the ball's Z direction
 				if (paddle.direction.z !== 0) {
 					this.direction.z = paddle.direction.z * influenceFactor;
 				} else {
-					this.direction.z += randomZ; // Add randomness
+					this.direction.z += randomZ;
 				}
 	
 				this.mesh.position.x = this.nextPosition.x < paddle.mesh.position.x ?
@@ -104,13 +105,13 @@ export class Ball {
 	
 			if (paddle.orientation == "horizontal" && (this.nextPosition.z < paddle.mesh.position.z - paddle.depth / 2 || this.nextPosition.z > paddle.mesh.position.z + paddle.depth / 2)) {
 				this.direction.z *= -1;
-				this.direction.z += randomZ; // Add randomness
+				this.direction.z += randomZ;
 	
 				// If the paddle is moving left or right, adjust the ball's X direction
 				if (paddle.direction.x !== 0) {
 					this.direction.x = paddle.direction.x * influenceFactor;
 				} else {
-					this.direction.x += randomX; // Add randomness
+					this.direction.x += randomX;
 				}
 	
 				this.mesh.position.z = this.nextPosition.z < paddle.mesh.position.z ?
@@ -160,22 +161,22 @@ export class Ball {
 				this.direction.z *= -1;
 				const btop = board.center.z - board.depth / 2;
 				this.mesh.position.z = btop + gap ;
-				// if (game.playerNumber >= 3) this.reset();
+				if (game.playerNumber >= 3) this.reset();
 			}else if (side === "bottom") {
 				this.direction.z *= -1;
 				const btop = board.center.z + board.depth / 2;
 				this.mesh.position.z = btop - gap;
-				// if (game.playerNumber >= 3) this.reset();
+				if (game.playerNumber >= 3) this.reset();
 			} else if (side === "left"){
 				this.direction.x *= -1;
 				const bleft = board.center.x - board.width / 2;
 				this.mesh.position.x = bleft + gap;
-				// if (game.playerNumber >= 2) this.reset();
+				if (game.playerNumber >= 2) this.reset();
 			}else if (side === "right") {
 				this.direction.x *= -1;
 				const bright = board.center.x + board.width / 2;
 				this.mesh.position.x = bright - gap;
-				// if (game.playerNumber >= 2) this.reset();
+				if (game.playerNumber >= 2) this.reset();
 			} else {
 				this.direction.x *= -1;
 				this.direction.z *= -1;

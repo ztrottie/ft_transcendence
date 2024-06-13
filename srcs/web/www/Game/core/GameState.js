@@ -1,12 +1,16 @@
 export class GameState {
 	constructor() {
 		this.keysPressed = {};
+		this.keysHandled = {};
 		this.addEventListeners();
 	}
 
 	addEventListeners() {
 		window.addEventListener('keydown', (event) => {
-			this.keysPressed[event.key] = true;
+			if (!this.keysPressed[event.key]) {
+				this.keysPressed[event.key] = true;
+				this.keysHandled[event.key] = false;
+			}
 		});
 
 		window.addEventListener('keyup', (event) => {
@@ -19,9 +23,11 @@ export class GameState {
 	}
 
 	update(game) {
-		if (this.isKeyPressed('r')) {
+		if (this.isKeyPressed('r') && !this.keysHandled['r']) {
 			game.setIdle(!game.idle);
+			this.keysHandled['r'] = true; // Mark the key as handled
 		}
+		
 		// Update paddles based on key
 		if (game.idle == false){
 			if (game.playerNumber >= 2){

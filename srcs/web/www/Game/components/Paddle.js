@@ -14,10 +14,13 @@ export class Paddle {
 
 		// Mesh
 		this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
-		this.material = new THREE.MeshBasicMaterial({ color: _col });
+		this.material = new THREE.MeshStandardMaterial({ color: _col });
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.mesh.position.set(_x, _y, _z);
 
+		const edges = new THREE.EdgesGeometry(this.geometry);
+		this.line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000, linewidth: 10 }));
+		
 		// Physics
 		this.minSpeed = 0.01; // Minimum speed
 		this.maxSpeed = 0.08; // Maximum speed
@@ -25,11 +28,13 @@ export class Paddle {
 		this.acceleration = 0.01; // Acceleration value
 		this.friction = 0.005; // Friction value
 		this.direction = new THREE.Vector3(0, 0, 0); // Initial direction
-		this.firstPosition = new THREE.Vector3(_x, _y, _z);
+		this.firstPosition = new THREE.Vector3(_x, _y, _z); // First object position
 	}
-
+	
 	addToScene(scene) {
 		scene.add(this.mesh);
+		scene.add(this.light);
+		scene.add(this.line);
 	}
 
 	removeFromScene(scene) {
@@ -97,8 +102,9 @@ export class Paddle {
 		// Check if the new position is valid
 		if (board.isValidPaddlePosition(newPosition, this.orientation === "vertical" ? this.depth + 1 : this.width + 1, this.orientation)) {
 			this.mesh.position.copy(newPosition);
+			this.line.position.copy(this.mesh.position);
 		} else {
-			this.speed = 0; // Reset speed if the new position is invalid
+			this.speed = 0;
 		}
 
 		// Reset the moving flag

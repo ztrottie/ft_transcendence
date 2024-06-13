@@ -50,7 +50,7 @@ export class Game {
 		this.cameraEndPos = new THREE.Vector3(this.board.center.x, this.board.center.y + 5.5, this.board.center.z);
 		this.cameraStartQuat = new THREE.Quaternion();
 		this.cameraEndQuat = new THREE.Quaternion();
-		this.cameraAnimationTime = 2000; // Temps de l'animation en millisecondes
+		this.cameraAnimationTime = 2000;
 		this.cameraAnimationStart = null;
 
 		// Light
@@ -85,13 +85,14 @@ export class Game {
 		// const axesHelper = new THREE.AxesHelper(5);
 		// this.scene.add(axesHelper);
 
-		this.gameState = new GameState();
-
-		window.addEventListener("resize", () => this.onWindowResize(), false);
-
+		
 		// Initialize paddles and ball
 		this.setupPaddles();
 		this.setupBall();
+
+		// Game hendeling 
+		this.gameState = new GameState();
+		window.addEventListener("resize", () => this.onWindowResize(), false);
 	}
 
 	setupPaddles() {
@@ -206,7 +207,7 @@ export class Game {
 	
 	animateCameraTransition() {
 		const elapsedTime = Date.now() - this.cameraAnimationStart;
-		const t = Math.min(elapsedTime / this.cameraAnimationTime, 1); // Interpolation factor
+		const t = Math.min(elapsedTime / this.cameraAnimationTime, 1);
 	
 		this.camera.position.lerpVectors(this.cameraStartPos, this.cameraEndPos, t);
 		this.camera.lookAt(this.board.center);
@@ -253,7 +254,6 @@ export class Game {
 
 		// State update
 		this.gameState.update(this);
-
 		this.controls.update();
 		
 		// Update movement
