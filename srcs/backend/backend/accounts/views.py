@@ -11,7 +11,7 @@ from Userdb.models import User
 from django.shortcuts import redirect, render
 from .forms import RegisterForm
 from django.contrib.auth.hashers import check_password
-from django.http import JsonResponse
+from django.middleware.csrf import get_token
 import json
 import random
 import string
@@ -25,58 +25,65 @@ def signupView(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            return redirect('login')
     else:
         form = RegisterForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
+
+@api_view(['GET'])
+def get_csrf_token(request):
+    token = get_token(request)
+    return Response({'csrfToken': token}, status=status.HTTP_200_OK)
+
+@api_view(('GET','POST'))
 def loginView(request):
+    if request.method == 'POST':
+        if request.content_type != 'application/json':
+            return Response({'details':'Media type not supported, expected application/json!'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return Response({'details':'Invalid Json!'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        user_email = data.get('email')
+        password = data.get('password')
 
-    print (request.content_type)
-    if request.content_type != 'application/json':
-        return Response({'details':'Media type not supported, expected application/json!'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-    
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return Response({'details':'Invalid Json!'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    user_email = data.get('email')
-    password = data.get('password')
-
-    if not user_email or password:
-        return Response({'details':'Email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    try:
-        user = User.objects.get(email=user_email)
-    except User.DoesNotExist:
-        return Response({'details':'Invalid email'}, status=status.HTTP_401_UNAUTHORIZED)
-
-    if check_password(password, user.password):
-        #go to the user table and select the correct user
-        user_profile = User.objects.get(email=user_email)
-        #add the code to the user table so the user has his own code
-        verification_code = random_digit_gen
-        user_profile.otp = verification_code
-        user_profile.otp_expiry_time = timezone.now() + timedelta(hours=1)
-        user_profile.save()
-        #send the email to the user
-        send_mail(
-            'Ft_transcendence verification code',#subject
-            'backEndWantYourLocation@backEnd.com',#the from email
-            [user_email],#the recipient email
-            fail_silently=False,#if false, send_email will raise a exception if an error occurs
-        )
-        return Response({'detail': 'Verification code sent successfully.'}, status=status.HTTP_200_OK)
-
-    return Response({'detail': 'Invalid credentials!.'}, status=status.HTTP_401_UNAUTHORIZED)
+        print(user_email)
+        print(password)
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
+        #if not user_email or password:
+        #    return Response({'details':'Email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(email=user_email)
+        except User.DoesNotExist:
+            return Response({'details':'Invalid email'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if check_password(password, user.password):
+            #go to the user table and select the correct user
+            user_profile = User.objects.get(email=user_email)
+            #add the code to the user table so the user has his own code
+            verification_code = random_digit_gen()
+            user_profile.otp = verification_code
+            user_profile.otp_expiry_time = timezone.now() + timedelta(hours=1)
+            user_profile.save()
+            #send the email to the user
+            send_mail(
+                'Ft_transcendence verification code',#subject
+                'Here is your one time code!',#message in the email
+                'backEndWantYourLocation@backEnd.com',#the from email
+                [user_email],#the recipient email
+                fail_silently=False,#if false, send_email will raise a exception if an error occurs
+            )
+            return Response({'detail': 'Verification code sent successfully.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Invalid credentials!.'}, status=status.HTTP_401_UNAUTHORIZED)
+    return render(request, 'registration/signup.html')
+
+
+
 def verify(request):
     #get the email password otp from the request
     email = request.data.get('email')

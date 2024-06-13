@@ -12,11 +12,15 @@ export async function renderLogin() {
 	document.getElementById('myForm').addEventListener('submit', async function(event) {
 		event.preventDefault();
 
-		const formData = new FormData(this);
+		const formData = JSON.stringify({
+			'email': 'w@w.com',
+			'password': 'w'
+		});
 
 		const options = {
 			method: 'POST',
 			headers: {
+				'Content-Type': 'application/json',
 				'X-CSRFToken': csrftoken
 			},
 			body: formData

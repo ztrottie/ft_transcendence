@@ -3,12 +3,12 @@ import { sleep } from '../../router.js';
 
 export async function renderSignup() {
 	try {
-		loadContent('content', '/frontend/js/pages/signup/signup.html');
+		loadContent('content', '/frontend/js/pages/signUp/signup.html');
 	} catch (error) {
 		console.error('Error fetching signup.html:', error);
 	}
 	loadContent('csrftoken', '/api/accounts/signup/');
-	await sleep(1000);
+	await sleep(5000);
 	document.getElementById('myForm').addEventListener('submit', function(event) {
 		event.preventDefault();
 
