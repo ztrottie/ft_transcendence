@@ -25,6 +25,7 @@ class matchManager(models.Manager):
 
 class Match(models.Model):
 	user = models.ForeignKey('Userdb.User', on_delete=models.CASCADE, related_name="Primary_Player")
+	user_score = models.SmallIntegerField(default=0)
 	guest1 = models.CharField(max_length=80)
 	guest2 = models.CharField(max_length=80)
 	guest3 = models.CharField(max_length=80)

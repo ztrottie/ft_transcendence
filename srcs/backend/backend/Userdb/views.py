@@ -13,8 +13,11 @@ def user_list(request):
 		serializer = UserSerializer(users, many=True)
 		return Response(serializer.data)
 	elif request.method == 'POST':
-		content = request.data.get('_content')
-		data = json.loads(content)
+		try:
+			content = request.data.get('_content')
+			data = json.loads(content)
+		except:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
 		serializer = UserSerializer(data=data)
 		if serializer.is_valid():
 			serializer.save()
