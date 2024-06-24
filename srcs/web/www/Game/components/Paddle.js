@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export class Paddle {
-	constructor(_name, _x, _y, _z, _width, _height, _depth, _col, _orientation = "vertical") {
+	constructor(_name, _x, _y, _z, _width, _height, _depth, _col, _life, _orientation = "vertical") {
 		// Properties
 		this.orientation = _orientation;
 		this.height = _height;
@@ -10,7 +10,7 @@ export class Paddle {
 		this.name = _name;
 		this.col = _col;
 		this.isMoving = false;
-		this.life = 3;
+		this.life = _life;
 
 		// Mesh
 		this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
@@ -33,14 +33,20 @@ export class Paddle {
 	
 	addToScene(scene) {
 		scene.add(this.mesh);
-		scene.add(this.light);
 		scene.add(this.line);
 	}
 
 	removeFromScene(scene) {
 		scene.remove(this.mesh);
+		scene.remove(this.line);
 		this.mesh.geometry.dispose();
 		this.mesh.material.dispose();
+	}
+
+	checkLife(scene) {
+		if (this.life <= 0) {
+			this.removeFromScene(scene);
+		}
 	}
 
 	move(direction) {
@@ -89,7 +95,11 @@ export class Paddle {
 		}
 	}
 
-	update(board) {
+	update(board, scene) {
+
+		// Check if the paddle is still alive
+		this.checkLife(scene);
+
 		// Apply friction only if the paddle is not moving
 		if (!this.isMoving) {
 			this.applyFriction();

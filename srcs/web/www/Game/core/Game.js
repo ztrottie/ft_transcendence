@@ -17,18 +17,18 @@ export class Game {
 		document.body.appendChild(this.renderer.domElement);
 
 		// Properties
-		this.lifeNumber = 0;
-		this.roundNumber = 0;
-		this.playerNumber = 4;
 		this.idle = true;
-		this.cameraYmove = 4;
-		this.cameraYspeed = 0.003;
-
+		this.lifeNumber = 3;
+		this.roundNumber = 0;
+		this.playerNumber = 2;
+		
 		// Board
 		this.board = new Board(4, 2, 0);
 		this.board.addToScene(this.scene);
-
+		
 		// Camera
+		this.cameraYmove = 4;
+		this.cameraYspeed = 0.003;
 		this.camera = new THREE.PerspectiveCamera(
 			75,
 			window.innerWidth / window.innerHeight,
@@ -97,11 +97,23 @@ export class Game {
 
 	setupPaddles() {
 		// Remove existing paddles from scene if they exist
-		if (this.paddle1) this.paddle1.removeFromScene(this.scene);
-		if (this.paddle2) this.paddle2.removeFromScene(this.scene);
-		if (this.paddle3) this.paddle3.removeFromScene(this.scene);
-		if (this.paddle4) this.paddle4.removeFromScene(this.scene);
-
+		if (this.paddle1) {
+			this.paddle1.removeFromScene(this.scene);
+			this.paddle1 = null;
+		}
+		if (this.paddle2) {
+			this.paddle2.removeFromScene(this.scene);
+			this.paddle2 = null;
+		}
+		if (this.paddle3) {
+			this.paddle3.removeFromScene(this.scene);
+			this.paddle3 = null;
+		}
+		if (this.paddle4) {
+			this.paddle4.removeFromScene(this.scene);
+			this.paddle4 = null;
+		}
+	
 		// Initialize paddles based on player number
 		this.paddle1 = new Paddle(
 			"paddle1",
@@ -111,7 +123,8 @@ export class Game {
 			0.1,
 			0.5,
 			2,
-			0xff0000
+			0xff0000,
+			this.lifeNumber
 		);
 		this.paddle2 = new Paddle(
 			"paddle2",
@@ -121,43 +134,50 @@ export class Game {
 			0.1,
 			0.5,
 			2,
-			0x0000ff
+			0x0000ff,
+			this.lifeNumber
 		);
-
-		this.paddle3 = new Paddle(
-			"paddle3",
-			this.board.center.x,
-			this.board.center.y + 0.25,
-			this.board.center.z - this.board.depth / 2 + 0.5,
-			2,
-			0.5,
-			0.1,
-			0x00FFFF,
-			"horizontal"
-		);
-
-		this.paddle4 = new Paddle(
-			"paddle4",
-			this.board.center.x,
-			this.board.center.y + 0.25,
-			this.board.center.z + this.board.depth / 2 - 0.5,
-			2,
-			0.5,
-			0.1,
-			0xFFFF00,
-			"horizontal"
-		);
-
+	
 		// Add paddles to scene based on player number
 		this.paddle1.addToScene(this.scene);
 		this.paddle2.addToScene(this.scene);
+		
 		if (this.playerNumber >= 3) {
+			this.paddle3 = new Paddle(
+				"paddle3",
+				this.board.center.x,
+				this.board.center.y + 0.25,
+				this.board.center.z - this.board.depth / 2 + 0.5,
+				2,
+				0.5,
+				0.1,
+				0x00FFFF,
+				this.lifeNumber,
+				"horizontal"
+			);
 			this.paddle3.addToScene(this.scene);
+		} else {
+			this.paddle3 = null;
 		}
+	
 		if (this.playerNumber === 4) {
+			this.paddle4 = new Paddle(
+				"paddle4",
+				this.board.center.x,
+				this.board.center.y + 0.25,
+				this.board.center.z + this.board.depth / 2 - 0.5,
+				2,
+				0.5,
+				0.1,
+				0xFFFF00,
+				this.lifeNumber,
+				"horizontal"
+			);
 			this.paddle4.addToScene(this.scene);
+		} else {
+			this.paddle4 = null;
 		}
-	}
+	}	
 
 	setupBall() {
 		// Remove existing ball from scene if it exists
@@ -220,14 +240,14 @@ export class Game {
 	
 	updateMovements() {
 		if (this.playerNumber >= 2) {
-			this.paddle1.update(this.board);
-			this.paddle2.update(this.board);
+			this.paddle1.update(this.board, this.scene);
+			this.paddle2.update(this.board, this.scene);
 		}
 		if (this.playerNumber >= 3) {
-			this.paddle3.update(this.board);
+			this.paddle3.update(this.board, this.scene);
 		}
 		if (this.playerNumber === 4) {
-			this.paddle4.update(this.board);
+			this.paddle4.update(this.board, this.scene);
 		}
 	}
 	
@@ -243,6 +263,28 @@ export class Game {
 		this.ball.update(this, this.board);
 	}
 
+	countPaddlesInLife() {
+		let count = 0;
+		let lastPaddle = null;
+		if (this.paddle1 && this.paddle1.life > 0) count++;
+		lastPaddle = "paddle1";
+		if (this.paddle2 && this.paddle2.life > 0) count++;
+		lastPaddle = "paddle2";
+		if (this.paddle3 && this.paddle3.life > 0) count++;
+		lastPaddle = "paddle3";
+		if (this.paddle4 && this.paddle4.life > 0) count++;
+		lastPaddle = "paddle4";
+
+		if (count === 1) return lastPaddle;
+		return null;
+	}
+
+	resetGame() {
+		this.setupPaddles();
+		this.setupBall();
+		this.setIdle(true);
+	}
+
 	animate() {
 		requestAnimationFrame(() => this.animate());
 
@@ -251,6 +293,26 @@ export class Game {
 		} else if (this.cameraAnimating) {
 			this.animateCameraTransition();
 		}
+
+		const inlife = this.countPaddlesInLife();
+		switch(inlife) {
+			case "paddle1":
+				this.gameState.win_score.player1++;
+				this.resetGame();
+				break;
+			case "paddle2":
+				this.gameState.win_score.player2++;
+				this.resetGame();
+				break;
+			case "paddle3":
+				this.gameState.win_score.player3++;
+				this.resetGame();
+				break;
+			case "paddle4":
+				this.gameState.win_score.player4++;
+				this.resetGame();
+				break;
+			}
 
 		// State update
 		this.gameState.update(this);

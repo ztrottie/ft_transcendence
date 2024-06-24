@@ -3,6 +3,12 @@ export class GameState {
 		this.keysPressed = {};
 		this.keysHandled = {};
 		this.addEventListeners();
+		this.win_score = {
+			player1: 0,
+			player2: 0,
+			player3: 0,
+			player4: 0
+		};
 	}
 
 	addEventListeners() {

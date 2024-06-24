@@ -27,6 +27,10 @@ export class Ball {
 		this.direction = this.getRandomDirection();
 		this.firstPosition = new THREE.Vector3(_x, _y, _z);
 		this.nextPosition = new THREE.Vector3(1, 0, 1);
+
+		// Cooldown
+		this.cooldown = 1500; // 1.5 seconds
+		this.cooldownTimer = 0;
 	}
 	
 	addToScene(scene) {
@@ -77,7 +81,7 @@ export class Ball {
 		this.lastPaddle = paddle.name;
 		this.nextPosition.copy(this.mesh.position).add(this.direction.clone().normalize().multiplyScalar(this.speed));
 	
-		if (this.collides(this.nextPosition, paddle)) {
+		if (paddle.life > 0 && this.collides(this.nextPosition, paddle)) {
 	
 			// Add some randomness to the direction after collision
 			const randomFactor = 0.4;
@@ -86,7 +90,7 @@ export class Ball {
 	
 			// Adjust this value to control the amount of influence from the paddle's movement
 			const influenceFactor = 0.4;
-
+	
 			if (paddle.orientation == "vertical" && (this.nextPosition.x < paddle.mesh.position.x - paddle.width / 2 || this.nextPosition.x > paddle.mesh.position.x + paddle.width / 2)) {
 				this.direction.x *= -1;
 				this.direction.x += randomX;
@@ -97,6 +101,12 @@ export class Ball {
 				} else {
 					this.direction.z += randomZ;
 				}
+	
+				// Add small deviation
+				const deviationAngle = 0.1; // Adjust this value as needed
+				this.direction.x += (Math.random() - 0.5) * deviationAngle;
+				this.direction.z += (Math.random() - 0.5) * deviationAngle;
+				this.direction.normalize();
 	
 				this.mesh.position.x = this.nextPosition.x < paddle.mesh.position.x ?
 					paddle.mesh.position.x - paddle.width / 2 - this.width / 2 :
@@ -114,13 +124,18 @@ export class Ball {
 					this.direction.x += randomX;
 				}
 	
+				// Add small deviation
+				const deviationAngle = 0.1; // Adjust this value as needed
+				this.direction.x += (Math.random() - 0.5) * deviationAngle;
+				this.direction.z += (Math.random() - 0.5) * deviationAngle;
+				this.direction.normalize();
+	
 				this.mesh.position.z = this.nextPosition.z < paddle.mesh.position.z ?
 					paddle.mesh.position.z - paddle.depth / 2 - this.depth / 2 :
 					paddle.mesh.position.z + paddle.depth / 2 + this.depth / 2;
 			}
 		}
-	}
-	
+	}	
 	
 	applyAcceleration() {
 		if (this.speed < this.maxSpeed) {
@@ -141,6 +156,8 @@ export class Ball {
 		this.mesh.position.copy(this.firstPosition);
 		this.direction = this.getRandomDirection();
 		this.speed = 0;
+		this.light.position.copy(this.mesh.position);
+		this.cooldownTimer = Date.now() + this.cooldown;
 	}	
 
 	updatePosition() {
@@ -150,6 +167,11 @@ export class Ball {
 	}
 
 	update(game, board) {
+		
+		const currentTime = Date.now();
+		if (currentTime < this.cooldownTimer) {
+			return; // Ball is on cooldown
+		}
 		this.applyAcceleration();
 		this.applyFriction();
 		this.updatePosition();
@@ -161,22 +183,26 @@ export class Ball {
 				this.direction.z *= -1;
 				const btop = board.center.z - board.depth / 2;
 				this.mesh.position.z = btop + gap ;
-				if (game.playerNumber >= 3) this.reset();
+				if (game.paddle3 && game.paddle3.life > 0) this.reset();
+				if (!game.idle && game.paddle3) game.paddle3.life--;
 			}else if (side === "bottom") {
 				this.direction.z *= -1;
 				const btop = board.center.z + board.depth / 2;
 				this.mesh.position.z = btop - gap;
-				if (game.playerNumber >= 3) this.reset();
+				if (game.paddle4 && game.paddle4.life > 0) this.reset();
+				if (!game.idle && game.paddle4) game.paddle4.life--;
 			} else if (side === "left"){
 				this.direction.x *= -1;
 				const bleft = board.center.x - board.width / 2;
 				this.mesh.position.x = bleft + gap;
-				if (game.playerNumber >= 2) this.reset();
+				if (game.paddle1 && game.paddle1.life > 0) this.reset();
+				if (!game.idle && game.paddle1) game.paddle1.life--;
 			}else if (side === "right") {
 				this.direction.x *= -1;
 				const bright = board.center.x + board.width / 2;
 				this.mesh.position.x = bright - gap;
-				if (game.playerNumber >= 2) this.reset();
+				if (game.paddle2 && game.paddle2.life > 0) this.reset();
+				if (!game.idle && game.paddle2) game.paddle2.life--;
 			} else {
 				this.direction.x *= -1;
 				this.direction.z *= -1;
