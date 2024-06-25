@@ -21,13 +21,15 @@ export class Game {
 		this.lifeNumber = 3;
 		this.roundNumber = 0;
 		this.playerNumber = 2;
+		this.cameraHeight = 8;
+		this.cameraDistance = 10;
 		
 		// Board
 		this.board = new Board(4, 2, 0);
 		this.board.addToScene(this.scene);
 		
 		// Camera
-		this.cameraYmove = 4;
+		this.cameraYmove = 10;
 		this.cameraYspeed = 0.003;
 		this.camera = new THREE.PerspectiveCamera(
 			75,
@@ -36,18 +38,18 @@ export class Game {
 			10000
 		);
 
-		this.camera.position.set(
-			this.board.center.x,
-			this.board.center.y + 5.5,
-			this.board.center.z
-		);
+		// this.camera.position.set(
+		// 	this.board.center.x - 5,
+		// 	this.board.center.y + 5.5,
+		// 	this.board.center.z + 5
+		// );
 
 		this.camera.lookAt(this.board.center);
 
 		// Camera animation properties
 		this.cameraAnimating = false;
 		this.cameraStartPos = new THREE.Vector3();
-		this.cameraEndPos = new THREE.Vector3(this.board.center.x, this.board.center.y + 5.5, this.board.center.z);
+		this.cameraEndPos = new THREE.Vector3(this.board.center.x, this.board.center.y + this.cameraHeight, this.board.center.z);
 		this.cameraStartQuat = new THREE.Quaternion();
 		this.cameraEndQuat = new THREE.Quaternion();
 		this.cameraAnimationTime = 2000;
@@ -57,11 +59,11 @@ export class Game {
 		const boxGeometry = new THREE.BoxGeometry(3, .4, 2);
 		const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x808080});
 		const box = new THREE.Mesh(boxGeometry, boxMaterial);
-		box.position.set(this.board.center.x, this.board.center.y + 5.21, this.board.center.z);
+		box.position.set(this.board.center.x, this.board.center.y + 9.21, this.board.center.z);
 		this.scene.add(box);
 
 		this.rectLight = new THREE.RectAreaLight( 0xffffff, 1,  3, 2 );
-		this.rectLight.position.set( this.board.center.x, this.board.center.y + 5, this.board.center.z );
+		this.rectLight.position.set( this.board.center.x, this.board.center.y + 9, this.board.center.z );
 		this.rectLight.lookAt( this.board.center.x, this.board.center.y, this.board.center.z );
 		this.scene.add( this.rectLight )
 
@@ -202,14 +204,14 @@ export class Game {
 		if (!idle) {
 			this.cameraAnimating = true;
 			this.cameraStartPos.copy(this.camera.position);
-			this.cameraEndPos.set(this.board.center.x, this.board.center.y + 5.5, this.board.center.z);
+			this.cameraEndPos.set(this.board.center.x, this.board.center.y + this.cameraHeight, this.board.center.z);
 			this.cameraAnimationStart = Date.now();
 		}
 		this.camera.lookAt(this.board.center);
 	}
 
 	animateIdleCamera() {
-		const radius = 8;
+		const radius = this.cameraDistance;
 		const speed = 0.0005;
 		const time = Date.now() * speed;
 	
