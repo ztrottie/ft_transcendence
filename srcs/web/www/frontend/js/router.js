@@ -5,6 +5,8 @@ import { renderHeader } from "./components/header/header.js";
 import { renderFooter } from "./components/footer/footer.js";
 import { renderSignup } from "./pages/signup/signup.js";
 
+import { Game } from '../../Game/core/Game.js';
+
 export function debounce(func, delay) {
 	let timeoutId;
 	return function(...args) {
@@ -74,6 +76,8 @@ window.addEventListener('DOMContentLoaded', () => {
 			localStorage.setItem("lang", "en");
 	}
 	changeLanguage(localStorage.getItem("lang"));
+	const game = new Game();
+	game.start();
 });
 
 window.addEventListener('hashchange', () => {
