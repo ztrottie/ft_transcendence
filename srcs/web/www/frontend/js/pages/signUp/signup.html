@@ -1,15 +1,15 @@
 <form id="myForm" class="position-absolute top-50 start-50 translate-middle-x">
 	<div id="csrftoken"></div>
-	<label for="id_name">Name:</label>
+	<label for="id_name"><span data-i18n="name"></span>:</label>
 	<input type="text" autocomplete="name" name="name" a maxlength="80" required="true" id="id_name"><br>
-	<label for="id_email">Email:</label>
+	<label for="id_email"><span data-i18n="email"></span>:</label>
 	<input type="email" autocomplete="email" name="email" maxlength="254" required="true" id="id_email"><br>
-	<label for="id_login42">Login42:</label>
+	<label for="id_login42"><span data-i18n="login42"></span>:</label>
 	<input type="text" name="login42" maxlength="80" required="true" id="id_login42"><br>
-	<label for="id_password">Password:</label>
+	<label for="id_password"><span data-i18n="password"></span>:</label>
 	<input type="password" name="password" required="true" id="id_password"><br>
-	<label for="id_password_2">Confirm Password:</label>
+	<label for="id_password_2"><Span data-i18n="confirm_password"></Span>:</label>
 	<input type="password" name="password_2" required="true" id="id_password_2"><br>
-	<button type="submit" class="btn btn-success">Register</button>
-	<p>Already an account? <a href="#/login">Log in</a></p>
+	<button type="submit" class="btn btn-success" data-i18n="register"></button>
+	<p><span data-i18n="already_account"></span> <a href="#/login" data-i18n="login"></a></p>
 </form>

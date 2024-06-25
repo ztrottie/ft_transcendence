@@ -1,31 +1,36 @@
 import { loadContent, postAuth } from '../../api/fetch.js';
-import { showFriendList, sleep } from '../../router.js';
+import { getCookie, showFriendList, sleep } from '../../router.js';
 
 export async function renderLogin() {
 	try {
-		loadContent('content', '/frontend/js/pages/login/login.html');
+		loadContent('content', '/frontend/js/pages/login/login.html', loadContent('csrftoken', '/api/accounts/login/'));
 	} catch (error) {
 		console.error('Error fetching login.html:', error);
 	}
-	loadContent('csrftoken', '/api/accounts/login/');
-	await sleep(1000);
-	document.getElementById('myForm').addEventListener('submit', async function(event) {
-		event.preventDefault();
+	try {
+		await sleep(1000)
+		document.getElementById('myForm').addEventListener('submit', async function(event) {
+			event.preventDefault();
+			
+			const formData = new FormData(this);
+			
+			const options = {
+				method: 'POST',
+				headers: {
+					'X-CSRFToken': csrftoken
+				},
+				body: formData
+			}
+			const test = await postAuth('https://127.0.0.1/api/accounts/login/', options);
+			console.log(test)
+			
+			await sleep(100);
+			showFriendList();
+			location.href = '#';
+		});
+	} catch (error) {
 
-		const formData = new FormData(this);
-
-		const options = {
-			method: 'POST',
-			headers: {
-				'X-CSRFToken': csrftoken
-			},
-			body: formData
-		}
-		postAuth('https://127.0.0.1/api/accounts/login/', options);
-		await sleep(1000);
-		showFriendList();
-		location.href = '#';
-	});
+	}
 }
 
 

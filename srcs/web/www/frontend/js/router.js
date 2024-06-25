@@ -3,9 +3,9 @@ import { renderHome } from "./pages/home/home.js";
 import { renderLogin } from "./pages/login/login.js";
 import { renderHeader } from "./components/header/header.js";
 import { renderFooter } from "./components/footer/footer.js";
-import { renderSignup } from "./pages/signUp/signup.js";
+import { renderSignup } from "./pages/signup/signup.js";
 
-function debounce(func, delay) {
+export function debounce(func, delay) {
 	let timeoutId;
 	return function(...args) {
 		clearTimeout(timeoutId);
@@ -43,18 +43,18 @@ function renderNotFound() {
 }
 const routeHandlers = {
 	'': renderTemplate,
-	'#/': renderHome,
 	'#/login': renderLogin,
 	'#/signup': renderSignup,
 	'default': renderNotFound
 };
 
-function handleRoutes() {
+async function handleRoutes() {
 	const hash = window.location.hash || '';
 	const handler = routeHandlers[hash] || routeHandlers['default'];
 	document.getElementById('content').innerHTML = '';
 	handler();
 	changeLanguage(localStorage.getItem("lang"));
+	
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -76,7 +76,10 @@ window.addEventListener('DOMContentLoaded', () => {
 	changeLanguage(localStorage.getItem("lang"));
 });
 
-window.addEventListener('hashchange', handleRoutes);
+window.addEventListener('hashchange', () => {
+	handleRoutes()
+});
+
 
 function changeLanguage(lang) {
 	debouncedChangeLanguage(lang);

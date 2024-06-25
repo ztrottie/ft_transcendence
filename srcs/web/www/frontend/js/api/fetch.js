@@ -1,4 +1,4 @@
-export const loadContent = async (id, filePath) => {
+export const loadContent = async (id, filePath, callback = null) => {
 	try {
 		let file = await fetch(filePath);
 		for (let i = 4; !file.ok && i > 0; i--)
@@ -6,11 +6,13 @@ export const loadContent = async (id, filePath) => {
 		if (!file.ok) {
 			file = await fetch(`/frontend/js/pages/error/pageNotFound.html`);
 			const html = await file.text();
-			document.getElementById('body').innerHTML = html
+			document.getElementById(id).innerHTML = html
 		}
 		else {
 			const html = await file.text();
 			document.getElementById(id).innerHTML = html
+			if (callback && typeof callback === 'function')
+				callback();
 		}
 	} catch (error) {
 		console.error(`Error : ${filePath} -> `, error);
@@ -28,15 +30,10 @@ export async function postRequest(url, options = null) {
 		.catch(error => console.error('Error:', error));
 }
 
-export async function postAuth(url, options = null) {
-	fetch(url, options)
-		.then(response => {
-			return response
-		})
-		.then(data => {
-			return console.log('Success:', data)
-		})
+export function postAuth(url, options = null) {
+	const test = fetch(url, options)
 		.catch(error => console.error('Error:', error));
+		return test
 }
 
 export async function getRequest(url, options = '') {
