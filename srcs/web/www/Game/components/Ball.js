@@ -29,7 +29,7 @@ export class Ball {
 		this.nextPosition = new THREE.Vector3(1, 0, 1);
 
 		// Cooldown
-		this.cooldown = 1500; // 1.5 seconds
+		this.cooldown = 3000; // 3 seconds
 		this.cooldownTimer = 0;
 	}
 	

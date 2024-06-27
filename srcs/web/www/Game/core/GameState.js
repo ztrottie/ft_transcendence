@@ -13,25 +13,25 @@ export class GameState {
 
 	addEventListeners() {
 		window.addEventListener('keydown', (event) => {
-			if (!this.keysPressed[event.key]) {
-				this.keysPressed[event.key] = true;
-				this.keysHandled[event.key] = false;
+			if (!this.keysPressed[event.code]) {
+				this.keysPressed[event.code] = true;
+				this.keysHandled[event.code] = false;
 			}
 		});
 
 		window.addEventListener('keyup', (event) => {
-			this.keysPressed[event.key] = false;
+			this.keysPressed[event.code] = false;
 		});
 	}
 
-	isKeyPressed(key) {
-		return !!this.keysPressed[key];
+	isKeyPressed(code) {
+		return !!this.keysPressed[code];
 	}
 
 	update(game) {
-		if (this.isKeyPressed('r') && !this.keysHandled['r']) {
+		if (this.isKeyPressed('KeyR') && !this.keysHandled['KeyR']) {
 			game.setIdle(!game.idle);
-			this.keysHandled['r'] = true; // Mark the key as handled
+			this.keysHandled['KeyR'] = true; // Mark the key as handled
 		}
 		
 		// Update paddles based on key
@@ -39,10 +39,10 @@ export class GameState {
 			if (game.playerNumber >= 2){
 
 				//player 1
-				if (this.isKeyPressed('w')) {
+				if (this.isKeyPressed('KeyW')) {
 					game.paddle1.move("up");
 				}
-				if (this.isKeyPressed('s')) {
+				if (this.isKeyPressed('KeyS')) {
 					game.paddle1.move("down");
 				}
 				
@@ -57,18 +57,18 @@ export class GameState {
 			if (game.playerNumber == 4){
 
 				//player 3
-				if (this.isKeyPressed('o')) {
+				if (this.isKeyPressed('KeyO')) {
 					game.paddle3.move("left");
 				}
-				if (this.isKeyPressed('p')) {
+				if (this.isKeyPressed('KeyP')) {
 					game.paddle3.move("right");
 				}
 					
 				//player 4
-				if (this.isKeyPressed('x')) {
+				if (this.isKeyPressed('KeyX')) {
 					game.paddle4.move("left");
 				}
-				if (this.isKeyPressed('c')) {
+				if (this.isKeyPressed('KeyC')) {
 					game.paddle4.move("right");
 				}
 			}

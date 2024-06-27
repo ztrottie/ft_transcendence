@@ -20,7 +20,7 @@ export class Game {
 		this.idle = true;
 		this.lifeNumber = 3;
 		this.roundNumber = 0;
-		this.playerNumber = 2;
+		this.playerNumber = 4;
 		this.cameraHeight = 8;
 		this.cameraDistance = 10;
 		
@@ -37,13 +37,7 @@ export class Game {
 			0.1,
 			10000
 		);
-
-		// this.camera.position.set(
-		// 	this.board.center.x - 5,
-		// 	this.board.center.y + 5.5,
-		// 	this.board.center.z + 5
-		// );
-
+		
 		this.camera.lookAt(this.board.center);
 
 		// Camera animation properties
