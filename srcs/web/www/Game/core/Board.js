@@ -1,5 +1,6 @@
 import * as THREE from "three";
-
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 export class Board {
 	constructor(_x, _y, _z) {
 		this.position = new THREE.Vector3(_x, _y, _z);
@@ -42,7 +43,6 @@ export class Board {
 		const rightWallGeometry = new THREE.BoxGeometry(wallThickness, wallHeight, this.depth);
 		this.rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial);
 		this.rightWall.position.set(this.position.x + this.width - wallThickness / 2, this.position.y + wallHeight / 2, this.center.z);
-	
 	}
 
 	addToScene(scene) {

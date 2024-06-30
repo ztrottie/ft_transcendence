@@ -28,6 +28,9 @@ export class Game {
 		this.board = new Board(4, 2, 0);
 		this.board.addToScene(this.scene);
 		
+		//paddles
+		this.paddles = [];
+		
 		// Camera
 		this.cameraYmove = 10;
 		this.cameraYspeed = 0.003;
@@ -93,25 +96,25 @@ export class Game {
 
 	setupPaddles() {
 		// Remove existing paddles from scene if they exist
-		if (this.paddle1) {
-			this.paddle1.removeFromScene(this.scene);
-			this.paddle1 = null;
+		if (this.paddles[0]) {
+			this.paddles[0].removeFromScene(this.scene);
+			this.paddles[0] = null;
 		}
-		if (this.paddle2) {
-			this.paddle2.removeFromScene(this.scene);
-			this.paddle2 = null;
+		if (this.paddles[1]) {
+			this.paddles[1].removeFromScene(this.scene);
+			this.paddles[1] = null;
 		}
-		if (this.paddle3) {
-			this.paddle3.removeFromScene(this.scene);
-			this.paddle3 = null;
+		if (this.paddles[2]) {
+			this.paddles[2].removeFromScene(this.scene);
+			this.paddles[2] = null;
 		}
-		if (this.paddle4) {
-			this.paddle4.removeFromScene(this.scene);
-			this.paddle4 = null;
+		if (this.paddles[3]) {
+			this.paddles[3].removeFromScene(this.scene);
+			this.paddles[3] = null;
 		}
 	
 		// Initialize paddles based on player number
-		this.paddle1 = new Paddle(
+		this.paddles[0] = new Paddle(
 			"paddle1",
 			this.board.center.x - this.board.width / 2 + 0.5,
 			this.board.center.y + 0.25,
@@ -122,7 +125,7 @@ export class Game {
 			0xff0000,
 			this.lifeNumber
 		);
-		this.paddle2 = new Paddle(
+		this.paddles[1] = new Paddle(
 			"paddle2",
 			this.board.center.x + this.board.width / 2 - 0.5,
 			this.board.center.y + 0.25,
@@ -135,11 +138,11 @@ export class Game {
 		);
 	
 		// Add paddles to scene based on player number
-		this.paddle1.addToScene(this.scene);
-		this.paddle2.addToScene(this.scene);
+		this.paddles[0].addToScene(this.scene);
+		this.paddles[1].addToScene(this.scene);
 		
 		if (this.playerNumber >= 3) {
-			this.paddle3 = new Paddle(
+			this.paddles[2] = new Paddle(
 				"paddle3",
 				this.board.center.x,
 				this.board.center.y + 0.25,
@@ -151,13 +154,13 @@ export class Game {
 				this.lifeNumber,
 				"horizontal"
 			);
-			this.paddle3.addToScene(this.scene);
+			this.paddles[2].addToScene(this.scene);
 		} else {
-			this.paddle3 = null;
+			this.paddles[2] = null;
 		}
 	
 		if (this.playerNumber === 4) {
-			this.paddle4 = new Paddle(
+			this.paddles[3] = new Paddle(
 				"paddle4",
 				this.board.center.x,
 				this.board.center.y + 0.25,
@@ -169,9 +172,9 @@ export class Game {
 				this.lifeNumber,
 				"horizontal"
 			);
-			this.paddle4.addToScene(this.scene);
+			this.paddles[3].addToScene(this.scene);
 		} else {
-			this.paddle4 = null;
+			this.paddles[3] = null;
 		}
 	}	
 
@@ -236,25 +239,25 @@ export class Game {
 	
 	updateMovements() {
 		if (this.playerNumber >= 2) {
-			this.paddle1.update(this.board, this.scene);
-			this.paddle2.update(this.board, this.scene);
+			this.paddles[0].update(this.board, this.scene);
+			this.paddles[1].update(this.board, this.scene);
 		}
 		if (this.playerNumber >= 3) {
-			this.paddle3.update(this.board, this.scene);
+			this.paddles[2].update(this.board, this.scene);
 		}
 		if (this.playerNumber === 4) {
-			this.paddle4.update(this.board, this.scene);
+			this.paddles[3].update(this.board, this.scene);
 		}
 	}
 	
 	checkBoardCollisions() {
-		this.ball.checkPaddleCollision(this.paddle1);
-		this.ball.checkPaddleCollision(this.paddle2);
+		this.ball.checkPaddleCollision(this.paddles[0]);
+		this.ball.checkPaddleCollision(this.paddles[1]);
 		if (this.playerNumber >= 3) {
-			this.ball.checkPaddleCollision(this.paddle3);
+			this.ball.checkPaddleCollision(this.paddles[2]);
 		}
 		if (this.playerNumber === 4) {
-			this.ball.checkPaddleCollision(this.paddle4);
+			this.ball.checkPaddleCollision(this.paddles[3]);
 		}
 		this.ball.update(this, this.board);
 	}
@@ -262,13 +265,13 @@ export class Game {
 	countPaddlesInLife() {
 		let count = 0;
 		let lastPaddle = null;
-		if (this.paddle1 && this.paddle1.life > 0) count++;
+		if (this.paddles[0] && this.paddles[0].life > 0) count++;
 		lastPaddle = "paddle1";
-		if (this.paddle2 && this.paddle2.life > 0) count++;
+		if (this.paddles[1] && this.paddles[1].life > 0) count++;
 		lastPaddle = "paddle2";
-		if (this.paddle3 && this.paddle3.life > 0) count++;
+		if (this.paddles[2] && this.paddles[2].life > 0) count++;
 		lastPaddle = "paddle3";
-		if (this.paddle4 && this.paddle4.life > 0) count++;
+		if (this.paddles[3] && this.paddles[3].life > 0) count++;
 		lastPaddle = "paddle4";
 
 		if (count === 1) return lastPaddle;

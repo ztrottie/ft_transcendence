@@ -183,26 +183,26 @@ export class Ball {
 				this.direction.z *= -1;
 				const btop = board.center.z - board.depth / 2;
 				this.mesh.position.z = btop + gap ;
-				if (game.paddle3 && game.paddle3.life > 0) this.reset();
-				if (!game.idle && game.paddle3) game.paddle3.life--;
+				if (game.paddles[2] && game.paddles[2].life > 0) this.reset();
+				if (!game.idle && game.paddles[2]) game.paddles[2].life--;
 			}else if (side === "bottom") {
 				this.direction.z *= -1;
 				const btop = board.center.z + board.depth / 2;
 				this.mesh.position.z = btop - gap;
-				if (game.paddle4 && game.paddle4.life > 0) this.reset();
-				if (!game.idle && game.paddle4) game.paddle4.life--;
+				if (game.paddles[3] && game.paddles[3].life > 0) this.reset();
+				if (!game.idle && game.paddles[3]) game.paddles[3].life--;
 			} else if (side === "left"){
 				this.direction.x *= -1;
 				const bleft = board.center.x - board.width / 2;
 				this.mesh.position.x = bleft + gap;
-				if (game.paddle1 && game.paddle1.life > 0) this.reset();
-				if (!game.idle && game.paddle1) game.paddle1.life--;
+				if (game.paddles[0] && game.paddles[0].life > 0) this.reset();
+				if (!game.idle && game.paddles[0]) game.paddles[0].life--;
 			}else if (side === "right") {
 				this.direction.x *= -1;
 				const bright = board.center.x + board.width / 2;
 				this.mesh.position.x = bright - gap;
-				if (game.paddle2 && game.paddle2.life > 0) this.reset();
-				if (!game.idle && game.paddle2) game.paddle2.life--;
+				if (game.paddles[1] && game.paddles[1].life > 0) this.reset();
+				if (!game.idle && game.paddles[1]) game.paddles[1].life--;
 			} else {
 				this.direction.x *= -1;
 				this.direction.z *= -1;

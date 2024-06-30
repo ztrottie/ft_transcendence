@@ -40,36 +40,36 @@ export class GameState {
 
 				//player 1
 				if (this.isKeyPressed('KeyW')) {
-					game.paddle1.move("up");
+					game.paddles[0].move("up");
 				}
 				if (this.isKeyPressed('KeyS')) {
-					game.paddle1.move("down");
+					game.paddles[0].move("down");
 				}
 				
 				//player 2
 				if (this.isKeyPressed('ArrowUp')) {
-					game.paddle2.move("up");
+					game.paddles[1].move("up");
 				}
 				if (this.isKeyPressed('ArrowDown')) {
-					game.paddle2.move("down");
+					game.paddles[1].move("down");
 				}
 			}
 			if (game.playerNumber == 4){
 
 				//player 3
 				if (this.isKeyPressed('KeyO')) {
-					game.paddle3.move("left");
+					game.paddles[2].move("left");
 				}
 				if (this.isKeyPressed('KeyP')) {
-					game.paddle3.move("right");
+					game.paddles[2].move("right");
 				}
 					
 				//player 4
 				if (this.isKeyPressed('KeyX')) {
-					game.paddle4.move("left");
+					game.paddles[3].move("left");
 				}
 				if (this.isKeyPressed('KeyC')) {
-					game.paddle4.move("right");
+					game.paddles[3].move("right");
 				}
 			}
 		}
