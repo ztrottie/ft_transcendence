@@ -15,7 +15,7 @@ export class Ball {
 		this.mesh.position.set(_x, _y, _z);
 		
 		// Light
-		this.light = new THREE.PointLight(0xffff00, 1, 2);
+		this.light = new THREE.PointLight(0xffff00, 1, 10);
 		this.light.position.set(_x, _y + 2, _z);
 
 		//physics
@@ -184,25 +184,25 @@ export class Ball {
 				const btop = board.center.z - board.depth / 2;
 				this.mesh.position.z = btop + gap ;
 				if (game.paddles[2] && game.paddles[2].life > 0) this.reset();
-				if (!game.idle && game.paddles[2]) game.paddles[2].life--;
+				if (!game.idle && game.paddles[2] && game.paddles[2].life > 0) game.paddles[2].life--;
 			}else if (side === "bottom") {
 				this.direction.z *= -1;
 				const btop = board.center.z + board.depth / 2;
 				this.mesh.position.z = btop - gap;
 				if (game.paddles[3] && game.paddles[3].life > 0) this.reset();
-				if (!game.idle && game.paddles[3]) game.paddles[3].life--;
+				if (!game.idle && game.paddles[3] && game.paddles[3].life > 0) game.paddles[3].life--;
 			} else if (side === "left"){
 				this.direction.x *= -1;
 				const bleft = board.center.x - board.width / 2;
 				this.mesh.position.x = bleft + gap;
 				if (game.paddles[0] && game.paddles[0].life > 0) this.reset();
-				if (!game.idle && game.paddles[0]) game.paddles[0].life--;
+				if (!game.idle && game.paddles[0] && game.paddles[0].life > 0) game.paddles[0].life--;
 			}else if (side === "right") {
 				this.direction.x *= -1;
 				const bright = board.center.x + board.width / 2;
 				this.mesh.position.x = bright - gap;
 				if (game.paddles[1] && game.paddles[1].life > 0) this.reset();
-				if (!game.idle && game.paddles[1]) game.paddles[1].life--;
+				if (!game.idle && game.paddles[1] && game.paddles[1].life > 0) game.paddles[1].life--;
 			} else {
 				this.direction.x *= -1;
 				this.direction.z *= -1;

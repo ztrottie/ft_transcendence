@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import { Text } from "../components/Text.js";
 export class Board {
-	constructor(_x, _y, _z) {
+	constructor(_x, _y, _z, _scene) {
 		this.position = new THREE.Vector3(_x, _y, _z);
 		this.width = 8;
 		this.height = 0;
@@ -18,6 +19,15 @@ export class Board {
 		this.plane.rotation.x = -Math.PI / 2;
 		this.plane.position.copy(this.center);
 		this.plane.position.y = this.position.y;
+		this.scene = _scene;
+		this.texts = [];
+
+		//texts
+		this.texts[0] = new Text(this.scene, new THREE.Vector3(this.center.x - 3, this.center.y, this.center.z), '');
+		this.texts[1] = new Text(this.scene, new THREE.Vector3(this.center.x + 3, this.center.y, this.center.z), '');
+		this.texts[2] = new Text(this.scene, new THREE.Vector3(this.center.x, this.center.y, this.center.z - 3), '');
+		this.texts[3] = new Text(this.scene, new THREE.Vector3(this.center.x, this.center.y, this.center.z + 3), '');
+
 		
 		// Wall properties
 		const wallHeight = 0.2;
@@ -79,5 +89,14 @@ export class Board {
 			return "bottom";
 		}
 		return null;
+	}
+
+	update(game){
+		for (let i = 0; i < this.texts.length; i++) {
+			if (!game.idle && game.paddles[i] && game.paddles[i].life > 0)
+				this.texts[i].update(game.paddles[i].life);
+			else
+				this.texts[i].update('');
+		}
 	}
 }

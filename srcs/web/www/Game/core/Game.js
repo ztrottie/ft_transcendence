@@ -20,12 +20,12 @@ export class Game {
 		this.idle = true;
 		this.lifeNumber = 3;
 		this.roundNumber = 0;
-		this.playerNumber = 4;
+		this.playerNumber = 2;
 		this.cameraHeight = 8;
 		this.cameraDistance = 10;
 		
 		// Board
-		this.board = new Board(4, 2, 0);
+		this.board = new Board(4, 2, 0, this.scene);
 		this.board.addToScene(this.scene);
 		
 		//paddles
@@ -316,6 +316,7 @@ export class Game {
 		// State update
 		this.gameState.update(this);
 		this.controls.update();
+		this.board.update(this);
 		
 		// Update movement
 		this.updateMovements();
