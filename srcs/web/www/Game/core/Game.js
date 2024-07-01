@@ -23,6 +23,9 @@ export class Game {
 		this.playerNumber = 2;
 		this.cameraHeight = 8;
 		this.cameraDistance = 10;
+
+		// Players
+		this.players = [];
 		
 		// Board
 		this.board = new Board(4, 2, 0, this.scene);
@@ -90,7 +93,7 @@ export class Game {
 		this.setupBall();
 
 		// Game hendeling 
-		this.gameState = new GameState();
+		this.state = new GameState();
 		window.addEventListener("resize", () => this.onWindowResize(), false);
 	}
 
@@ -115,7 +118,7 @@ export class Game {
 	
 		// Initialize paddles based on player number
 		this.paddles[0] = new Paddle(
-			"paddle1",
+			this.players[0],
 			this.board.center.x - this.board.width / 2 + 0.5,
 			this.board.center.y + 0.25,
 			this.board.center.z,
@@ -126,7 +129,7 @@ export class Game {
 			this.lifeNumber
 		);
 		this.paddles[1] = new Paddle(
-			"paddle2",
+			this.players[1],
 			this.board.center.x + this.board.width / 2 - 0.5,
 			this.board.center.y + 0.25,
 			this.board.center.z,
@@ -143,7 +146,7 @@ export class Game {
 		
 		if (this.playerNumber >= 3) {
 			this.paddles[2] = new Paddle(
-				"paddle3",
+				this.players[2],
 				this.board.center.x,
 				this.board.center.y + 0.25,
 				this.board.center.z - this.board.depth / 2 + 0.5,
@@ -161,7 +164,7 @@ export class Game {
 	
 		if (this.playerNumber === 4) {
 			this.paddles[3] = new Paddle(
-				"paddle4",
+				this.players[3],
 				this.board.center.x,
 				this.board.center.y + 0.25,
 				this.board.center.z + this.board.depth / 2 - 0.5,
@@ -278,7 +281,7 @@ export class Game {
 		return null;
 	}
 
-	resetGame() {
+	resetRound() {
 		this.setupPaddles();
 		this.setupBall();
 		this.setIdle(true);
@@ -296,25 +299,25 @@ export class Game {
 		const inlife = this.countPaddlesInLife();
 		switch(inlife) {
 			case "paddle1":
-				this.gameState.win_score.player1++;
-				this.resetGame();
+				this.state.win_score.player1++;
+				this.resetRound();
 				break;
 			case "paddle2":
-				this.gameState.win_score.player2++;
-				this.resetGame();
+				this.state.win_score.player2++;
+				this.resetRound();
 				break;
 			case "paddle3":
-				this.gameState.win_score.player3++;
-				this.resetGame();
+				this.state.win_score.player3++;
+				this.resetRound();
 				break;
 			case "paddle4":
-				this.gameState.win_score.player4++;
-				this.resetGame();
+				this.state.win_score.player4++;
+				this.resetRound();
 				break;
 			}
 
 		// State update
-		this.gameState.update(this);
+		this.state.update(this);
 		this.controls.update();
 		this.board.update(this);
 		
@@ -330,5 +333,13 @@ export class Game {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
+	}
+
+	resetGame(){
+		this.state.win_score.player1 = 0;
+		this.state.win_score.player2 = 0;
+		this.state.win_score.player3 = 0;
+		this.state.win_score.player4 = 0;
+		this.resetRound();
 	}
 }
