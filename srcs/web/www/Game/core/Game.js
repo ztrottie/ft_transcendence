@@ -10,6 +10,7 @@ export class Game {
 	constructor() {
 		// Scene and renderer
 		this.scene = new THREE.Scene();
+		// this.scene.background = new THREE.Color(0x444444);
 		this.renderer = new THREE.WebGLRenderer();
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -56,22 +57,22 @@ export class Game {
 		this.cameraAnimationStart = null;
 
 		// Light
-		const boxGeometry = new THREE.BoxGeometry(3, .4, 2);
-		const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x808080});
-		const box = new THREE.Mesh(boxGeometry, boxMaterial);
-		box.position.set(this.board.center.x, this.board.center.y + 9.21, this.board.center.z);
-		this.scene.add(box);
+		// const boxGeometry = new THREE.BoxGeometry(3, .4, 2);
+		// const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x808080});
+		// const box = new THREE.Mesh(boxGeometry, boxMaterial);
+		// box.position.set(this.board.center.x, this.board.center.y + 9.21, this.board.center.z);
+		// this.scene.add(box);
 
-		this.rectLight = new THREE.RectAreaLight( 0xffffff, 1,  3, 2 );
-		this.rectLight.position.set( this.board.center.x, this.board.center.y + 9, this.board.center.z );
+		this.rectLight = new THREE.RectAreaLight( 0xFFFFFF, 10, 5, 2 );
+		this.rectLight.position.set( this.board.center.x, this.board.center.y + 5, this.board.center.z );
 		this.rectLight.lookAt( this.board.center.x, this.board.center.y, this.board.center.z );
 		this.scene.add( this.rectLight )
 
 		const rectLightHelper = new RectAreaLightHelper( this.rectLight );
 		this.scene.add( rectLightHelper );
 
-		const ambientLight = new THREE.AmbientLight(0xFFF5E1, 1);
-		this.scene.add(ambientLight);
+		// const ambientLight = new THREE.AmbientLight(0xFFF5E1, 0.5);
+		// this.scene.add(ambientLight);
 
 		// Helper controls
 		this.controls = new OrbitControls(
@@ -95,6 +96,13 @@ export class Game {
 		// Game hendeling 
 		this.state = new GameState();
 		window.addEventListener("resize", () => this.onWindowResize(), false);
+
+		for (let i = 0; i < 3000; i++) {
+			this.createRandomCube(this.board.center, 8, 80);
+		}
+		for (let i = 0; i < 40; i++) {
+			this.createRandomLight(this.board.center, 30, 100);
+		}
 	}
 
 	setupPaddles() {
@@ -192,6 +200,54 @@ export class Game {
 			this.board.center.z
 		);
 		this.ball.addToScene(this.scene);
+	}
+
+
+	isInSafeZone(x, y, z, origin, range = 10) {
+		const safeZoneSize = range; // Taille de la zone de sécurité (carré centré à l'origine)
+		return (
+			x > origin.x - safeZoneSize && x < origin.x + safeZoneSize &&
+			y > origin.y - safeZoneSize && y < origin.y + safeZoneSize &&
+			z > origin.z - safeZoneSize && z < origin.z + safeZoneSize
+		);
+	}
+
+	createRandomCube(origin, safeZoneSize, rangeMax) {
+		const geometry = new THREE.BoxGeometry();
+		const material = new THREE.MeshStandardMaterial({ color: 0x98806A });
+		const cube = new THREE.Mesh(geometry, material);
+	
+		let x, y, z;
+		do {
+			x = origin.x + Math.random() * (2 * rangeMax) - rangeMax;
+			y = origin.y + Math.random() * (2 * rangeMax) - rangeMax;
+			z = origin.z + Math.random() * (2 * rangeMax) - rangeMax;
+		} while (this.isInSafeZone(x, y, z, origin, safeZoneSize));
+	
+		cube.position.set(x, y, z);
+	
+		cube.rotation.set(
+			Math.random() * Math.PI,
+			Math.random() * Math.PI,
+			Math.random() * Math.PI
+		);
+
+		this.scene.add(cube);
+	}
+
+	createRandomLight(origin, safeZoneSize, rangeMax) {
+		const light = new THREE.PointLight(0xF98E1C, 2.5, 90);
+	
+		let x, y, z;
+		do {
+			x = origin.x + Math.random() * (2 * rangeMax) - rangeMax;
+			y = origin.y + Math.random() * (2 * rangeMax) - rangeMax;
+			z = origin.z + Math.random() * (2 * rangeMax) - rangeMax;
+		} while (this.isInSafeZone(x, y, z, origin, safeZoneSize));
+	
+		light.position.set(x, y, z);
+	
+		this.scene.add(light);
 	}
 
 	start() {
