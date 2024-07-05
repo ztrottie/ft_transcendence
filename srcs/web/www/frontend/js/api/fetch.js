@@ -100,9 +100,15 @@ const applyTranslations = (id, translations, lang) => {
 	const elements = container.querySelectorAll('[data-i18n]');
 	elements.forEach(element => {
 		const key = element.dataset.i18n;
-		if (translations[key]) {
+		if (key.startsWith('[placeholder]')) {
+			const placeholderKey = key.replace('[placeholder]', '');
+			if (translations[placeholderKey])
+				element.placeholder = translations[placeholderKey];
+		}
+		else if (translations[key]) {
 			element.textContent = translations[key];
 		}
 	});
 	document.documentElement.lang = lang;
 };
+

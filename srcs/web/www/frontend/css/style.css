@@ -27,3 +27,12 @@
 .paddle.modal-body {
 	height: 500px;
 }
+
+.brian {
+	color: #cbcbcb !important;
+	
+}
+
+.brian::placeholder {
+	color: #cbcbcb !important;
+}

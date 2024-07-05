@@ -10,6 +10,7 @@
 	"friend_list": "Friends list",
 	"game_setting": "Game Setting",
 	"home": "Home",
+	"key": "Key:",
 	"language": "Language",
 	"language_english": "English",
 	"language_french": "French",
@@ -31,7 +32,9 @@
 	"setting": "Setting",
 	"sign_up": "Sign up",
 	"submit": "Submit",
+	"user_list": "User list",
 	"wdelaros": "William Delarosbil",
 	"zbeaumon": "Zachary Beaumont",
-	"ztrottie": "Zackary Trottier"
+	"ztrottie": "Zackary Trottier",
+	"enter_name": "Enter a name"
 }

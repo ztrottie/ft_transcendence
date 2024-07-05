@@ -10,6 +10,7 @@
 	"friend_list": "Liste d'amis",
 	"game_setting": "Paramètres du jeu",
 	"home": "Maison en pain d'épice",
+	"key": "key:",
 	"language": "Langue",
 	"language_english": "Anglais",
 	"language_french": "Français",
@@ -31,7 +32,9 @@
 	"setting": "Paramètre",
 	"sign_up": "S'inscrire",
 	"submit": "Soumettre",
+	"user_list": "Liste d'utilisateurs",
 	"wdelaros": "William Delarosbil",
 	"zbeaumon": "Zachary Beaumont",
-	"ztrottie": "Zackary Trottier"
+	"ztrottie": "Zackary Trottier",
+	"enter_name": "Entrer un nom"
 }

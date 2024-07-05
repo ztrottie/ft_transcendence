@@ -10,6 +10,7 @@
 	"friend_list": "フレンドリスト",
 	"game_setting": "ゲーム設定",
 	"home": "ホーム",
+	"key": "鍵だ：",
 	"language": "言語",
 	"language_english": "英語",
 	"language_french": "フランス語",
@@ -31,7 +32,9 @@
 	"setting": "セッティング",
 	"sign_up": "登録する",
 	"submit": "投稿する",
+	"user_list": "ユーザーリスト",
 	"wdelaros": "ウィリアム・デラロスビル",
 	"zbeaumon": "ザカリー・ボーモント",
-	"ztrottie": "ザッカリー・トロティエ"
+	"ztrottie": "ザッカリー・トロティエ",
+	"enter_name": "名前を入力"
 }

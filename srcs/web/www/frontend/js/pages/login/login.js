@@ -2,8 +2,9 @@ import { loadContent, postAuth } from '../../api/fetch.js';
 import { getCookie, showFriendList, sleep } from '../../router.js';
 
 export async function renderLogin() {
+	document.getElementById('header').hidden = false;
 	try {
-		loadContent('content', '/frontend/js/pages/login/login.html', loadContent('csrftoken', '/api/accounts/login/'));
+		loadContent('content', '/frontend/js/pages/login/login.html', function () {loadContent('csrftoken', '/api/accounts/login/')});
 	} catch (error) {
 		console.error('Error fetching login.html:', error);
 	}

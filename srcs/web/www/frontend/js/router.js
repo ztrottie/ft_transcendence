@@ -28,16 +28,34 @@ export function getCookie(name) {
 }
 
 export async function renderTemplate() {
-	loadContent('content', '/frontend/js/pages/template/template.html');
+	await loadContent('content', '/frontend/js/pages/template/template.html');
 	// await sleep(1000);
 	// const gameButton = document.querySelectorAll('#gameBtn');
 	// gameButton.forEach(button => {
 	// 	button.addEventListener('click', async () => {
 	// 		let test = await getRequest('https://127.0.0.1/api/user/user_list/');
-	// 		console.log(test);à
+	// 		console.log(test);
 	// 	});
 	// });
 	changeLanguage(localStorage.getItem("lang"));
+	const btnGameSetting = document.getElementById('btnGameSetting');
+	btnGameSetting.addEventListener('click', () => {
+		const gameBtn = document.getElementById('gameBtn');
+
+		
+		gameBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			let formData = new FormData(document.getElementById('gameSet'));
+			console.log(formData.get('options'))
+			for(let pair of formData.entries()){
+				console.log(pair[0], pair[1]);
+			}
+			if (formData.get('options') == 4)
+				new bootstrap.Modal(document.getElementById('lobby1', {})).show();
+			else
+				new bootstrap.Modal(document.getElementById('lobby', {})).show();
+		})
+	})
 }
 
 function renderNotFound() {
@@ -56,7 +74,7 @@ async function handleRoutes() {
 	document.getElementById('content').innerHTML = '';
 	handler();
 	changeLanguage(localStorage.getItem("lang"));
-	
+
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -78,9 +96,19 @@ window.addEventListener('DOMContentLoaded', () => {
 	changeLanguage(localStorage.getItem("lang"));
 	const game = new Game();
 	game.start();
+	// setInterval(function () {
+	// 	console.log('allo')
+	// }, 5000)
 });
 
+export function hideAndSeek(boolean) {
+	document.getElementById('header').hidden = boolean
+	document.getElementById('content').hidden = boolean
+	document.getElementById('footer').hidden = boolean
+}
+
 window.addEventListener('hashchange', () => {
+	hideAndSeek(false)
 	handleRoutes()
 });
 
@@ -118,74 +146,31 @@ function attachEventListeners() {
 
 export async function showFriendList() {
 	try {
-		const user = await getRequest('https://127.0.0.1/api/user/user_login/');
-		if (!user.name)
-			return ;
-		const id = await getRequest('https://127.0.0.1/api/user/user_details/', user['name']);
-		const friend = await getRequest('https://127.0.0.1/api/user/user_relation/', id['id']);
+		// const user = await getRequest('https://127.0.0.1/api/user/user_login/');
+		// if (!user.name)
+		// 	return ;
+		// const id = await getRequest('https://127.0.0.1/api/user/user_details/', user['name']);
 		const userList = await getRequest('https://127.0.0.1/api/user/user_list/');
 		const nbOfUsers = userList['length'];
-		const nbOfFriend = friend['length'];
 
-		let divFriend = document.getElementById('friendList');
-		let divAddFriend = document.getElementById('addFriend');
-		while (divFriend.hasChildNodes())
-			divFriend.removeChild(divFriend.firstChild);
-		while (divAddFriend.hasChildNodes())
-			divAddFriend.removeChild(divAddFriend.firstChild);
+		let divUser = document.getElementById('friendList');
+		if (divUser.childElementCount === nbOfUsers)
+			return
+		while (divUser.hasChildNodes())
+			divUser.removeChild(divUser.firstChild);
 
 		for (let i = 0; i < nbOfUsers; i++) {
-			let button = document.createElement('button');
 			let card = document.createElement('div');
 			let cardBody = document.createElement('div');
-			
-			let img = document.createElement('img');
-			let imgAdd = document.createElement('img');
-			img.src = '/frontend/img/person-fill-dash.svg';
-			imgAdd.src = '/frontend/img/person-fill-add.svg';
-			
-			let text = '';
-			let friendName = '';
-			let isFriend = false;
-			if (userList[i]['id'] == id['id']) {
-				continue ;
-			}
-			else if (nbOfFriend) {
-				for (let j = 0; j < nbOfFriend; j++) {
-					if (userList[i]['id'] == friend[j]['User1Id'] || userList[i]['id'] == friend[j]['User2Id']) {
-						friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
-						text = document.createTextNode(friendName['name']);
-						isFriend = true;
-						break ;
-					}
-				}
-				if (isFriend === false) {
-					friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
-					text = document.createTextNode(friendName['name']);
-				}
-			}
-			else {
-				friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
-				text = document.createTextNode(friendName['name']);
-				isFriend = false;
-			}
-			button.classList.add('btn');
+			let friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
+			let text = document.createTextNode(friendName['name']);
 			cardBody.classList.add('card-body');
 			cardBody.classList.add('d-flex');
 			cardBody.classList.add('justify-content-between');
 			card.classList.add('card');
 			card.appendChild(cardBody);
 			cardBody.appendChild(text);
-			cardBody.appendChild(button);
-			if (isFriend === true) {
-				button.appendChild(img);
-				divFriend.appendChild(card);
-			}
-			else if (isFriend === false) {
-				button.addEventListener('click', () => addFriend(user['name'], userList[i]['name']));
-				button.appendChild(imgAdd);
-				divAddFriend.appendChild(card);
-			}
+			divUser.appendChild(card);
 		}
 	}
 	catch (error) {
@@ -193,30 +178,107 @@ export async function showFriendList() {
 	}
 }
 
-async function addFriend(userName, friendName) {
-	fetch('https://127.0.0.1/api/user/add_friend/' + userName + '/' + friendName + '/');
+// export async function showFriendList() {
+// 	try {
+// 		const user = await getRequest('https://127.0.0.1/api/user/user_login/');
+// 		if (!user.name)
+// 			return ;
+// 		const id = await getRequest('https://127.0.0.1/api/user/user_details/', user['name']);
+// 		const friend = await getRequest('https://127.0.0.1/api/user/user_relation/', id['id']);
+// 		const userList = await getRequest('https://127.0.0.1/api/user/user_list/');
+// 		const nbOfUsers = userList['length'];
+// 		const nbOfFriend = friend['length'];
 
-	let divAddFriend = document.getElementById('addFriend');
-	let i = 0;
-	while (divAddFriend.children[i].children[0].childNodes[0].nodeValue != friendName)
-		i++;
-	if (divAddFriend.children[i].children[0].childNodes[0].nodeValue == friendName)
-		divAddFriend.removeChild(divAddFriend.children[i]);
+// 		let divFriend = document.getElementById('friendList');
+// 		let divAddFriend = document.getElementById('addFriend');
+// 		while (divFriend.hasChildNodes())
+// 			divFriend.removeChild(divFriend.firstChild);
+// 		while (divAddFriend.hasChildNodes())
+// 			divAddFriend.removeChild(divAddFriend.firstChild);
 
-	let divFriend = document.getElementById('friendList');
-	let button = document.createElement('button');
-	let card = document.createElement('div');
-	let cardBody = document.createElement('div');
-	let img = document.createElement('img');
-	img.src = '/frontend/img/person-fill-dash.svg';
-	button.classList.add('btn');
-	cardBody.classList.add('card-body');
-	cardBody.classList.add('d-flex');
-	cardBody.classList.add('justify-content-between');
-	card.classList.add('card');
-	card.appendChild(cardBody);
-	cardBody.appendChild(document.createTextNode(friendName));
-	cardBody.appendChild(button);
-	button.appendChild(img);
-	divFriend.appendChild(card);
-}
+// 		for (let i = 0; i < nbOfUsers; i++) {
+// 			let button = document.createElement('button');
+// 			let card = document.createElement('div');
+// 			let cardBody = document.createElement('div');
+			
+// 			let img = document.createElement('img');
+// 			let imgAdd = document.createElement('img');
+// 			img.src = '/frontend/img/person-fill-dash.svg';
+// 			imgAdd.src = '/frontend/img/person-fill-add.svg';
+			
+// 			let text = '';
+// 			let friendName = '';
+// 			let isFriend = false;
+// 			if (userList[i]['id'] == id['id']) {
+// 				continue ;
+// 			}
+// 			else if (nbOfFriend) {
+// 				for (let j = 0; j < nbOfFriend; j++) {
+// 					if (userList[i]['id'] == friend[j]['User1Id'] || userList[i]['id'] == friend[j]['User2Id']) {
+// 						friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
+// 						text = document.createTextNode(friendName['name']);
+// 						isFriend = true;
+// 						break ;
+// 					}
+// 				}
+// 				if (isFriend === false) {
+// 					friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
+// 					text = document.createTextNode(friendName['name']);
+// 				}
+// 			}
+// 			else {
+// 				friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
+// 				text = document.createTextNode(friendName['name']);
+// 				isFriend = false;
+// 			}
+// 			button.classList.add('btn');
+// 			cardBody.classList.add('card-body');
+// 			cardBody.classList.add('d-flex');
+// 			cardBody.classList.add('justify-content-between');
+// 			card.classList.add('card');
+// 			card.appendChild(cardBody);
+// 			cardBody.appendChild(text);
+// 			cardBody.appendChild(button);
+// 			if (isFriend === true) {
+// 				button.appendChild(img);
+// 				divFriend.appendChild(card);
+// 			}
+// 			else if (isFriend === false) {
+// 				button.addEventListener('click', () => addFriend(user['name'], userList[i]['name']));
+// 				button.appendChild(imgAdd);
+// 				divAddFriend.appendChild(card);
+// 			}
+// 		}
+// 	}
+// 	catch (error) {
+// 		console.error(error);
+// 	}
+// }
+
+// async function addFriend(userName, friendName) {
+// 	fetch('https://127.0.0.1/api/user/add_friend/' + userName + '/' + friendName + '/');
+
+// 	let divAddFriend = document.getElementById('addFriend');
+// 	let i = 0;
+// 	while (divAddFriend.children[i].children[0].childNodes[0].nodeValue != friendName)
+// 		i++;
+// 	if (divAddFriend.children[i].children[0].childNodes[0].nodeValue == friendName)
+// 		divAddFriend.removeChild(divAddFriend.children[i]);
+
+// 	let divFriend = document.getElementById('friendList');
+// 	let button = document.createElement('button');
+// 	let card = document.createElement('div');
+// 	let cardBody = document.createElement('div');
+// 	let img = document.createElement('img');
+// 	img.src = '/frontend/img/person-fill-dash.svg';
+// 	button.classList.add('btn');
+// 	cardBody.classList.add('card-body');
+// 	cardBody.classList.add('d-flex');
+// 	cardBody.classList.add('justify-content-between');
+// 	card.classList.add('card');
+// 	card.appendChild(cardBody);
+// 	cardBody.appendChild(document.createTextNode(friendName));
+// 	cardBody.appendChild(button);
+// 	button.appendChild(img);
+// 	divFriend.appendChild(card);
+// }

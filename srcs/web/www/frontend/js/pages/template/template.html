@@ -1,4 +1,4 @@
-<button type="button" class="position-absolute start-50 top-50 translate-middle" data-bs-toggle="modal" data-bs-target="#gameSetting" data-i18n="press_to_play">
+<button type="button" id="btnGameSetting" class="position-absolute start-50 top-50 translate-middle" data-bs-toggle="modal" data-bs-target="#gameSetting" data-i18n="press_to_play">
 
 </button>
 
@@ -11,24 +11,24 @@
 				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form>
+				<form id="gameSet">
 					<div class="row">
 						<label for="numberOfLife" class="col-4" data-i18n="number_of_life"></label>
-						<input  class="col-7" type="range" min="1" max="10" step="1" id="numberOfLife" oninput="this.nextElementSibling.value = this.value">
-						<output class="col-1 text-end">6</output>
+						<input  class="col-7" type="range" min="1" max="5" step="1"  name="numberOfLife" id="numberOfLife" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">3</output>
 					</div>
 					<div class="row">
-						<label for="numberOfGame" class="col-4" data-i18n="number_of_games"></label>
-						<input class="col-7" type="range" min="1" max="10" step="1" id="numberOfGame" oninput="this.nextElementSibling.value = this.value">
-						<output class="col-1 text-end">6</output>
+						<label for="numberOfGame" class="col-4" data-i18n="number_of_games"></label> <!--number of round win-->
+						<input class="col-7" type="range" min="1" max="3" step="1" name="numberOfGame" id="numberOfGame" oninput="this.nextElementSibling.value = this.value">
+						<output class="col-1 text-end">2</output>
 					</div>
 					<div class="row d-flex justify-content-between mt-2 mb-2">
-						<input type="radio" class="btn-check" name="options" id="option" checked>
+						<input type="radio" class="btn-check" name="options" id="option" value="2" checked>
 						<label class="btn btn-outline-secondary col-5 ms-2" for="option">2</label>
-						<input type="radio" class="btn-check" name="options" id="option1">
+						<input type="radio" class="btn-check" name="options" id="option1" value="4">
 						<label class="btn btn-outline-secondary col-5 me-2" for="option1">4</label>
 					</div>
-					<button type="button" id="gameBtn" data-bs-toggle="modal" data-bs-target="#lobby" data-i18n="submit">submit</button>
+					<button type="submit" data-bs-dismiss="modal" id="gameBtn" data-i18n="submit"></button>
 				</form>
 			</div>
 		</div>
@@ -45,11 +45,35 @@
 			</div>
 			<div class="modal-body paddle">
 				<h3 class="w-auto position-absolute start-50 top-50 translate-middle" data-i18n="choose_spot"></h3>
-				<input type="text" class="position-absolute start-0 top-50 w-25 h-25 translate-middle-y">
-				<button type="button" class="position-absolute start-50 top-0 w-25 h-25 translate-middle-x">3</button>
-				<button type="button" class="position-absolute end-0 top-50 w-25 h-25 translate-middle-y">2</button>
-				<button type="button" class="position-absolute start-50 bottom-0 w-25 h-25 translate-middle-x">4</button>
+				<input type="text" data-i18n="[placeholder]enter_name" class="brian position-absolute bg-danger start-0 top-50 w-25 translate-middle-y"> <!--1		w 	s-->
+				<h5 class="position-absolute start-0 bottom-50 w-25 translate-middle-y"><span data-i18n="key"></span> W S</h5>
+				<input type="text" data-i18n="[placeholder]enter_name" class="brian position-absolute bg-primary end-0 top-50 w-25 translate-middle-y"> <!--2			up 	down-->
+				<h5 class="position-absolute end-0 bottom-50 w-25 translate-middle-y"><span data-i18n="key"></span> ↑ ↓</h5>
 			</div>
 		</div>
 	</div> 
 </div>
+
+<!-- lobby modal -->
+<div class="modal" id="lobby1" tabindex="-1" data-bs-backdrop="static" aria-labelledby="lobby1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" data-i18n="lobby"></h5>
+				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body paddle">
+				<h3 class="w-auto position-absolute start-50 top-50 translate-middle" data-i18n="choose_spot"></h3>
+				<input type="text" data-i18n="[placeholder]enter_name" class="brian position-absolute bg-danger start-0 top-50 w-25 translate-middle-y"> <!--1		w 	s-->
+				<h5 class="position-absolute start-0 bottom-50 w-25 translate-middle-y"><span data-i18n="key"></span> W S</h5>
+				<input type="text" data-i18n="[placeholder]enter_name" class="brian position-absolute bg-primary end-0 top-50 w-25 translate-middle-y"> <!--2			up 	down-->
+				<h5 class="position-absolute end-0 bottom-50 w-25 translate-middle-y"><span data-i18n="key"></span> ↑ ↓</h5>
+				<input type="text" data-i18n="[placeholder]enter_name" class="position-absolute bg-info start-50 top-0 w-25 translate-middle-x"> <!--3			o 	p-->
+				<h5 class="position-absolute start-50 w-25 translate-middle-x" style="top: 10%;"><span data-i18n="key"></span> O P</h5>
+				<input type="text" data-i18n="[placeholder]enter_name" class="position-absolute bg-warning start-50 bottom-0 w-25 translate-middle-x"> <!--4	x 	c-->
+				<h5 class="position-absolute start-50 w-25 translate-middle-x" style="bottom: 10%;"><span data-i18n="key"></span> X C</h5>
+			</div>
+		</div>
+	</div> 
+</div>
+
