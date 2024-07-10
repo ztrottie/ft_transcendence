@@ -10,6 +10,7 @@ export class Game {
 	constructor() {
 		// Scene and renderer
 		this.scene = new THREE.Scene();
+
 		// this.scene.background = new THREE.Color(0x444444);
 		this.renderer = new THREE.WebGLRenderer();
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -18,13 +19,10 @@ export class Game {
 		document.body.appendChild(this.renderer.domElement);
 
 		// Properties
-		this.idle = true;
 		this.lifeNumber = 3;
 		this.roundNumber = 0;
 		this.playerNumber = 2;
-		this.cameraHeight = 8;
-		this.cameraDistance = 10;
-
+		
 		// Players
 		this.players = [];
 		
@@ -36,6 +34,8 @@ export class Game {
 		this.paddles = [];
 		
 		// Camera
+		this.cameraHeight = 8;
+		this.cameraDistance = 10;
 		this.cameraYmove = 10;
 		this.cameraYspeed = 0.003;
 		this.camera = new THREE.PerspectiveCamera(
@@ -43,8 +43,7 @@ export class Game {
 			window.innerWidth / window.innerHeight,
 			0.1,
 			10000
-		);
-		
+		);		
 		this.camera.lookAt(this.board.center);
 
 		// Camera animation properties
@@ -56,18 +55,13 @@ export class Game {
 		this.cameraAnimationTime = 2000;
 		this.cameraAnimationStart = null;
 
-		// Light
-		// const boxGeometry = new THREE.BoxGeometry(3, .4, 2);
-		// const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x808080});
-		// const box = new THREE.Mesh(boxGeometry, boxMaterial);
-		// box.position.set(this.board.center.x, this.board.center.y + 9.21, this.board.center.z);
-		// this.scene.add(box);
-
+		// Lights
 		this.rectLight = new THREE.RectAreaLight( 0xFFFFFF, 10, 5, 2 );
 		this.rectLight.position.set( this.board.center.x, this.board.center.y + 5, this.board.center.z );
 		this.rectLight.lookAt( this.board.center.x, this.board.center.y, this.board.center.z );
 		this.scene.add( this.rectLight )
 
+		// Light helper
 		const rectLightHelper = new RectAreaLightHelper( this.rectLight );
 		this.scene.add( rectLightHelper );
 
@@ -94,15 +88,24 @@ export class Game {
 		this.setupBall();
 
 		// Game hendeling 
-		this.state = new GameState();
+		this.manager = new GameState();
 		window.addEventListener("resize", () => this.onWindowResize(), false);
 
-		for (let i = 0; i < 3000; i++) {
-			this.createRandomCube(this.board.center, 8, 80);
-		}
-		for (let i = 0; i < 40; i++) {
-			this.createRandomLight(this.board.center, 30, 100);
-		}
+		// Background generation
+		this.backgroundGeneration();
+	}	
+	
+	setupBall() {
+		// Remove existing ball from scene if it exists
+		if (this.ball) this.ball.removeFromScene(this.scene);
+
+		// Initialize ball
+		this.ball = new Ball(
+			this.board.center.x,
+			this.board.center.y + 0.2,
+			this.board.center.z
+		);
+		this.ball.addToScene(this.scene);
 	}
 
 	setupPaddles() {
@@ -189,19 +192,14 @@ export class Game {
 		}
 	}	
 
-	setupBall() {
-		// Remove existing ball from scene if it exists
-		if (this.ball) this.ball.removeFromScene(this.scene);
-
-		// Initialize ball
-		this.ball = new Ball(
-			this.board.center.x,
-			this.board.center.y + 0.2,
-			this.board.center.z
-		);
-		this.ball.addToScene(this.scene);
+	backgroundGeneration() {
+		for (let i = 0; i < 3000; i++) {
+			this.createRandomCube(this.board.center, 8, 80);
+		}
+		for (let i = 0; i < 40; i++) {
+			this.createRandomLight(this.board.center, 30, 100);
+		}
 	}
-
 
 	isInSafeZone(x, y, z, origin, range = 10) {
 		const safeZoneSize = range; // Taille de la zone de sécurité (carré centré à l'origine)
@@ -213,6 +211,7 @@ export class Game {
 	}
 
 	createRandomCube(origin, safeZoneSize, rangeMax) {
+		
 		const geometry = new THREE.BoxGeometry();
 		const material = new THREE.MeshStandardMaterial({ color: 0x98806A });
 		const cube = new THREE.Mesh(geometry, material);
@@ -250,14 +249,8 @@ export class Game {
 		this.scene.add(light);
 	}
 
-	start() {
-		this.animate();
-	}
-
-	setIdle(idle) {
-		this.idle = idle;
-
-		if (!idle) {
+	setIdle() {
+		if (!this.manager.state.idle) {
 			this.cameraAnimating = true;
 			this.cameraStartPos.copy(this.camera.position);
 			this.cameraEndPos.set(this.board.center.x, this.board.center.y + this.cameraHeight, this.board.center.z);
@@ -340,40 +333,62 @@ export class Game {
 	resetRound() {
 		this.setupPaddles();
 		this.setupBall();
-		this.setIdle(true);
+		// this.setIdle(true);
+		this.manager.setState("idle", this);
+
+	}
+
+	
+	onWindowResize() {
+		this.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.updateProjectionMatrix();
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
+	}
+	
+	resetGame(){
+		this.manager.win_score.player1 = 0;
+		this.manager.win_score.player2 = 0;
+		this.manager.win_score.player3 = 0;
+		this.manager.win_score.player4 = 0;
+		this.resetRound();
+	}
+	
+	start() {
+		this.animate();
 	}
 
 	animate() {
 		requestAnimationFrame(() => this.animate());
 
-		if (this.idle) {
+		if (this.manager.state.idle) {
 			this.animateIdleCamera();
-		} else if (this.cameraAnimating) {
+		}
+		if (this.cameraAnimating) {
 			this.animateCameraTransition();
 		}
 
 		const inlife = this.countPaddlesInLife();
 		switch(inlife) {
 			case "paddle1":
-				this.state.win_score.player1++;
+				this.manager.win_score.player1++;
 				this.resetRound();
 				break;
 			case "paddle2":
-				this.state.win_score.player2++;
+				this.manager.win_score.player2++;
 				this.resetRound();
 				break;
 			case "paddle3":
-				this.state.win_score.player3++;
+				this.manager.win_score.player3++;
 				this.resetRound();
 				break;
 			case "paddle4":
-				this.state.win_score.player4++;
+				this.manager.win_score.player4++;
 				this.resetRound();
 				break;
 			}
 
 		// State update
-		this.state.update(this);
+		this.manager.update(this);
 		this.controls.update();
 		this.board.update(this);
 		
@@ -383,19 +398,5 @@ export class Game {
 
 		// Render
 		this.renderer.render(this.scene, this.camera);
-	}
-
-	onWindowResize() {
-		this.camera.aspect = window.innerWidth / window.innerHeight;
-		this.camera.updateProjectionMatrix();
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
-	}
-
-	resetGame(){
-		this.state.win_score.player1 = 0;
-		this.state.win_score.player2 = 0;
-		this.state.win_score.player3 = 0;
-		this.state.win_score.player4 = 0;
-		this.resetRound();
 	}
 }

@@ -17,5 +17,5 @@ export function startGame(game, life, round, name1, name2, name3, name4){
 	game.paddles[1].name = name2;
 	game.paddles[2].name = name3;
 	game.paddles[3].name = name4;
-	game.idle = false;
+	game.manager.state.idle = false;
 }
