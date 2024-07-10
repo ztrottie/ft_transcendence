@@ -93,7 +93,7 @@ export class Board {
 
 	update(game){
 		for (let i = 0; i < this.texts.length; i++) {
-			if (!game.manager.state.idle && game.paddles[i] && game.paddles[i].life > 0)
+			if (!game.cameraAnimating && !game.manager.state.idle && game.paddles[i] && game.paddles[i].life > 0)
 				this.texts[i].update(game.paddles[i].life);
 			else
 				this.texts[i].update('');

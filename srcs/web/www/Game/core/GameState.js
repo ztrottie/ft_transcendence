@@ -18,6 +18,8 @@ export class GameState {
 			inverse4player: false,
 			tournaments: false,
 			winner: false,
+			current: 'idle',
+			last: null
 		};
 	}
 
@@ -25,36 +27,39 @@ export class GameState {
 	// Set the current state
 	setState(newState, game) {
 		
+		this.last = this.state.current;
+		this.current = newState;
 		if (newState != 'idle' && this.state.idle){
-			this.state.idle = false;
 			game.setIdle();
-		}
-		// Reset all states
-		for (let state in this.state) {
-			this.state[state] = false;
 		}
 
 		switch (newState) {
 			case 'idle':
+				this.resetState();
 				this.state.idle = true;
 				game.setIdle();
 				break;
 			case 'pause':
-				this.state.pause = true;
+				this.state.pause = !this.state.pause;
 				break;
 			case 'normal1v1':
+				this.resetState();
 				this.state.normal1v1 = true;
 				break;
 			case 'normal4player':
+				this.resetState();
 				this.state.normal4player = true;
 				break;
 			case 'inverse1v1':
+				this.resetState();
 				this.state.inverse1v1 = true;
 				break;
 			case 'inverse4player':
+				this.resetState();
 				this.state.inverse4player = true;
 				break;
 			case 'tournaments':
+				this.resetState();
 				this.state.tournaments = true;
 				break;
 			case 'winner':
@@ -63,6 +68,19 @@ export class GameState {
 			default:
 				console.error('Etat inconnu:', newState);
 				break;
+		}
+	}
+
+	resetState() {
+		this.state = {
+			idle: false,
+			pause: false,
+			normal1v1: false,
+			normal4player: false,
+			inverse1v1: false,
+			inverse4player: false,
+			tournaments: false,
+			winner: false,
 		}
 	}
 
@@ -84,17 +102,27 @@ export class GameState {
 	}
 
 	update(game) {
-		if (this.isKeyPressed('KeyR') && !this.keysHandled['KeyR']) {
+		if (this.isKeyPressed('Space') && !this.keysHandled['Space']) {
 			
 			if (this.state.idle){
-				this.setState('pause', game);
+				this.setState('normal1v1', game);
 			}else{
-				this.setState('idle', game);
+				game.resetRound();
 			}
+			this.keysHandled['Space'] = true; // Mark the key as handled
+			console.log('Pressed Space');
+		}
 
+		if (this.isKeyPressed('KeyP') && !this.keysHandled['KeyP']) {
+			this.setState('pause', game);
+			this.keysHandled['KeyP'] = true; // Mark the key as handled
+			console.log('Pressed P pause:', this.state.pause);
+		}
 
-
+		if (this.isKeyPressed('KeyR') && !this.keysHandled['KeyR']) {
+			window.location.reload();
 			this.keysHandled['KeyR'] = true; // Mark the key as handled
+			console.log('Pressed R (reset)');
 		}
 		
 		// Update paddles based on key

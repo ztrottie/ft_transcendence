@@ -52,7 +52,7 @@ export class Game {
 		this.cameraEndPos = new THREE.Vector3(this.board.center.x, this.board.center.y + this.cameraHeight, this.board.center.z);
 		this.cameraStartQuat = new THREE.Quaternion();
 		this.cameraEndQuat = new THREE.Quaternion();
-		this.cameraAnimationTime = 2000;
+		this.cameraAnimationTime = 1000;
 		this.cameraAnimationStart = null;
 
 		// Lights
@@ -62,8 +62,8 @@ export class Game {
 		this.scene.add( this.rectLight )
 
 		// Light helper
-		const rectLightHelper = new RectAreaLightHelper( this.rectLight );
-		this.scene.add( rectLightHelper );
+		// const rectLightHelper = new RectAreaLightHelper( this.rectLight );
+		// this.scene.add( rectLightHelper );
 
 		// const ambientLight = new THREE.AmbientLight(0xFFF5E1, 0.5);
 		// this.scene.add(ambientLight);
@@ -192,15 +192,6 @@ export class Game {
 		}
 	}	
 
-	backgroundGeneration() {
-		for (let i = 0; i < 3000; i++) {
-			this.createRandomCube(this.board.center, 8, 80);
-		}
-		for (let i = 0; i < 40; i++) {
-			this.createRandomLight(this.board.center, 30, 100);
-		}
-	}
-
 	isInSafeZone(x, y, z, origin, range = 10) {
 		const safeZoneSize = range; // Taille de la zone de sécurité (carré centré à l'origine)
 		return (
@@ -208,6 +199,15 @@ export class Game {
 			y > origin.y - safeZoneSize && y < origin.y + safeZoneSize &&
 			z > origin.z - safeZoneSize && z < origin.z + safeZoneSize
 		);
+	}
+
+	backgroundGeneration() {
+		for (let i = 0; i < 3000; i++) {
+			this.createRandomCube(this.board.center, 8, 80);
+		}
+		for (let i = 0; i < 40; i++) {
+			this.createRandomLight(this.board.center, 30, 100);
+		}
 	}
 
 	createRandomCube(origin, safeZoneSize, rangeMax) {
@@ -250,12 +250,11 @@ export class Game {
 	}
 
 	setIdle() {
-		if (!this.manager.state.idle) {
-			this.cameraAnimating = true;
-			this.cameraStartPos.copy(this.camera.position);
-			this.cameraEndPos.set(this.board.center.x, this.board.center.y + this.cameraHeight, this.board.center.z);
-			this.cameraAnimationStart = Date.now();
-		}
+		this.ball.reset();
+		this.cameraAnimating = true;
+		this.cameraStartPos.copy(this.camera.position);
+		this.cameraEndPos.set(this.board.center.x, this.board.center.y + this.cameraHeight, this.board.center.z);
+		this.cameraAnimationStart = Date.now();
 		this.camera.lookAt(this.board.center);
 	}
 
@@ -263,11 +262,10 @@ export class Game {
 		const radius = this.cameraDistance;
 		const speed = 0.0005;
 		const time = Date.now() * speed;
-	
 		if (this.cameraYmove >= 8 || this.cameraYmove <= 4) {
 			this.cameraYspeed *= -1;
 		}
-	
+
 		this.camera.position.x = this.board.center.x + radius * Math.cos(time);
 		this.camera.position.z = this.board.center.z + radius * Math.sin(time);
 		this.camera.position.y = this.board.center.y + this.cameraYmove;
@@ -276,13 +274,60 @@ export class Game {
 		this.cameraYmove += this.cameraYspeed;
 	}
 	
+	// animateCameraTransition() {
+	// 	const elapsedTime = Date.now() - this.cameraAnimationStart;
+	// 	const t = Math.min(elapsedTime / this.cameraAnimationTime, 1);
+	
+	// 	// Durée de chaque étape en pourcentage du temps total
+	// 	const step1Duration = 0.3; // 20% du temps total
+	// 	const step2Duration = 0.3; // 30% du temps total
+	// 	const step3Duration = 0.4; // 50% du temps total
+	// 	const cameraDistance = 100; // Distance que la caméra monte
+
+	// 	if (t < step1Duration) {
+	// 		// Step 1: Move to the center
+	// 		const t1 = t / step1Duration;
+	// 		const centerElevated = new THREE.Vector3(this.board.center.x, this.board.center.y + 1, this.board.center.z);
+	// 		this.camera.position.lerpVectors(this.cameraStartPos, centerElevated, t1);
+	// 	} else if (t < step1Duration + step2Duration) {
+	// 		// Step 2: Move up quickly
+	// 		const t2 = (t - step1Duration) / step2Duration;
+	// 		const upPosition = new THREE.Vector3(this.board.center.x, this.board.center.y + cameraDistance, this.board.center.z); // Adjust the height as needed
+	// 		this.camera.position.lerpVectors(this.board.center, upPosition, t2);
+	// 	} else {
+	// 		// Step 3: Move down to the final position
+	// 		const t3 = (t - step1Duration - step2Duration) / step3Duration;
+	// 		const upPosition = new THREE.Vector3(this.board.center.x, this.board.center.y + cameraDistance, this.board.center.z); // Same height as above
+	// 		this.camera.position.lerpVectors(upPosition, this.cameraEndPos, t3);
+	// 	}
+	
+	// 	this.camera.lookAt(this.board.center);
+	
+	// 	if (t >= 1) {
+	// 		this.cameraAnimating = false;
+	// 		this.ball.reset();
+	// 	}
+	// }
+
 	animateCameraTransition() {
 		const elapsedTime = Date.now() - this.cameraAnimationStart;
 		const t = Math.min(elapsedTime / this.cameraAnimationTime, 1);
 	
-		this.camera.position.lerpVectors(this.cameraStartPos, this.cameraEndPos, t);
+		const cameraDistance = 200; // Distance que la caméra monte
+		const upPosition = new THREE.Vector3(this.board.center.x, this.board.center.y + cameraDistance, this.board.center.z);
+	
+		// Si le temps écoulé est inférieur à une très petite valeur, on place la caméra directement à la hauteur maximale
+		if (elapsedTime < 50) { // 50 ms pour que ce soit quasiment instantané
+			this.camera.position.copy(upPosition);
+		} else {
+			// Descente vers la position finale
+			this.camera.position.lerpVectors(upPosition, this.cameraEndPos, t);
+		}
+	
+		// Assurez-vous que la caméra regarde toujours vers le centre du plateau
 		this.camera.lookAt(this.board.center);
 	
+		// Vérifiez si l'animation est terminée
 		if (t >= 1) {
 			this.cameraAnimating = false;
 			this.ball.reset();
@@ -333,24 +378,23 @@ export class Game {
 	resetRound() {
 		this.setupPaddles();
 		this.setupBall();
-		// this.setIdle(true);
 		this.manager.setState("idle", this);
-
+		console.log("Round reset");
 	}
 
-	
-	onWindowResize() {
-		this.camera.aspect = window.innerWidth / window.innerHeight;
-		this.camera.updateProjectionMatrix();
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
-	}
-	
 	resetGame(){
 		this.manager.win_score.player1 = 0;
 		this.manager.win_score.player2 = 0;
 		this.manager.win_score.player3 = 0;
 		this.manager.win_score.player4 = 0;
 		this.resetRound();
+		console.log("Game reset");
+	}
+	
+	onWindowResize() {
+		this.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.updateProjectionMatrix();
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 	
 	start() {
@@ -360,13 +404,23 @@ export class Game {
 	animate() {
 		requestAnimationFrame(() => this.animate());
 
+		// Pause
+		if (this.manager.state.pause){
+			this.manager.update(this);
+			this.controls.update();
+			this.renderer.render(this.scene, this.camera);
+			return;
+		} 
+
+		// Camera animation
 		if (this.manager.state.idle) {
 			this.animateIdleCamera();
 		}
-		if (this.cameraAnimating) {
+		else if (this.cameraAnimating) {
 			this.animateCameraTransition();
 		}
-
+		
+		// Check for the winner of the round
 		const inlife = this.countPaddlesInLife();
 		switch(inlife) {
 			case "paddle1":
@@ -385,7 +439,7 @@ export class Game {
 				this.manager.win_score.player4++;
 				this.resetRound();
 				break;
-			}
+		}
 
 		// State update
 		this.manager.update(this);

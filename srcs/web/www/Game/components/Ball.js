@@ -176,7 +176,7 @@ export class Ball {
 		this.applyFriction();
 		this.updatePosition();
 		this.light.position.copy(this.mesh.position);
-		const gap = this.radius*2 + 0.08;
+		const gap = this.radius * 2 + 0.08;
 		const side = board.sideTouched(this.mesh.position, gap);
 		if (side) {
 			if (side === "top"){
