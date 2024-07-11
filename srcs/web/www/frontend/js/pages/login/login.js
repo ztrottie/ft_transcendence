@@ -4,12 +4,11 @@ import { getCookie, showFriendList, sleep } from '../../router.js';
 export async function renderLogin() {
 	document.getElementById('header').hidden = false;
 	try {
-		loadContent('content', '/frontend/js/pages/login/login.html', function () {loadContent('csrftoken', '/api/accounts/login/')});
+		await loadContent('content', '/frontend/js/pages/login/login.html', function () {loadContent('csrftoken', '/api/accounts/login/')});
 	} catch (error) {
 		console.error('Error fetching login.html:', error);
 	}
 	try {
-		await sleep(1000)
 		document.getElementById('myForm').addEventListener('submit', async function(event) {
 			event.preventDefault();
 			

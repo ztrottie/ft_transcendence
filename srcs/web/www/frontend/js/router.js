@@ -3,7 +3,7 @@ import { renderHome } from "./pages/home/home.js";
 import { renderLogin } from "./pages/login/login.js";
 import { renderHeader } from "./components/header/header.js";
 import { renderFooter } from "./components/footer/footer.js";
-import { renderSignup } from "./pages/signup/signup.js";
+import { renderSignup } from "./pages/signUp/signup.js";
 
 import { Game } from '../../Game/core/Game.js';
 
@@ -27,35 +27,45 @@ export function getCookie(name) {
 	if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+function setGame(e) {
+	e.preventDefault();
+	let formData = new FormData(document.getElementById('gameSet'));
+	console.log("data");
+	for(let pair of formData.entries()){
+		console.log(pair[0], pair[1]);
+	}
+
+	if (formData.get('options') == 4)
+		new bootstrap.Modal(document.getElementById('lobby1', {})).show();
+	else if (formData.get('options') == 'tournament')
+		new bootstrap.Modal(document.getElementById('lobbyTournament', {})).show();
+	else
+		new bootstrap.Modal(document.getElementById('lobby', {})).show();
+}
+
 export async function renderTemplate() {
 	await loadContent('content', '/frontend/js/pages/template/template.html');
-	// await sleep(1000);
-	// const gameButton = document.querySelectorAll('#gameBtn');
-	// gameButton.forEach(button => {
-	// 	button.addEventListener('click', async () => {
-	// 		let test = await getRequest('https://127.0.0.1/api/user/user_list/');
-	// 		console.log(test);
-	// 	});
-	// });
 	changeLanguage(localStorage.getItem("lang"));
 	const btnGameSetting = document.getElementById('btnGameSetting');
-	btnGameSetting.addEventListener('click', () => {
-		const gameBtn = document.getElementById('gameBtn');
 
-		
-		gameBtn.addEventListener('click', (e) => {
-			e.preventDefault();
-			let formData = new FormData(document.getElementById('gameSet'));
-			console.log(formData.get('options'))
-			for(let pair of formData.entries()){
-				console.log(pair[0], pair[1]);
-			}
-			if (formData.get('options') == 4)
-				new bootstrap.Modal(document.getElementById('lobby1', {})).show();
-			else
-				new bootstrap.Modal(document.getElementById('lobby', {})).show();
-		})
-	})
+	const gameBtn = document.getElementById('gameBtn');
+
+	gameBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		let formData = new FormData(document.getElementById('gameSet'));
+		console.log("data");
+		for(let pair of formData.entries()){
+			console.log(pair[0], pair[1]);
+		}
+
+		if (formData.get('options') == 4)
+			new bootstrap.Modal(document.getElementById('lobby1', {})).show();
+		else if (formData.get('options') == 'tournament')
+			new bootstrap.Modal(document.getElementById('lobbyTournament', {})).show();
+		else
+			new bootstrap.Modal(document.getElementById('lobby', {})).show();
+	});
+
 }
 
 function renderNotFound() {
@@ -96,20 +106,17 @@ window.addEventListener('DOMContentLoaded', () => {
 	changeLanguage(localStorage.getItem("lang"));
 	const game = new Game();
 	game.start();
-	// setInterval(function () {
-	// 	console.log('allo')
-	// }, 5000)
 });
 
 export function hideAndSeek(boolean) {
-	document.getElementById('header').hidden = boolean
-	document.getElementById('content').hidden = boolean
-	document.getElementById('footer').hidden = boolean
+	document.getElementById('header').hidden = boolean;
+	document.getElementById('content').hidden = boolean;
+	document.getElementById('footer').hidden = boolean;
 }
 
 window.addEventListener('hashchange', () => {
-	hideAndSeek(false)
-	handleRoutes()
+	hideAndSeek(false);
+	handleRoutes();
 });
 
 
@@ -128,7 +135,7 @@ function attachEventListeners() {
 	langButtons.forEach(button => {
 		button.addEventListener('click', () => {
 			changeLanguage(button.dataset.lang);
-		});
+		}, { once: true });
 
 		if (button.dataset.lang == document.documentElement.lang) {
 			localStorage.setItem("lang", button.dataset.lang);
@@ -137,7 +144,7 @@ function attachEventListeners() {
 		}
 		else {
 			button.disabled = false;
-			button.classList.remove("btn-primary")
+			button.classList.remove("btn-primary");
 		}
 	});
 }
@@ -146,16 +153,12 @@ function attachEventListeners() {
 
 export async function showFriendList() {
 	try {
-		// const user = await getRequest('https://127.0.0.1/api/user/user_login/');
-		// if (!user.name)
-		// 	return ;
-		// const id = await getRequest('https://127.0.0.1/api/user/user_details/', user['name']);
 		const userList = await getRequest('https://127.0.0.1/api/user/user_list/');
 		const nbOfUsers = userList['length'];
 
 		let divUser = document.getElementById('friendList');
 		if (divUser.childElementCount === nbOfUsers)
-			return
+			return ;
 		while (divUser.hasChildNodes())
 			divUser.removeChild(divUser.firstChild);
 
