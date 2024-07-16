@@ -27,30 +27,29 @@ export function getCookie(name) {
 	if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function setGame(e) {
-	e.preventDefault();
-	let formData = new FormData(document.getElementById('gameSet'));
-	console.log("data");
-	for(let pair of formData.entries()){
-		console.log(pair[0], pair[1]);
-	}
-
-	if (formData.get('options') == 4)
-		new bootstrap.Modal(document.getElementById('lobby1', {})).show();
-	else if (formData.get('options') == 'tournament')
-		new bootstrap.Modal(document.getElementById('lobbyTournament', {})).show();
-	else
-		new bootstrap.Modal(document.getElementById('lobby', {})).show();
-}
-
 export async function renderTemplate() {
 	await loadContent('content', '/frontend/js/pages/template/template.html');
 	changeLanguage(localStorage.getItem("lang"));
-	const btnGameSetting = document.getElementById('btnGameSetting');
 
-	const gameBtn = document.getElementById('gameBtn');
+	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-	gameBtn.addEventListener('click', (e) => {
+	document.querySelectorAll('input[name="options"]').forEach((elem) => {
+		elem.addEventListener('change', function() {
+			const nbOfGame = document.getElementById('numberOfGame')
+			if (elem.value != 'tournament') {
+				document.getElementById('reverseMode').hidden = false;
+				nbOfGame.max = 3;
+			}
+			else if (elem.value == 'tournament') {
+				nbOfGame.max = nbOfGame.nextElementSibling.value = nbOfGame.value = 1;
+				document.getElementById('reverse').checked = false;
+				document.getElementById('reverseMode').hidden = true;
+			}
+		})
+	})
+
+	document.getElementById('gameBtn').addEventListener('click', (e) => {
 		e.preventDefault();
 		let formData = new FormData(document.getElementById('gameSet'));
 		console.log("data");
@@ -65,7 +64,6 @@ export async function renderTemplate() {
 		else
 			new bootstrap.Modal(document.getElementById('lobby', {})).show();
 	});
-
 }
 
 function renderNotFound() {
@@ -84,7 +82,6 @@ async function handleRoutes() {
 	document.getElementById('content').innerHTML = '';
 	handler();
 	changeLanguage(localStorage.getItem("lang"));
-
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -93,9 +90,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	renderFooter();
 	renderHeader();
 	showFriendList();
-	loadContentLang('body', document.documentElement.lang, () => {
-		attachEventListeners();
-	});
+	// loadContentLang('body', document.documentElement.lang, () => {
+	// 	attachEventListeners();
+	// });
 	localStorage.setItem("lang", lang);
 	if (localStorage.getItem("lang") != 'fr' && localStorage.getItem("lang") != 'en' && localStorage.getItem("lang") != 'ja') {
 		if (navigator.language == 'fr' || navigator.language == 'en' || navigator.language == 'ja')
@@ -120,7 +117,7 @@ window.addEventListener('hashchange', () => {
 });
 
 
-function changeLanguage(lang) {
+export function changeLanguage(lang) {
 	debouncedChangeLanguage(lang);
 }
 

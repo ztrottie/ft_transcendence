@@ -105,6 +105,11 @@ const applyTranslations = (id, translations, lang) => {
 			if (translations[placeholderKey])
 				element.placeholder = translations[placeholderKey];
 		}
+		else if (key.startsWith('[data-bs-title]')) {
+			const titleKey = key.replace('[data-bs-title]', '');
+			if (translations[titleKey])
+				element.setAttribute('data-bs-original-title', translations[titleKey]);
+		}
 		else if (translations[key]) {
 			element.textContent = translations[key];
 		}

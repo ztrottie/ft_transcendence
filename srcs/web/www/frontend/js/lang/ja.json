@@ -29,6 +29,8 @@
 	"press_to_play": "プレスして再生する",
 	"rapelcha": "ラファエル・ペルシャ",
 	"register": "登録",
+	"reverse_mode": "リバースモード",
+	"Sainte-Viagra": "サント・ビアグラ",
 	"setting": "セッティング",
 	"sign_up": "登録する",
 	"submit": "投稿する",
@@ -37,5 +39,6 @@
 	"wdelaros": "ウィリアム・デラロスビル",
 	"zbeaumon": "ザカリー・ボーモント",
 	"ztrottie": "ザッカリー・トロティエ",
-	"enter_name": "名前を入力"
+	"enter_name": "名前を入力",
+	"info": "ボールに触るな"
 }

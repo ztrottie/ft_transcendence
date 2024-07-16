@@ -29,6 +29,8 @@
 	"press_to_play": "Appuyer pour jouer",
 	"rapelcha": "Raphael Pelchat",
 	"register": "S'enregistrer",
+	"reverse_mode": "Mode inverse",
+	"Sainte-Viagra": "Sainte-Viagra",
 	"setting": "Paramètre",
 	"sign_up": "S'inscrire",
 	"submit": "Soumettre",
@@ -37,5 +39,6 @@
 	"wdelaros": "William Delarosbil",
 	"zbeaumon": "Zachary Beaumont",
 	"ztrottie": "Zackary Trottier",
-	"enter_name": "Entrer un nom"
+	"enter_name": "Entrer un nom",
+	"info": "Ne pas toucher la balle"
 }
