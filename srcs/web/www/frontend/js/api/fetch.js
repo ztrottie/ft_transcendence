@@ -1,7 +1,7 @@
 export const loadContent = async (id, filePath, callback = null) => {
 	try {
 		let file = await fetch(filePath);
-		for (let i = 4; !file.ok && i > 0; i--)
+		for (let i = 10; !file.ok && i > 0; i--)
 			file = await fetch(filePath);
 		if (!file.ok) {
 			file = await fetch(`/frontend/js/pages/error/pageNotFound.html`);

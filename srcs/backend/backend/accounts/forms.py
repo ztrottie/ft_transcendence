@@ -24,7 +24,7 @@ class RegisterForm(forms.ModelForm):
         if qs.exists():
             raise forms.ValidationError("This email is already taken")
         return email
-    
+
     def clean_name(self):
         """Checker si le email est deja existant dans la db"""
 
@@ -96,3 +96,4 @@ class UserAdminChangeForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial["password"]
+

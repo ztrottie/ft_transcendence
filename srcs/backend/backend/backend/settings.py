@@ -28,13 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-}
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,11 +39,53 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'rest_framework_simplejwt',
     'Userdb',
     'RelationDB',
     'accounts',
 	'match',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=525),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': 'django-insecure-$fqd2sbu4e4@n@ze*rz!+(aj+b06-s#zpzu+am=bo$5j^s&z9&',  # Change to your secret key
+}
+
+# Gmail SMTP Configuration
+EMAIL_BACKEND_GMAIL = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_GMAIL = 'smtp.gmail.com'
+EMAIL_PORT_GMAIL = 587
+EMAIL_USE_TLS_GMAIL = True
+EMAIL_HOST_USER_GMAIL = 'your_gmail_address@gmail.com'
+EMAIL_HOST_PASSWORD_GMAIL = 'your_gmail_password'
+
+# Outlook (Hotmail) SMTP Configuration
+EMAIL_BACKEND_HOTMAIL = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_HOTMAIL = 'smtp-mail.outlook.com'
+EMAIL_PORT_HOTMAIL = 587
+EMAIL_USE_TLS_HOTMAIL = True
+EMAIL_HOST_USER_HOTMAIL = 'your_hotmail_address@hotmail.com'
+EMAIL_HOST_PASSWORD_HOTMAIL = 'your_hotmail_password'
 
 AUTH_USER_MODEL = 'Userdb.User'
 

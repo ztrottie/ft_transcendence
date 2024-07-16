@@ -1,12 +1,14 @@
 name: backend-test.yml
 
 on:
+  pull_request:
+    branches: [ "main", "Develop" ]
   push:
     branches: [ "backend-*", "devops-*" ]
 
 jobs:
   backend_testing:
-    name: bakcned-testing
+    name: backend-testing
     runs-on: self-hosted
 
     steps:

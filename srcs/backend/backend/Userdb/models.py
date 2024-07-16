@@ -14,11 +14,11 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("Users must have an email address")
         if not name:
-            raise ValueError("Users must have an name")
+            raise ValueError("Users must have a name")
         if not login42:
-            raise ValueError("Users must have an login42")
+            raise ValueError("Users must have a login42")
         if not password:
-            raise ValueError("Users must have an password")
+            raise ValueError("Users must have a password")
         user_obj = self.model(
             email=self.normalize_email(email),
             name=name,
@@ -47,6 +47,8 @@ class User(AbstractBaseUser):
     status_type_id = models.SmallIntegerField(default=0)
     admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    otp = models.CharField(max_length=6, blank=True)
+    otp_expiry_time = models.DateTimeField(blank=True, null=True)
     statusTypeId = models.ForeignKey(StatusType, on_delete=models.CASCADE, default="2")
 
     objects = UserManager()
