@@ -13,17 +13,17 @@ export class GameState {
 			idle: true,
 			pause: false,
 			normal1v1: false,
-			normal4player: false,
-			inverse1v1: false,
-			inverse4player: false,
-			tournaments: false,
+			normal4p: false,
+			reverse1v1: false,
+			reverse4p: false,
+			tournament: false,
 			winner: false,
 			current: 'idle',
 			last: null
 		};
 	}
 
-	// state: idle, pause, normal1v1, normal4player, inverse1v1, inverse4player, tournois, winner
+	// state: idle, pause, normal1v1, normal4player, reverse1v1, reverse4player, tournois, winner
 	// Set the current state
 	setState(newState, game) {
 		
@@ -45,22 +45,28 @@ export class GameState {
 			case 'normal1v1':
 				this.resetState();
 				this.state.normal1v1 = true;
+				game.playerNumber = 2;
 				break;
-			case 'normal4player':
+			case 'normal4p':
 				this.resetState();
 				this.state.normal4player = true;
+				game.playerNumber = 4;
 				break;
-			case 'inverse1v1':
+			case 'reverse1v1':
 				this.resetState();
-				this.state.inverse1v1 = true;
+				this.state.reverse1v1 = true;
+				game.playerNumber = 2;
+				game.reverse = true;
 				break;
-			case 'inverse4player':
+			case 'reverse4p':
 				this.resetState();
-				this.state.inverse4player = true;
+				this.state.reverse4player = true;
+				game.playerNumber = 4;
+				game.reverse = true;
 				break;
-			case 'tournaments':
+			case 'tournament':
 				this.resetState();
-				this.state.tournaments = true;
+				this.state.tournament = true;
 				break;
 			case 'winner':
 				this.state.winner = true;
@@ -77,9 +83,9 @@ export class GameState {
 			pause: false,
 			normal1v1: false,
 			normal4player: false,
-			inverse1v1: false,
-			inverse4player: false,
-			tournaments: false,
+			reverse1v1: false,
+			reverse4player: false,
+			tournament: false,
 			winner: false,
 		}
 	}

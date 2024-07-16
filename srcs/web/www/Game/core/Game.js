@@ -22,6 +22,8 @@ export class Game {
 		this.lifeNumber = 3;
 		this.roundNumber = 0;
 		this.playerNumber = 2;
+		this.reverse = false;
+		this.gameMode = null;
 		
 		// Players
 		this.players = [];
@@ -273,61 +275,22 @@ export class Game {
 		this.camera.lookAt(this.board.center);
 		this.cameraYmove += this.cameraYspeed;
 	}
-	
-	// animateCameraTransition() {
-	// 	const elapsedTime = Date.now() - this.cameraAnimationStart;
-	// 	const t = Math.min(elapsedTime / this.cameraAnimationTime, 1);
-	
-	// 	// Durée de chaque étape en pourcentage du temps total
-	// 	const step1Duration = 0.3; // 20% du temps total
-	// 	const step2Duration = 0.3; // 30% du temps total
-	// 	const step3Duration = 0.4; // 50% du temps total
-	// 	const cameraDistance = 100; // Distance que la caméra monte
-
-	// 	if (t < step1Duration) {
-	// 		// Step 1: Move to the center
-	// 		const t1 = t / step1Duration;
-	// 		const centerElevated = new THREE.Vector3(this.board.center.x, this.board.center.y + 1, this.board.center.z);
-	// 		this.camera.position.lerpVectors(this.cameraStartPos, centerElevated, t1);
-	// 	} else if (t < step1Duration + step2Duration) {
-	// 		// Step 2: Move up quickly
-	// 		const t2 = (t - step1Duration) / step2Duration;
-	// 		const upPosition = new THREE.Vector3(this.board.center.x, this.board.center.y + cameraDistance, this.board.center.z); // Adjust the height as needed
-	// 		this.camera.position.lerpVectors(this.board.center, upPosition, t2);
-	// 	} else {
-	// 		// Step 3: Move down to the final position
-	// 		const t3 = (t - step1Duration - step2Duration) / step3Duration;
-	// 		const upPosition = new THREE.Vector3(this.board.center.x, this.board.center.y + cameraDistance, this.board.center.z); // Same height as above
-	// 		this.camera.position.lerpVectors(upPosition, this.cameraEndPos, t3);
-	// 	}
-	
-	// 	this.camera.lookAt(this.board.center);
-	
-	// 	if (t >= 1) {
-	// 		this.cameraAnimating = false;
-	// 		this.ball.reset();
-	// 	}
-	// }
 
 	animateCameraTransition() {
 		const elapsedTime = Date.now() - this.cameraAnimationStart;
 		const t = Math.min(elapsedTime / this.cameraAnimationTime, 1);
 	
-		const cameraDistance = 200; // Distance que la caméra monte
+		const cameraDistance = 200; // Camera distance from the board
 		const upPosition = new THREE.Vector3(this.board.center.x, this.board.center.y + cameraDistance, this.board.center.z);
 	
-		// Si le temps écoulé est inférieur à une très petite valeur, on place la caméra directement à la hauteur maximale
-		if (elapsedTime < 50) { // 50 ms pour que ce soit quasiment instantané
+		if (elapsedTime < 50) { // 50 ms
 			this.camera.position.copy(upPosition);
 		} else {
-			// Descente vers la position finale
 			this.camera.position.lerpVectors(upPosition, this.cameraEndPos, t);
 		}
 	
-		// Assurez-vous que la caméra regarde toujours vers le centre du plateau
 		this.camera.lookAt(this.board.center);
 	
-		// Vérifiez si l'animation est terminée
 		if (t >= 1) {
 			this.cameraAnimating = false;
 			this.ball.reset();
@@ -348,13 +311,13 @@ export class Game {
 	}
 	
 	checkBoardCollisions() {
-		this.ball.checkPaddleCollision(this.paddles[0]);
-		this.ball.checkPaddleCollision(this.paddles[1]);
+		this.ball.checkPaddleCollision(this, this.paddles[0]);
+		this.ball.checkPaddleCollision(this, this.paddles[1]);
 		if (this.playerNumber >= 3) {
-			this.ball.checkPaddleCollision(this.paddles[2]);
+			this.ball.checkPaddleCollision(this, this.paddles[2]);
 		}
 		if (this.playerNumber === 4) {
-			this.ball.checkPaddleCollision(this.paddles[3]);
+			this.ball.checkPaddleCollision(this, this.paddles[3]);
 		}
 		this.ball.update(this, this.board);
 	}
