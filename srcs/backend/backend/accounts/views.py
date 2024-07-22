@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from Userdb.models import User
 from django.shortcuts import redirect, render
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, OTPForm
 from django.contrib.auth.hashers import check_password
 from django.middleware.csrf import get_token
 import json
@@ -40,7 +40,7 @@ def get_csrf_token(request):
 def loginView(request):
     form = LoginForm()
     if request.method == 'POST':
-        form = LoginForm(request.POST);
+        form = LoginForm(request.POST)
         if form.is_valid():
             user = authenticate(request, username=form.cleaned_data['email'], password=form.cleaned_data['password'])
             if user is not None:
@@ -64,35 +64,31 @@ def loginView(request):
         return Response({'details':'Email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
     return render(request, 'registration/login.html')
 
+@api_view(['POST'])
 def verify(request):
-    #get the email password otp from the request
-    email = request.data.get('email')
-    password = request.data.get('password')
-    otp = request.data.get('otp')
-    #check the user's credentials with the db
-    user = authenticate(request, email=email, password=password)
-
-    if user is not None:
-        #go in the db to get the specified user
-        user_profile = User.objects.get(user=user)
-
-    if (
-        #check if the verification code is valid
-        user_profile.otp == otp and
-        user_profile.otp_expiry_time is not None and
-        user_profile.otp_expiry_time > timezone.now
-    ):
-        #generate token for the user
-        refresh = RefreshToken.for_user(user);
-        access_token = str(refresh.access_token)
-        #reset the otp in the db so its ready for the next one
-        user_profile.otp = '';
-        user_profile.otp_expiry_time = None
-        user_profile.save()
-
-        return Response({'access_token': access_token, 'refresh_token': str(refresh)}, status=status.HTTP_200_OK)
-
-    return Response({'detail': 'Invalid verification code or credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
+    form = OTPForm()
+    if request.method == 'POST':
+        form = OTPForm(request.POST)
+        if form.is_valid():
+            user = authenticate(request, username=form.cleaned_data['email'], password=form.cleaned_data['password'])
+            if user is not None:
+                user_profile = User.objects.get(email=request.POST["email"])
+                if (
+                    #check if the verification code is valid
+                    user_profile.otp == request.POST["otp"] and
+                    user_profile.otp_expiry_time is not None and
+                    user_profile.otp_expiry_time > timezone.now()
+                ):
+                    #generate token for the user
+                    login(request, user)
+                    refresh = RefreshToken.for_user(user)
+                    access_token = str(refresh.access_token)
+                    #reset the otp in the db so its ready for the next one
+                    user_profile.otp = ''
+                    user_profile.otp_expiry_time = None
+                    user_profile.save()
+                    return Response({'access_token': access_token, 'refresh_token': str(refresh)}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Invalid verification code or credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 def logoutView(request):
     logout(request)
