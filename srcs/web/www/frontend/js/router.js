@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	handleRoutes();
 	renderFooter();
 	renderHeader();
-	showFriendList();
+	// showFriendList();
 	// loadContentLang('body', document.documentElement.lang, () => {
 	// 	attachEventListeners();
 	// });

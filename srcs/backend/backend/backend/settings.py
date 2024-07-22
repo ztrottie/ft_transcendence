@@ -72,20 +72,12 @@ SIMPLE_JWT = {
 }
 
 # Gmail SMTP Configuration
-EMAIL_BACKEND_GMAIL = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_GMAIL = 'smtp.gmail.com'
-EMAIL_PORT_GMAIL = 587
-EMAIL_USE_TLS_GMAIL = True
-EMAIL_HOST_USER_GMAIL = 'your_gmail_address@gmail.com'
-EMAIL_HOST_PASSWORD_GMAIL = 'your_gmail_password'
-
-# Outlook (Hotmail) SMTP Configuration
-EMAIL_BACKEND_HOTMAIL = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_HOTMAIL = 'smtp-mail.outlook.com'
-EMAIL_PORT_HOTMAIL = 587
-EMAIL_USE_TLS_HOTMAIL = True
-EMAIL_HOST_USER_HOTMAIL = 'your_hotmail_address@hotmail.com'
-EMAIL_HOST_PASSWORD_HOTMAIL = 'your_hotmail_password'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'williamdelarosbil@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
 
 AUTH_USER_MODEL = 'Userdb.User'
 

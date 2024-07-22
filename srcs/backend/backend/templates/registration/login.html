@@ -1,1 +1,9 @@
-{% csrf_token %}
+<form id="myForm" class="position-absolute top-50 start-50 translate-middle-x">
+	{% csrf_token %}
+	<label for="id_email"><span data-i18n="email"></span>:</label>
+	<input type="email" name="email" autocapitalize="none" autocomplete="username" maxlength="255" required="true" id="id_email"><br>
+	<label for="id_password"><span data-i18n="password"></span>:</label>
+	<input type="password" autocomplete="current-password" name="password" maxlength="63" required="true" id="id_password"><br>
+	<button type="submit" data-i18n="login"></button>
+	<p><span data-i18n="no_account"></span> <a href="#/signup" data-i18n="create_one"></a></p>
+</form>

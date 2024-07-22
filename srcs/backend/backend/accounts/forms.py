@@ -5,6 +5,10 @@ from django.core import validators
 
 User = get_user_model()
 
+class LoginForm(forms.Form):
+    email = forms.EmailField(max_length=254)
+    password = forms.CharField(max_length=63, widget=forms.PasswordInput)
+
 class RegisterForm(forms.ModelForm):
     """Form par defaut"""
 
