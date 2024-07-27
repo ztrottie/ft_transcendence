@@ -1,4 +1,4 @@
-import { getRequest, loadContent, postAuth } from '../../api/fetch.js';
+import { loadContent, postAuth } from '../../api/fetch.js';
 import { showFriendList, sleep } from '../../router.js';
 
 function elementForm(otp) {
@@ -11,6 +11,38 @@ function elementForm(otp) {
 			elem.required = true;
 		}
 	})
+	const otpId = document.getElementById("otp-field");
+	
+	otpId.addEventListener("input", function (e) {
+		const target = e.target;
+		const val = target.value;
+	
+		if (isNaN(val)) {
+			target.value = "";
+			return;
+		}
+	
+		if (val != "") {
+			const next = target.nextElementSibling;
+			if (next) {
+				next.focus();
+			}
+		}
+	});
+	
+	otpId.addEventListener("keyup", function (e) {
+		const target = e.target;
+		const key = e.key.toLowerCase();
+	
+		if (key == "backspace" || key == "delete") {
+			target.value = "";
+			const prev = target.previousElementSibling;
+			if (prev) {
+				prev.focus();
+			}
+			return;
+		}
+	});
 }
 
 export async function renderLogin() {
@@ -24,9 +56,7 @@ export async function renderLogin() {
 		event.preventDefault();
 
 		const formData = new FormData(this);
-		// for (var pair of formData.entries()) {
-		// 	console.log(pair[0]+ ', ' + pair[1]); 
-		// }
+		
 		const options = {
 			method: 'POST',
 			headers: {
@@ -58,14 +88,20 @@ export async function renderLogin() {
 					},
 					body: formData
 				}
-				await postAuth('https://127.0.0.1/api/accounts/verify/', options)
-				location.href = '#';
-			}, {once: true});
+				let file = await postAuth('https://127.0.0.1/api/accounts/verify/', options)
+				if (file.ok) {
+					document.querySelector('.logout_btn').hidden = false
+					document.querySelector('.login_btn').hidden = true
+					let test = await file.json()
+					sessionStorage.setItem('access_token', test['data']['access'])
+					showFriendList()
+					location.href = '#';
+				}
+			});
 		}
 		// await sleep(100);
 		// showFriendList();
-		
-	}, {once: true});
+	}, { once: true});
 }
 
 

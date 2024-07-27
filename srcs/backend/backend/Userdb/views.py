@@ -1,26 +1,29 @@
 from django.shortcuts import render
 from rest_framework import status, generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.response import Response
+from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from .models import User
+from django.conf import settings
 from .serializer import UserSerializer
 import json
+import jwt
 
-@api_view(['GET', 'POST'])
-def user_list(request):
-	if request.method == 'GET':
-		users = User.objects.all()
-		serializer = UserSerializer(users, many=True)
-		return Response(serializer.data)
-	elif request.method == 'POST':
-		content = request.data.get('_content')
-		data = json.loads(content)
-		serializer = UserSerializer(data=data)
-		if serializer.is_valid():
-			serializer.save()
-			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-	return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+class user_list(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated,]
+
+    def get(self, request):
+        try:
+            users = User.objects.exclude(name=request.user)
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data)
+        except:
+            return Response([])
 
 @api_view((['GET']))
 def user_details(request, pk):
@@ -45,13 +48,12 @@ def user_details_name(request, name):
 		return Response(serializer.data)
 	return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-from rest_framework.permissions import IsAuthenticated
+class user_login(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated,]
 
-@api_view(['GET'])
-def user_login(request):
-	if request.user.is_authenticated:
-		user = request.user
-		data = {'name': user.name, 'email': user.email, 'pk': user.pk}
-		return Response(data, status=200)
-	else:
-		return Response({'error': 'User is not authenticated'}, status=403)
+    def post(self, request):
+        try:
+            return Response([{'detail': 'O\'sullivan, it\'s work'}], status=status.HTTP_200_OK)
+        except:
+            return Response({})

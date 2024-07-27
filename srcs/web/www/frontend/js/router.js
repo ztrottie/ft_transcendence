@@ -1,4 +1,4 @@
-import { getRequest, loadContent, loadContentLang, postAuth, postRequest } from "./api/fetch.js";
+import { getInfo, getRequest, loadContent, loadContentLang, postAuth, postRequest } from "./api/fetch.js";
 import { renderHome } from "./pages/home/home.js";
 import { renderLogin } from "./pages/login/login.js";
 import { renderHeader } from "./components/header/header.js";
@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	handleRoutes();
 	renderFooter();
 	renderHeader();
-	// showFriendList();
+	showFriendList();
 	// loadContentLang('body', document.documentElement.lang, () => {
 	// 	attachEventListeners();
 	// });
@@ -103,8 +103,20 @@ window.addEventListener('DOMContentLoaded', () => {
 	changeLanguage(localStorage.getItem("lang"));
 	const game = new Game();
 	game.start();
+	isLogin()
 });
 
+async function isLogin() {
+	try {
+		let file = await postAuth('https://127.0.0.1/api/user/user_login/', {method: 'POST', headers: {'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`}});
+		if (file.ok) {
+			document.querySelector('.logout_btn').hidden = false
+			document.querySelector('.login_btn').hidden = true
+		}
+	} catch(error) {
+		console.log('allo')
+	}
+}
 export function hideAndSeek(boolean) {
 	document.getElementById('header').hidden = boolean;
 	document.getElementById('content').hidden = boolean;
@@ -146,13 +158,10 @@ function attachEventListeners() {
 	});
 }
 
-
-
 export async function showFriendList() {
 	try {
-		const userList = await getRequest('https://127.0.0.1/api/user/user_list/');
+		const userList = await getRequest('https://127.0.0.1/api/user/user_list/', {method: 'GET', headers: {'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`}});
 		const nbOfUsers = userList['length'];
-
 		let divUser = document.getElementById('friendList');
 		if (divUser.childElementCount === nbOfUsers)
 			return ;
@@ -162,7 +171,12 @@ export async function showFriendList() {
 		for (let i = 0; i < nbOfUsers; i++) {
 			let card = document.createElement('div');
 			let cardBody = document.createElement('div');
-			let friendName = await getRequest('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
+			let friendName = await getInfo('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
+			if (!friendName.id) {
+				while (divUser.hasChildNodes())
+					divUser.removeChild(divUser.firstChild);
+				return ;
+			}
 			let text = document.createTextNode(friendName['name']);
 			cardBody.classList.add('card-body');
 			cardBody.classList.add('d-flex');
