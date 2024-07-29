@@ -3,6 +3,22 @@ import { sleep } from '../../router.js';
 
 export async function renderSignup() {
 	try {
+		let file = await postAuth('https://127.0.0.1/api/token/verify/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				'token': `${sessionStorage.getItem('access_token')}`
+			})
+		})
+		if (file.ok) {
+			location.href = '#';
+			return ;
+		}
+	} catch (error) {
+	}
+	try {
 		await loadContent('content', '/api/accounts/signup/');
 	} catch (error) {
 		console.error('Error fetching signup.html:', error);

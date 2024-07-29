@@ -84,12 +84,12 @@ async function handleRoutes() {
 	changeLanguage(localStorage.getItem("lang"));
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
 	let lang = localStorage.getItem("lang");
-	handleRoutes();
-	renderFooter();
-	renderHeader();
-	showFriendList();
+	await handleRoutes();
+	await renderFooter();
+	await renderHeader();
+	await showFriendList();
 	// loadContentLang('body', document.documentElement.lang, () => {
 	// 	attachEventListeners();
 	// });
@@ -103,12 +103,17 @@ window.addEventListener('DOMContentLoaded', () => {
 	changeLanguage(localStorage.getItem("lang"));
 	const game = new Game();
 	game.start();
-	isLogin()
+	await isLogin()
 });
 
 async function isLogin() {
 	try {
-		let file = await postAuth('https://127.0.0.1/api/user/user_login/', {method: 'POST', headers: {'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`}});
+		let file = await postAuth('https://127.0.0.1/api/user/user_login/', {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
+			}
+		});
 		if (file.ok) {
 			document.querySelector('.logout_btn').hidden = false
 			document.querySelector('.login_btn').hidden = true
@@ -161,6 +166,7 @@ function attachEventListeners() {
 export async function showFriendList() {
 	try {
 		const userList = await getRequest('https://127.0.0.1/api/user/user_list/', {method: 'GET', headers: {'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`}});
+		// console.log(userList)
 		const nbOfUsers = userList['length'];
 		let divUser = document.getElementById('friendList');
 		if (divUser.childElementCount === nbOfUsers)

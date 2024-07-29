@@ -10,16 +10,19 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=63, widget=forms.PasswordInput)
 
 def validateLength(value):
-    an_integer = value
-    a_string = str(an_integer)
-    length = len(a_string)
-    if length != 6:
-        raise forms.ValidationError("Invalid length")
+    if value.isnumeric():
+        a_string = str(value)
+        length = len(a_string)
+        if length != 6:
+            raise forms.ValidationError("Invalid length")
+    else:
+        raise forms.ValidationError("Number only")
 
 class OTPForm(forms.Form):
     email = forms.EmailField(max_length=254)
     password = forms.CharField(max_length=63, widget=forms.PasswordInput)
-    otp = forms.IntegerField(validators=[validateLength])
+    otp = forms.CharField(validators=[validateLength])
+
 
 class RegisterForm(forms.ModelForm):
     """Form par defaut"""

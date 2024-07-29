@@ -15,12 +15,11 @@ export async function renderHeader() {
 					'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
 				},
 			}
-			let file = await postAuth('https://127.0.0.1/api/accounts/logout/', options)
-			if (file.ok) {
-				document.querySelector('.logout_btn').hidden = true
-				document.querySelector('.login_btn').hidden = false
-				showFriendList()
-			}
+			await postAuth('https://127.0.0.1/api/accounts/logout/', options)
+			document.querySelector('.logout_btn').hidden = true
+			document.querySelector('.login_btn').hidden = false
+			sessionStorage.removeItem('access_token')
+			showFriendList()
 		} catch (error) {
 			console.log('error')
 		}

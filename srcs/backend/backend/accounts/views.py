@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from Userdb.models import User
@@ -92,9 +93,7 @@ def verify(request):
                     user_profile.otp_expiry_time > timezone.now()
                 ):
                     response = Response()
-                    print('before get token')
                     data = get_tokens_for_user(user)
-                    print('after get token')
                     response.set_cookie(
                         key = settings.SIMPLE_JWT['AUTH_COOKIE'],
                         value = data["refresh"],
@@ -105,7 +104,6 @@ def verify(request):
                     )
                     csrf.get_token(request)
                     response.data = {"Success" : "Login successfully","data":data}
-                    login(request, user)
                     #reset the otp in the db so its ready for the next one
                     user_profile.otp = ''
                     user_profile.otp_expiry_time = None
@@ -115,17 +113,14 @@ def verify(request):
         return Response({'detail': 'Invalid verification code or credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class logoutView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated,]
 
     def post(self, request):
-        if self.request.data.get('all'):
-            token: OutstandingToken
-            for token in OutstandingToken.objects.filter(user=request.user):
-                _, _ = BlacklistedToken.objects.get_or_create(token=token)
-            return Response({"status": "OK, goodbye, all refresh tokens blacklisted"})
-        refresh_token = self.request.data.get('refresh_token')
-        token = RefreshToken(token=refresh_token)
-        token.blacklist()
-        logout(request)
-        return Response("Successful")
+        try:
+            refresh_token = request.COOKIES.get('refresh_token')
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -31,19 +31,19 @@ export async function postRequest(url, options = null) {
 }
 
 export function postAuth(url, options = null) {
-	const test = fetch(url, options)
+	const response = fetch(url, options)
 		.catch(error => console.error('Error:', error));
-		return test
+		return response
 }
 
 export async function getInfo(url, options = '') {
     try {
-        const test = await fetch(url + options, {'credentials': 'include'});
-        if (!test.ok) {
+        const response = await fetch(url + options, {'credentials': 'include'});
+        if (!response.ok) {
             console.log(url);
             return [];
         }
-        return await test.json();
+        return await response.json();
     }
     catch (error) {
         return [];
@@ -53,12 +53,12 @@ export async function getInfo(url, options = '') {
 export async function getRequest(url, options = null) {
     try {
 		console.log(options)
-        const test = await fetch(url, options);
-        if (!test.ok) {
+        const response = await fetch(url, options);
+        if (!response.ok) {
             console.log(url);
             return [];
         }
-        return await test.json();
+        return await response.json();
     }
     catch (error) {
         return [];
