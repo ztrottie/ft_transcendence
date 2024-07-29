@@ -1,5 +1,4 @@
 import { loadContent, postAuth } from '../../api/fetch.js';
-import { sleep } from '../../router.js';
 
 export async function renderSignup() {
 	try {

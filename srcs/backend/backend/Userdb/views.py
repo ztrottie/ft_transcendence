@@ -14,16 +14,16 @@ import json
 import jwt
 
 class user_list(APIView):
-    authentication_classes = [JWTAuthentication, SessionAuthentication]
-    permission_classes = [IsAuthenticated,]
+	authentication_classes = [JWTAuthentication, SessionAuthentication]
+	permission_classes = [IsAuthenticated,]
 
-    def get(self, request):
-        try:
-            users = User.objects.exclude(name=request.user)
-            serializer = UserSerializer(users, many=True)
-            return Response(serializer.data)
-        except:
-            return Response([])
+	def get(self, request):
+		try:
+			users = User.objects.exclude(name=request.user)
+			serializer = UserSerializer(users, many=True)
+			return Response(serializer.data)
+		except:
+			return Response([])
 
 @api_view((['GET']))
 def user_details(request, pk):
@@ -49,11 +49,11 @@ def user_details_name(request, name):
 	return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 class user_login(APIView):
-    authentication_classes = [JWTAuthentication, SessionAuthentication]
-    permission_classes = [IsAuthenticated,]
+	authentication_classes = [JWTAuthentication, SessionAuthentication]
+	permission_classes = [IsAuthenticated,]
 
-    def post(self, request):
-        if request.user.is_authenticated:
-            return Response([{'detail': 'O\'sullivan, it\'s work'}], status=status.HTTP_200_OK)
-        else:
-            return Response([{}], status=status.HTTP_401_UNAUTHORIZED)
+	def post(self, request):
+		if request.user.is_authenticated:
+			return Response([{'detail': 'O\'sullivan, it\'s work'}], status=status.HTTP_200_OK)
+		else:
+			return Response([{}], status=status.HTTP_401_UNAUTHORIZED)

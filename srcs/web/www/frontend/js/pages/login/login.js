@@ -1,5 +1,5 @@
 import { loadContent, postAuth } from '../../api/fetch.js';
-import { showFriendList, sleep } from '../../router.js';
+import { showFriendList } from '../../router.js';
 
 function elementForm(otp) {
 	document.querySelectorAll('.formStart').forEach((elem) => {

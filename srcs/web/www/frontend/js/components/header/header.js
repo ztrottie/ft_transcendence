@@ -1,5 +1,5 @@
 import { loadContent, postAuth } from '../../api/fetch.js';
-import { debounce, showFriendList, sleep } from '../../router.js';
+import { showFriendList } from '../../router.js';
 
 export async function renderHeader() {
 	try {
