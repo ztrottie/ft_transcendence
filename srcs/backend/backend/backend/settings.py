@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$fqd2sbu4e4@n@ze*rz!+(aj+b06-s#zpzu+am=bo$5j^s&z9&'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -66,7 +66,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=3),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	"ROTATE_REFRESH_TOKENS": False,
 	"BLACKLIST_AFTER_ROTATION": False,
@@ -117,8 +117,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'williamdelarosbil@gmail.com'
-EMAIL_HOST_PASSWORD = 'password'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 AUTH_USER_MODEL = 'Userdb.User'
 
@@ -152,24 +152,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 CSRF_TRUSTED_ORIGINS = ["https://127.0.0.1"]
 
-
 DATABASES = {
 	"default": {
 		"ENGINE": "django.db.backends.postgresql",
-		'NAME': os.environ.get('POSTGRES_DB', 'yessir'),
-		'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-		'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'yessir'),
+		'NAME': os.environ.get('POSTGRES_DB'),
+		'USER': os.environ.get('POSTGRES_USER'),
+		'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
 		"HOST": "database",
 		"PORT": "5432",
 	}
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

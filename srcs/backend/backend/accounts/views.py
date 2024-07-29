@@ -98,7 +98,7 @@ def verify(request):
 					response.set_cookie(
 						key = settings.SIMPLE_JWT['AUTH_COOKIE'],
 						value = data["refresh"],
-						expires = settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+						max_age = settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
 						secure = settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
 						httponly = settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
 						samesite = settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
@@ -110,6 +110,7 @@ def verify(request):
 					user_profile.otp_expiry_time = None
 					user_profile.save()
 					return response
+				return Response({'detail': 'OTP expires or not correct'}, status=status.HTTP_401_UNAUTHORIZED)
 			return Response({'detail': 'Already register'}, status=status.HTTP_401_UNAUTHORIZED)
 		return Response({'detail': 'Invalid verification code or credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
 
