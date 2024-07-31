@@ -23,7 +23,7 @@ export class GameState {
 		};
 	}
 
-	// state: idle, pause, normal1v1, normal4player, reverse1v1, reverse4player, tournois, winner
+	// state: idle, pause, normal1v1, normal4p, reverse1v1, reverse4p, tournois, winner
 	// Set the current state
 	setState(newState, game) {
 		
@@ -49,7 +49,7 @@ export class GameState {
 				break;
 			case 'normal4p':
 				this.resetState();
-				this.state.normal4player = true;
+				this.state.normal4p = true;
 				game.playerNumber = 4;
 				break;
 			case 'reverse1v1':
@@ -57,12 +57,14 @@ export class GameState {
 				this.state.reverse1v1 = true;
 				game.playerNumber = 2;
 				game.reverse = true;
+				game.ball.maxSpeed = 0.2
 				break;
 			case 'reverse4p':
 				this.resetState();
-				this.state.reverse4player = true;
+				this.state.reverse4p = true;
 				game.playerNumber = 4;
 				game.reverse = true;
+				game.ball.maxSpeed = 0.2
 				break;
 			case 'tournament':
 				this.resetState();
@@ -75,6 +77,8 @@ export class GameState {
 				console.error('Etat inconnu:', newState);
 				break;
 		}
+		game.setupPaddles();
+		game.setupBall();
 	}
 
 	resetState() {
@@ -111,7 +115,7 @@ export class GameState {
 		if (this.isKeyPressed('Space') && !this.keysHandled['Space']) {
 			
 			if (this.state.idle){
-				this.setState('normal1v1', game);
+				this.setState(game.gameMode, game);
 			}else{
 				game.resetRound();
 			}
