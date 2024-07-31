@@ -46,25 +46,27 @@ export class GameState {
 				this.resetState();
 				this.state.normal1v1 = true;
 				game.playerNumber = 2;
+				game.ballMaxSpeed = 0.1;
 				break;
 			case 'normal4p':
 				this.resetState();
 				this.state.normal4p = true;
 				game.playerNumber = 4;
+				game.ballMaxSpeed = 0.1;
 				break;
 			case 'reverse1v1':
 				this.resetState();
 				this.state.reverse1v1 = true;
 				game.playerNumber = 2;
 				game.reverse = true;
-				game.ball.maxSpeed = 0.2
+				game.ballMaxSpeed = 0.2;
 				break;
 			case 'reverse4p':
 				this.resetState();
 				this.state.reverse4p = true;
 				game.playerNumber = 4;
 				game.reverse = true;
-				game.ball.maxSpeed = 0.2
+				game.ballMaxSpeed = 0.2;
 				break;
 			case 'tournament':
 				this.resetState();
@@ -72,6 +74,10 @@ export class GameState {
 				break;
 			case 'winner':
 				this.state.winner = true;
+				game.playerNumber = 0
+				game.ball.removeFromScene(game.scene);
+				const winner = "player1";
+				const t = new Text(game.scene, game.board.center, winner);
 				break;
 			default:
 				console.error('Etat inconnu:', newState);

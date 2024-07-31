@@ -21,10 +21,12 @@ export class Game {
 		
 		// Properties
 		this.lifeNumber = 1;
-		this.roundNumber = 0;
-		this.playerNumber = 4;
+		this.roundNumber = 1;
+		this.roundPlay = 0;
+		this.playerNumber = 2;
 		this.reverse = false;
-		this.gameMode = 'normal1v1';
+		this.gameMode = 'reverse1v1';
+		this.ballMaxSpeed = 0.1;
 
 		// Players
 		this.players = [];
@@ -108,7 +110,8 @@ export class Game {
 		this.ball = new Ball(
 			this.board.center.x,
 			this.board.center.y + 0.2,
-			this.board.center.z
+			this.board.center.z,
+			this
 		);
 		this.ball.addToScene(this.scene);
 	}
@@ -351,6 +354,7 @@ export class Game {
 	resetRound() {
 		this.setupPaddles();
 		this.setupBall();
+		this.roundPlay++;
 		this.manager.setState("idle", this);
 		console.log("Round reset");
 	}
@@ -392,7 +396,7 @@ export class Game {
 		else if (this.cameraAnimating) {
 			this.animateCameraTransition();
 		}
-		
+
 		// Check for the winner of the round
 		const inlife = this.countPaddlesInLife();
 		switch(inlife) {
@@ -412,6 +416,12 @@ export class Game {
 				this.manager.win_score.player4++;
 				this.resetRound();
 				break;
+		}
+
+		if (this.roundPlay >= this.roundNumber){
+			this.roundPlay = 0;
+			this.manager.setState("winner", this);
+			return;
 		}
 
 		// State update

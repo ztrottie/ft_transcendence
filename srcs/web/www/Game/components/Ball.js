@@ -1,6 +1,6 @@
 import * as THREE from "three";
 export class Ball {
-	constructor(_x, _y, _z) {
+	constructor(_x, _y, _z, game) {
 		// Properties
 		this.radius = 0.2;
 		this.width = this.radius * 2;
@@ -20,7 +20,7 @@ export class Ball {
 
 		//physics
 		this.minSpeed = 0.01;
-		this.maxSpeed = 0.1;
+		this.maxSpeed = game.ballMaxSpeed;
 		this.speed = 0;
 		this.acceleration = 0.001;
 		this.friction = 0.0;
