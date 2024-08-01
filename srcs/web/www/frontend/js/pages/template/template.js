@@ -23,19 +23,47 @@ export async function renderTemplate() {
 		})
 	})
 
-	document.getElementById('gameBtn').addEventListener('click', (e) => {
+	document.getElementById('gameSet').addEventListener('submit', function(e) {
 		e.preventDefault();
-		let formData = new FormData(document.getElementById('gameSet'));
-		// console.log("data");
-		// for(let pair of formData.entries()){
-		// 	console.log(pair[0], pair[1]);
-		// }
+		const formData = new FormData(this);
 
-		if (formData.get('options') === '4p')
+		let nbPlayer = formData.get('options');
+		let nbLife = formData.get('numberOfLife');
+		let nbRound = formData.get('numberOfGame');
+
+		if (nbPlayer === '4p') {
 			new bootstrap.Modal(document.getElementById('lobby1', {})).show();
-		else if (formData.get('options') == 'tournament')
+			nbPlayer = '4p';
+		}
+		else if (nbPlayer === 'tournament') {
 			new bootstrap.Modal(document.getElementById('lobbyTournament', {})).show();
-		else
+			nbPlayer = 'tournament';
+		}
+		else {
 			new bootstrap.Modal(document.getElementById('lobby', {})).show();
+			nbPlayer = '1v1';
+		}
+
+		if (nbRound < 1)
+			nbRound = 1;
+		else if (nbRound > 3)
+			nbRound = 3;
+
+		if (nbLife < 1)
+			nbLife = 1;
+		else if (nbLife > 5)
+			nbLife = 5;
+
+		if (nbPlayer === 'tournament')
+			nbRound = 1;
+		else if (formData.get('reverse') === 'on')
+			nbPlayer = 'reverse' + nbPlayer;
+		else
+			nbPlayer = 'normal' + nbPlayer;
+		//function(nbPlayer, nbLife, nbRound)
+
+		console.log('numberOfLife', nbLife);
+		console.log('numberOfGame', nbRound);
+		console.log('options', nbPlayer);
 	});
 }

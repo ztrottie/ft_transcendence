@@ -9,7 +9,7 @@ import { renderNotFound } from "./pages/error/error.js";
 
 import { Game } from '../../Game/core/Game.js';
 
-const game = new Game();
+export const game = new Game();
 
 export function debounce(func, delay) {
 	let timeoutId;
