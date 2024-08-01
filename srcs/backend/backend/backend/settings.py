@@ -66,8 +66,8 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=3),
-	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+	# "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	"ROTATE_REFRESH_TOKENS": False,
 	"BLACKLIST_AFTER_ROTATION": False,
 	"UPDATE_LAST_LOGIN": False,
@@ -93,23 +93,17 @@ SIMPLE_JWT = {
 
 	"JTI_CLAIM": "jti",
 
-	"SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-	"SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-	"SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
-
 	"TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
-	"TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+	# "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
 	"TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
 	"TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
-	"SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
-	"SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 
-	'AUTH_COOKIE': 'refresh_token',  # Cookie name. Enables cookies if value is set.
-	'AUTH_COOKIE_DOMAIN': None,     # A string like "example.com", or None for standard domain cookie.
-	'AUTH_COOKIE_SECURE': True,    # Whether the auth cookies should be secure (https:// only).
-	'AUTH_COOKIE_HTTP_ONLY' : True, # Http only cookie flag.It's not fetch by javascript.
-	'AUTH_COOKIE_PATH': '/',        # The path of the auth cookie.
-	'AUTH_COOKIE_SAMESITE': 'Lax',
+	# 'AUTH_COOKIE': 'refresh_token',  # Cookie name. Enables cookies if value is set.
+	# 'AUTH_COOKIE_DOMAIN': None,     # A string like "example.com", or None for standard domain cookie.
+	# 'AUTH_COOKIE_SECURE': True,    # Whether the auth cookies should be secure (https:// only).
+	# 'AUTH_COOKIE_HTTP_ONLY' : True, # Http only cookie flag.It's not fetch by javascript.
+	# 'AUTH_COOKIE_PATH': '/',        # The path of the auth cookie.
+	# 'AUTH_COOKIE_SAMESITE': 'Lax',
 }
 
 # Gmail SMTP Configuration
@@ -160,9 +154,9 @@ CSRF_TRUSTED_ORIGINS = ["https://127.0.0.1"]
 DATABASES = {
 	"default": {
 		"ENGINE": "django.db.backends.postgresql",
-		'NAME': os.environ.get('POSTGRES_DB'),
-		'USER': os.environ.get('POSTGRES_USER'),
-		'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+		'NAME': os.environ.get('POSTGRES_DB', 'yessir'),
+		'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+		'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'yessir'),
 		"HOST": "database",
 		"PORT": "5432",
 	}

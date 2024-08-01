@@ -4,7 +4,6 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from .models import User
@@ -14,7 +13,7 @@ import json
 import jwt
 
 class user_list(APIView):
-	authentication_classes = [JWTAuthentication, SessionAuthentication]
+	authentication_classes = [JWTAuthentication]
 	permission_classes = [IsAuthenticated,]
 
 	def get(self, request):
@@ -49,7 +48,7 @@ def user_details_name(request, name):
 	return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 class user_login(APIView):
-	authentication_classes = [JWTAuthentication, SessionAuthentication]
+	authentication_classes = [JWTAuthentication]
 	permission_classes = [IsAuthenticated,]
 
 	def post(self, request):

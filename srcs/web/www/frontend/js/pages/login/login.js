@@ -50,6 +50,10 @@ function elementForm(otp) {
 let loginForm = handleLogin;
 
 async function listenerFunction(event) {
+	let logBtn = document.getElementById('loginBtn');
+	logBtn.disabled = true;
+	logBtn.removeAttribute('data-bs-dismiss');
+	logBtn.removeAttribute('data-bs-target');
 	event.preventDefault();
 	loginForm(this);
 }
@@ -64,11 +68,30 @@ async function handleLogin(data) {
 		},
 		body: formData
 	}
+	let logBtn = document.getElementById('loginBtn');
 	let file = await postAuth('https://127.0.0.1/api/accounts/login/', options);
 	if (file.ok) {
 		elementForm(true);
 		loginForm = handleOTP;
 	}
+	else {
+		const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+		const appendAlert = (message, type) => {
+			const wrapper = document.createElement('div')
+			wrapper.innerHTML = [
+				`<div id="my-alert" class="alert alert-${type} alert-dismissible" role="alert">`,
+				`   <div>${message}</div>`,
+				'   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+				'</div>'
+			].join('')
+
+			alertPlaceholder.append(wrapper)
+		}
+		appendAlert('Invalid email or password!', 'danger')
+		logBtn.setAttribute('data-bs-dismiss', 'alert');
+		logBtn.setAttribute('data-bs-target', '#my-alert');
+	}
+	logBtn.disabled = false;
 }
 
 async function handleOTP(data) {
@@ -91,6 +114,7 @@ async function handleOTP(data) {
 		},
 		body: formData
 	}
+	let logBtn = document.getElementById('loginBtn');
 	let file = await postAuth('https://127.0.0.1/api/accounts/verify/', options);
 	if (file.ok) {
 		document.querySelector('.logout_btn').hidden = false;
@@ -100,6 +124,24 @@ async function handleOTP(data) {
 		showFriendList();
 		location.href = '#';
 	}
+	else {
+		const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+		const appendAlert = (message, type) => {
+			const wrapper = document.createElement('div')
+			wrapper.innerHTML = [
+				`<div id="my-alert" class="alert alert-${type} alert-dismissible" role="alert">`,
+				`   <div>${message}</div>`,
+				'   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+				'</div>'
+			].join('')
+
+			alertPlaceholder.append(wrapper)
+		}
+		appendAlert('Invalid OTP!', 'danger')
+		logBtn.setAttribute('data-bs-dismiss', 'alert');
+		logBtn.setAttribute('data-bs-target', '#my-alert');
+	}
+	logBtn.disabled = false;
 }
 
 export async function renderLogin() {

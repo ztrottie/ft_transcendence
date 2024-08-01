@@ -4,6 +4,7 @@ import { renderFooter } from "./components/footer/footer.js";
 import { renderTemplate } from "./pages/template/template.js";
 import { renderLogin } from "./pages/login/login.js";
 import { renderSignup } from "./pages/signUp/signup.js";
+import { renderHome } from "./pages/home/home.js";
 import { renderNotFound } from "./pages/error/error.js";
 
 import { Game } from '../../Game/core/Game.js';
@@ -32,6 +33,7 @@ export function getCookie(name) {
 
 const routeHandlers = {
 	'': renderTemplate,
+	'#/game': renderHome,
 	'#/login': renderLogin,
 	'#/signup': renderSignup,
 	'default': renderNotFound
@@ -82,7 +84,6 @@ async function isLogin() {
 
 export function hideAndSeek(boolean) {
 	document.getElementById('header').hidden = boolean;
-	document.getElementById('content').hidden = boolean;
 	document.getElementById('footer').hidden = boolean;
 }
 

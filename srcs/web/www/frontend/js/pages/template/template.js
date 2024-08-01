@@ -26,10 +26,10 @@ export async function renderTemplate() {
 	document.getElementById('gameBtn').addEventListener('click', (e) => {
 		e.preventDefault();
 		let formData = new FormData(document.getElementById('gameSet'));
-		console.log("data");
-		for(let pair of formData.entries()){
-			console.log(pair[0], pair[1]);
-		}
+		// console.log("data");
+		// for(let pair of formData.entries()){
+		// 	console.log(pair[0], pair[1]);
+		// }
 
 		if (formData.get('options') === '4p')
 			new bootstrap.Modal(document.getElementById('lobby1', {})).show();

@@ -52,7 +52,6 @@ export async function getInfo(url, options = '') {
 
 export async function getRequest(url, options = null) {
 	try {
-		console.log(options)
 		const response = await fetch(url, options);
 		if (!response.ok) {
 			console.log(url);
@@ -131,4 +130,3 @@ const applyTranslations = (id, translations, lang) => {
 	});
 	document.documentElement.lang = lang;
 };
-
