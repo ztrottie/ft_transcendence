@@ -74,10 +74,11 @@ export class GameState {
 				break;
 			case 'winner':
 				this.state.winner = true;
-				game.playerNumber = 0
 				game.ball.removeFromScene(game.scene);
+				game.ball = null;
+				game.playerNumber = 0
 				const winner = "player1";
-				const t = new Text(game.scene, game.board.center, winner);
+				const t = new Text(game.scene, game.board.center, "allo");
 				break;
 			default:
 				console.error('Etat inconnu:', newState);

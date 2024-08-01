@@ -25,7 +25,7 @@ export class Game {
 		this.roundPlay = 0;
 		this.playerNumber = 2;
 		this.reverse = false;
-		this.gameMode = 'reverse1v1';
+		this.gameMode = 'winner';
 		this.ballMaxSpeed = 0.1;
 
 		// Players
@@ -135,34 +135,35 @@ export class Game {
 			this.paddles[3] = null;
 		}
 	
-		// Initialize paddles based on player number
-		this.paddles[0] = new Paddle(
-			this.players[0],
-			this.board.center.x - this.board.width / 2 + 0.5,
-			this.board.center.y + 0.25,
-			this.board.center.z,
-			0.1,
-			0.5,
-			2,
-			0xff0000,
-			this.lifeNumber
-		);
-		this.paddles[1] = new Paddle(
-			this.players[1],
-			this.board.center.x + this.board.width / 2 - 0.5,
-			this.board.center.y + 0.25,
-			this.board.center.z,
-			0.1,
-			0.5,
-			2,
-			0x0000ff,
-			this.lifeNumber
-		);
-	
-		// Add paddles to scene based on player number
-		this.paddles[0].addToScene(this.scene);
-		this.paddles[1].addToScene(this.scene);
+		if (this.playerNumber >= 2){
+			// Initialize paddles based on player number
+			this.paddles[0] = new Paddle(
+				this.players[0],
+				this.board.center.x - this.board.width / 2 + 0.5,
+				this.board.center.y + 0.25,
+				this.board.center.z,
+				0.1,
+				0.5,
+				2,
+				0xff0000,
+				this.lifeNumber
+			);
+			this.paddles[1] = new Paddle(
+				this.players[1],
+				this.board.center.x + this.board.width / 2 - 0.5,
+				this.board.center.y + 0.25,
+				this.board.center.z,
+				0.1,
+				0.5,
+				2,
+				0x0000ff,
+				this.lifeNumber
+			);
 		
+			// Add paddles to scene based on player number
+			this.paddles[0].addToScene(this.scene);
+			this.paddles[1].addToScene(this.scene);
+		}
 		if (this.playerNumber >= 3) {
 			this.paddles[2] = new Paddle(
 				this.players[2],
@@ -201,7 +202,7 @@ export class Game {
 	}	
 
 	isInSafeZone(x, y, z, origin, range = 10) {
-		const safeZoneSize = range; // Taille de la zone de sécurité (carré centré à l'origine)
+		const safeZoneSize = range;
 		return (
 			x > origin.x - safeZoneSize && x < origin.x + safeZoneSize &&
 			y > origin.y - safeZoneSize && y < origin.y + safeZoneSize &&
@@ -258,7 +259,8 @@ export class Game {
 	}
 
 	setIdle() {
-		this.ball.reset();
+		if (this.ball)
+			this.ball.reset();
 		this.cameraAnimating = true;
 		this.cameraStartPos.copy(this.camera.position);
 		this.cameraEndPos.set(this.board.center.x, this.board.center.y + this.cameraHeight, this.board.center.z);
@@ -299,7 +301,8 @@ export class Game {
 	
 		if (t >= 1) {
 			this.cameraAnimating = false;
-			this.ball.reset();
+			if (this.ball)
+				this.ball.reset();
 		}
 	}
 	
@@ -317,15 +320,17 @@ export class Game {
 	}
 	
 	checkBoardCollisions() {
-		this.ball.checkPaddleCollision(this, this.paddles[0]);
-		this.ball.checkPaddleCollision(this, this.paddles[1]);
-		if (this.playerNumber >= 3) {
-			this.ball.checkPaddleCollision(this, this.paddles[2]);
+		if (this.ball){
+			this.ball.checkPaddleCollision(this, this.paddles[0]);
+			this.ball.checkPaddleCollision(this, this.paddles[1]);
+			if (this.playerNumber >= 3) {
+				this.ball.checkPaddleCollision(this, this.paddles[2]);
+			}
+			if (this.playerNumber === 4) {
+				this.ball.checkPaddleCollision(this, this.paddles[3]);
+			}
+			this.ball.update(this, this.board);
 		}
-		if (this.playerNumber === 4) {
-			this.ball.checkPaddleCollision(this, this.paddles[3]);
-		}
-		this.ball.update(this, this.board);
 	}
 
 	countPaddlesInLife() {
@@ -398,31 +403,31 @@ export class Game {
 		}
 
 		// Check for the winner of the round
-		const inlife = this.countPaddlesInLife();
-		switch(inlife) {
-			case "paddle1":
-				this.manager.win_score.player1++;
-				this.resetRound();
-				break;
-			case "paddle2":
-				this.manager.win_score.player2++;
-				this.resetRound();
-				break;
-			case "paddle3":
-				this.manager.win_score.player3++;
-				this.resetRound();
-				break;
-			case "paddle4":
-				this.manager.win_score.player4++;
-				this.resetRound();
-				break;
-		}
+		// const inlife = this.countPaddlesInLife();
+		// switch(inlife) {
+		// 	case "paddle1":
+		// 		this.manager.win_score.player1++;
+		// 		this.resetRound();
+		// 		break;
+		// 	case "paddle2":
+		// 		this.manager.win_score.player2++;
+		// 		this.resetRound();
+		// 		break;
+		// 	case "paddle3":
+		// 		this.manager.win_score.player3++;
+		// 		this.resetRound();
+		// 		break;
+		// 	case "paddle4":
+		// 		this.manager.win_score.player4++;
+		// 		this.resetRound();
+		// 		break;
+		// }
 
-		if (this.roundPlay >= this.roundNumber){
-			this.roundPlay = 0;
-			this.manager.setState("winner", this);
-			return;
-		}
+		// if (this.roundPlay >= this.roundNumber){
+		// 	this.roundPlay = 0;
+		// 	this.manager.setState("winner", this);
+		// 	return;
+		// }
 
 		// State update
 		this.manager.update(this);
