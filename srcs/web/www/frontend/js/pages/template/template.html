@@ -55,10 +55,13 @@
 			<div class="modal-body paddle m-2">
 				<form id="chooseName">
 					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="choose_spot"></h3>
+					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="error_name" hidden></h3>
+					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="error_length" hidden></h3>
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="brian position-absolute bg-danger start-0 top-50 w-25 translate-middle-y"> <!--1		w 	s-->
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="brian position-absolute bg-primary end-0 top-50 w-25 translate-middle-y"> <!--2			up 	down-->
 					<h5 class="position-absolute start-0 bottom-50 w-25 translate-middle-y"><span data-i18n="key"></span> W S</h5>
 					<h5 class="position-absolute end-0 bottom-50 w-25 translate-middle-y"><span data-i18n="key"></span> ↑ ↓</h5>
+					<button type="submit" id="btnStart" class="btn btn-outline-dark w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="start_game" hidden></button>
 				</form>
 			</div>
 		</div>
@@ -76,6 +79,8 @@
 			<div class="modal-body paddle m-2">
 				<form id="chooseName">
 					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="choose_spot"></h3>
+					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="error_name" hidden></h3>
+					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="error_length" hidden></h3>
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="brian position-absolute bg-danger start-0 top-50 w-25 translate-middle-y"> <!--1		w 	s-->
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="brian position-absolute bg-primary end-0 top-50 w-25 translate-middle-y"> <!--2			up 	down-->
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="position-absolute bg-info start-50 top-0 w-25 translate-middle-x"> <!--3			o 	p-->
@@ -84,7 +89,7 @@
 					<h5 class="position-absolute end-0 bottom-50 w-25 translate-middle-y"><span data-i18n="key"></span> ↑ ↓</h5>
 					<h5 class="position-absolute start-50 w-25 translate-middle-x text-center" style="top: 10%;"><span data-i18n="key"></span> O P</h5>
 					<h5 class="position-absolute start-50 w-25 translate-middle-x text-center" style="bottom: 10%;"><span data-i18n="key"></span> X C</h5>
-					<button type="submit" id="btnStart" class="btn btn-outline-dark w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="start_game" hidden>Start Game</button>
+					<button type="submit" id="btnStart" class="btn btn-outline-dark w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="start_game" hidden></button>
 				</form>
 			</div>
 		</div>
@@ -102,12 +107,15 @@
 			<div class="modal-body paddle m-2">
 				<form id="chooseName">
 					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="choose_spot"></h3>
+					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="error_name" hidden></h3>
+					<h3 class="w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="error_length" hidden></h3>
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="brian position-absolute bg-danger start-0 top-0 w-25"> <!--1		w 	s-->
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="brian position-absolute bg-primary end-0 top-0 w-25"> <!--2			up 	down-->
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="position-absolute bg-info start-0 bottom-0 w-25"> <!--3			o 	p-->
 					<input type="text" data-i18n="[placeholder]enter_name" name="name" autocomplete="name" class="position-absolute bg-warning end-0 bottom-0 w-25"> <!--4	x 	c-->
 					<h5 class="position-absolute start-0 top-50 w-25 translate-middle-y"><span data-i18n="key"></span> W S</h5>
 					<h5 class="position-absolute end-0 top-50 w-25 translate-middle-y text-end"><span data-i18n="key"></span> ↑ ↓</h5>
+					<button type="submit" id="btnStart" class="btn btn-outline-dark w-auto position-absolute start-50 top-50 translate-middle text-center" data-i18n="start_game" hidden></button>
 				</form>
 			</div>
 		</div>

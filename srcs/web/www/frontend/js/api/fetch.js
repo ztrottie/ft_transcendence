@@ -64,7 +64,7 @@ export async function getRequest(url, options = null) {
 	}
 }
 
-const translationsCache = {};
+export const translationsCache = {};
 let isLanguageChangePending = false;
 
 export const loadContentLang = async (id, lang, callback) => {

@@ -1,4 +1,4 @@
-import { loadContent, postAuth } from '../../api/fetch.js';
+import { loadContent, postAuth, translationsCache } from '../../api/fetch.js';
 import { showFriendList } from '../../router.js';
 
 function elementForm(otp) {
@@ -79,15 +79,14 @@ async function handleLogin(data) {
 		const appendAlert = (message, type) => {
 			const wrapper = document.createElement('div')
 			wrapper.innerHTML = [
-				`<div id="my-alert" class="alert alert-${type} alert-dismissible" role="alert">`,
-				`   <div>${message}</div>`,
-				'   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+				`<div id="my-alert" class="alert alert-${type}" role="alert">`,
+				`	<p data-i18n="error_login" class="text-center m-0">${message}</p>`,
 				'</div>'
 			].join('')
 
 			alertPlaceholder.append(wrapper)
 		}
-		appendAlert('Invalid email or password!', 'danger')
+		appendAlert(translationsCache[document.documentElement.lang]['error_login'], 'danger')
 		logBtn.setAttribute('data-bs-dismiss', 'alert');
 		logBtn.setAttribute('data-bs-target', '#my-alert');
 	}
@@ -129,15 +128,14 @@ async function handleOTP(data) {
 		const appendAlert = (message, type) => {
 			const wrapper = document.createElement('div')
 			wrapper.innerHTML = [
-				`<div id="my-alert" class="alert alert-${type} alert-dismissible" role="alert">`,
-				`   <div>${message}</div>`,
-				'   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+				`<div id="my-alert" class="alert alert-${type}" role="alert">`,
+				`	<p data-i18n="error_otp" class="text-center m-0">${message}</p>`,
 				'</div>'
 			].join('')
 
 			alertPlaceholder.append(wrapper)
 		}
-		appendAlert('Invalid OTP!', 'danger')
+		appendAlert(translationsCache[document.documentElement.lang]['error_otp'], 'danger')
 		logBtn.setAttribute('data-bs-dismiss', 'alert');
 		logBtn.setAttribute('data-bs-target', '#my-alert');
 	}

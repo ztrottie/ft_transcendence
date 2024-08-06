@@ -21,12 +21,16 @@ import string
 def random_digit_gen(n=6):
 	return ''.join(random.choices(string.digits, k=n))
 
+@api_view(('GET','POST'))
+@permission_classes([AllowAny])
 def signupView(request):
 	if request.method == 'POST':
 		form = RegisterForm(request.POST)
 		if form.is_valid():
 			user = form.save()
 			return redirect('login')
+		else:
+			return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 	else:
 		form = RegisterForm()
 	return render(request, 'registration/signup.html', {'form': form})
