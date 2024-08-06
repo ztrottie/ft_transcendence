@@ -25,6 +25,7 @@ class user_list(APIView):
 			return Response([])
 
 @api_view((['GET']))
+@permission_classes([AllowAny])
 def user_details(request, pk):
 	try:
 		user = User.objects.get(pk=pk)
