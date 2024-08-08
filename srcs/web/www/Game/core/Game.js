@@ -5,6 +5,8 @@ import { Ball } from "../components/Ball.js";
 import { Board } from "./Board.js";
 import { Paddle } from "../components/Paddle.js";
 import { GameState } from "./GameState.js";
+import { Text } from "../components/Text.js";
+
 
 export class Game {
 	constructor() {
@@ -20,20 +22,22 @@ export class Game {
 
 		
 		// Properties
-		this.lifeNumber = 1;
-		this.roundNumber = 1;
+		this.lifeNumber = 4;
+		this.roundNumber = 2;
 		this.roundPlay = 0;
-		this.playerNumber = 2;
+		this.playerNumber = 4;
 		this.reverse = false;
-		this.gameMode = 'winner';
+		this.gameMode = 'normal4p';
 		this.ballMaxSpeed = 0.1;
-
+		this.ballNumber = 1;
+		
 		// Players
 		this.players = [];
 		
 		// Board
 		this.board = new Board(4, 2, 0, this.scene);
 		this.board.addToScene(this.scene);
+		this.winnerText = new Text(this.scene, this.board.center, "");
 		
 		//paddles
 		this.paddles = [];
@@ -107,13 +111,15 @@ export class Game {
 		}
 
 		// Initialize ball
-		this.ball = new Ball(
-			this.board.center.x,
-			this.board.center.y + 0.2,
-			this.board.center.z,
-			this
-		);
-		this.ball.addToScene(this.scene);
+		if (this.ballNumber > 0){
+			this.ball = new Ball(
+				this.board.center.x,
+				this.board.center.y + 0.2,
+				this.board.center.z,
+				this
+			);
+			this.ball.addToScene(this.scene);
+		}
 	}
 
 	setupPaddles() {
@@ -320,13 +326,13 @@ export class Game {
 	}
 	
 	checkBoardCollisions() {
-		if (this.ball){
+		if (this.ball && this.paddles[0] && this.paddles[1]){
 			this.ball.checkPaddleCollision(this, this.paddles[0]);
 			this.ball.checkPaddleCollision(this, this.paddles[1]);
-			if (this.playerNumber >= 3) {
+			if (this.playerNumber >= 3 && this.paddles[2]) {
 				this.ball.checkPaddleCollision(this, this.paddles[2]);
 			}
-			if (this.playerNumber === 4) {
+			if (this.playerNumber === 4 && this.paddles[3]) {
 				this.ball.checkPaddleCollision(this, this.paddles[3]);
 			}
 			this.ball.update(this, this.board);
@@ -401,37 +407,41 @@ export class Game {
 		else if (this.cameraAnimating) {
 			this.animateCameraTransition();
 		}
+		
+		if (this.roundPlay >= this.roundNumber){
+			this.roundPlay = 0;
+			this.manager.setState("winner", this);
+			this.renderer.render(this.scene, this.camera);
+			return;
+		}
 
 		// Check for the winner of the round
-		// const inlife = this.countPaddlesInLife();
-		// switch(inlife) {
-		// 	case "paddle1":
-		// 		this.manager.win_score.player1++;
-		// 		this.resetRound();
-		// 		break;
-		// 	case "paddle2":
-		// 		this.manager.win_score.player2++;
-		// 		this.resetRound();
-		// 		break;
-		// 	case "paddle3":
-		// 		this.manager.win_score.player3++;
-		// 		this.resetRound();
-		// 		break;
-		// 	case "paddle4":
-		// 		this.manager.win_score.player4++;
-		// 		this.resetRound();
-		// 		break;
-		// }
-
-		// if (this.roundPlay >= this.roundNumber){
-		// 	this.roundPlay = 0;
-		// 	this.manager.setState("winner", this);
-		// 	return;
-		// }
+		const inlife = this.countPaddlesInLife();
+		switch(inlife) {
+			case "paddle1":
+				this.manager.win_score.player1++;
+				this.resetRound();
+				break;
+			case "paddle2":
+				this.manager.win_score.player2++;
+				this.resetRound();
+				break;
+			case "paddle3":
+				this.manager.win_score.player3++;
+				this.resetRound();
+				break;
+			case "paddle4":
+				this.manager.win_score.player4++;
+				this.resetRound();
+				break;
+		}
 
 		// State update
-		this.manager.update(this);
-		this.controls.update();
+		if (this.manager)
+			this.manager.update(this);
+		if (this.controls)
+			this.controls.update();
+		if (this.board)
 		this.board.update(this);
 		
 		// Update movement

@@ -1,3 +1,5 @@
+import { Text } from "../components/Text.js";
+
 export class GameState {
 	constructor() {
 		this.keysPressed = {};
@@ -32,7 +34,10 @@ export class GameState {
 		if (newState != 'idle' && this.state.idle){
 			game.setIdle();
 		}
-
+		if (newState != 'winner' && newState != 'pause'  && newState != 'idle'){
+			game.ballNumber = 1;
+			game.winnerText.update("");
+		}
 		switch (newState) {
 			case 'idle':
 				this.resetState();
@@ -77,15 +82,18 @@ export class GameState {
 				game.ball.removeFromScene(game.scene);
 				game.ball = null;
 				game.playerNumber = 0
-				const winner = "player1";
-				const t = new Text(game.scene, game.board.center, "allo");
+				game.ballNumber = 0;
+				const winner = "alopsjdhfg";
+				game.winnerText.update("Winner: " + winner);
 				break;
 			default:
 				console.error('Etat inconnu:', newState);
 				break;
 		}
-		game.setupPaddles();
-		game.setupBall();
+		if (newState != 'pause'){
+			game.setupPaddles();
+			game.setupBall();
+		}
 	}
 
 	resetState() {
@@ -165,10 +173,10 @@ export class GameState {
 			if (game.playerNumber == 4){
 
 				//player 3
-				if (this.isKeyPressed('KeyO')) {
+				if (this.isKeyPressed('KeyN')) {
 					game.paddles[2].move("left");
 				}
-				if (this.isKeyPressed('KeyP')) {
+				if (this.isKeyPressed('KeyM')) {
 					game.paddles[2].move("right");
 				}
 					

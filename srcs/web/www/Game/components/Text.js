@@ -52,7 +52,7 @@ export class Text {
 	
 		// Centrer le texte
 		this.textMesh.position.set(
-			this.position.x - (textWidth / 2) - (textWidth / 8),
+			this.position.x - (textWidth / 2) - 0.08,
 			this.position.y,
 			this.position.z + textDepth * 2
 		);

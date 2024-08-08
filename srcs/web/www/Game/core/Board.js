@@ -23,7 +23,7 @@ export class Board {
 		this.texts = [];
 
 		//texts
-		this.texts[0] = new Text(this.scene, new THREE.Vector3(this.center.x - 3, this.center.y, this.center.z), 'sx');
+		this.texts[0] = new Text(this.scene, new THREE.Vector3(this.center.x - 3, this.center.y, this.center.z), '');
 		this.texts[1] = new Text(this.scene, new THREE.Vector3(this.center.x + 3, this.center.y, this.center.z), '');
 		this.texts[2] = new Text(this.scene, new THREE.Vector3(this.center.x, this.center.y, this.center.z - 3), '');
 		this.texts[3] = new Text(this.scene, new THREE.Vector3(this.center.x, this.center.y, this.center.z + 3), '');
