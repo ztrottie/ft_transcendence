@@ -19,17 +19,18 @@ export class Game {
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.shadowMap.enabled = true;
 		document.body.appendChild(this.renderer.domElement);
-
+		
 		
 		// Properties
 		this.lifeNumber = 4;
-		this.roundNumber = 2;
+		this.roundNumber = 1;
 		this.roundPlay = 0;
-		this.playerNumber = 4;
+		this.playerNumber = 2;
 		this.reverse = false;
-		this.gameMode = 'normal4p';
+		this.gameMode = 'normal1v1';
 		this.ballMaxSpeed = 0.1;
 		this.ballNumber = 1;
+		this.roundWinner = "";
 		
 		// Players
 		this.players = [];
@@ -144,7 +145,7 @@ export class Game {
 		if (this.playerNumber >= 2){
 			// Initialize paddles based on player number
 			this.paddles[0] = new Paddle(
-				this.players[0],
+				"player1",
 				this.board.center.x - this.board.width / 2 + 0.5,
 				this.board.center.y + 0.25,
 				this.board.center.z,
@@ -155,7 +156,7 @@ export class Game {
 				this.lifeNumber
 			);
 			this.paddles[1] = new Paddle(
-				this.players[1],
+				"player2",
 				this.board.center.x + this.board.width / 2 - 0.5,
 				this.board.center.y + 0.25,
 				this.board.center.z,
@@ -172,7 +173,7 @@ export class Game {
 		}
 		if (this.playerNumber >= 3) {
 			this.paddles[2] = new Paddle(
-				this.players[2],
+				"player3",
 				this.board.center.x,
 				this.board.center.y + 0.25,
 				this.board.center.z - this.board.depth / 2 + 0.5,
@@ -190,7 +191,7 @@ export class Game {
 	
 		if (this.playerNumber === 4) {
 			this.paddles[3] = new Paddle(
-				this.players[3],
+				"player4",
 				this.board.center.x,
 				this.board.center.y + 0.25,
 				this.board.center.z + this.board.depth / 2 - 0.5,
@@ -342,21 +343,23 @@ export class Game {
 	countPaddlesInLife() {
 		let count = 0;
 		let lastPaddle = null;
-		if (this.paddles[0] && this.paddles[0].life > 0){
-			count++;
-			lastPaddle = "paddle1";
-		}
-		if (this.paddles[1] && this.paddles[1].life > 0){
-			count++;
-			lastPaddle = "paddle2";
-		}
-		if (this.paddles[2] && this.paddles[2].life > 0){
-			count++;
-			lastPaddle = "paddle3";
-		}
-		if (this.paddles[3] && this.paddles[3].life > 0){
-			count++;
-			lastPaddle = "paddle4";
+		if (this.paddles){
+			if (this.paddles[0] && this.paddles[0].life > 0){
+				count++;
+				lastPaddle = this.paddles[0].name;
+			}
+			if (this.paddles[1] && this.paddles[1].life > 0){
+				count++;
+				lastPaddle = this.paddles[1].name;
+			}
+			if (this.paddles[2] && this.paddles[2].life > 0){
+				count++;
+				lastPaddle = this.paddles[2].name;
+			}
+			if (this.paddles[3] && this.paddles[3].life > 0){
+				count++;
+				lastPaddle = this.paddles[3].name;
+			}
 		}
 		if (count === 1) return lastPaddle;
 		return null;
@@ -371,10 +374,6 @@ export class Game {
 	}
 
 	resetGame(){
-		this.manager.win_score.player1 = 0;
-		this.manager.win_score.player2 = 0;
-		this.manager.win_score.player3 = 0;
-		this.manager.win_score.player4 = 0;
 		this.resetRound();
 		console.log("Game reset");
 	}
@@ -399,7 +398,6 @@ export class Game {
 			this.renderer.render(this.scene, this.camera);
 			return;
 		} 
-
 		// Camera animation
 		if (this.manager.state.idle) {
 			this.animateIdleCamera();
@@ -407,35 +405,17 @@ export class Game {
 		else if (this.cameraAnimating) {
 			this.animateCameraTransition();
 		}
-		
 		if (this.roundPlay >= this.roundNumber){
 			this.roundPlay = 0;
 			this.manager.setState("winner", this);
 			this.renderer.render(this.scene, this.camera);
 			return;
 		}
-
-		// Check for the winner of the round
-		const inlife = this.countPaddlesInLife();
-		switch(inlife) {
-			case "paddle1":
-				this.manager.win_score.player1++;
-				this.resetRound();
-				break;
-			case "paddle2":
-				this.manager.win_score.player2++;
-				this.resetRound();
-				break;
-			case "paddle3":
-				this.manager.win_score.player3++;
-				this.resetRound();
-				break;
-			case "paddle4":
-				this.manager.win_score.player4++;
-				this.resetRound();
-				break;
+		// Check for the winner of the round	
+		this.roundWinner = this.countPaddlesInLife();
+		if (this.roundWinner != null){
+			this.resetRound();
 		}
-
 		// State update
 		if (this.manager)
 			this.manager.update(this);
@@ -443,12 +423,12 @@ export class Game {
 			this.controls.update();
 		if (this.board)
 		this.board.update(this);
-		
 		// Update movement
 		this.updateMovements();
 		this.checkBoardCollisions();
-
 		// Render
 		this.renderer.render(this.scene, this.camera);
 	}
 }
+
+

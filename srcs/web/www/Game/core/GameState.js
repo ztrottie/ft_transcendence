@@ -83,8 +83,7 @@ export class GameState {
 				game.ball = null;
 				game.playerNumber = 0
 				game.ballNumber = 0;
-				const winner = "alopsjdhfg";
-				game.winnerText.update("Winner: " + winner);
+				game.winnerText.update(game.roundWinner);
 				break;
 			default:
 				console.error('Etat inconnu:', newState);
@@ -96,6 +95,10 @@ export class GameState {
 		}
 	}
 
+	tournament(game) {
+		
+	}
+ 
 	resetState() {
 		this.state = {
 			idle: false,
