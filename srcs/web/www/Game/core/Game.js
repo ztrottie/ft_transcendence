@@ -22,15 +22,18 @@ export class Game {
 		
 		
 		// Properties
-		this.lifeNumber = 4;
+		this.lifeNumber = 1;
 		this.roundNumber = 1;
 		this.roundPlay = 0;
 		this.playerNumber = 2;
-		this.reverse = false;
-		this.gameMode = 'normal1v1';
+		this.gameMode = 'tournament';
 		this.ballMaxSpeed = 0.1;
 		this.ballNumber = 1;
-		this.roundWinner = "";
+		this.roundWinner;
+		this.reverse = false;
+		this.tournament = true;
+		this.tournament_round = 0;
+		this.tournament_winner = []
 		
 		// Players
 		this.players = [];
@@ -141,8 +144,86 @@ export class Game {
 			this.paddles[3].removeFromScene(this.scene);
 			this.paddles[3] = null;
 		}
-	
-		if (this.playerNumber >= 2){
+
+		if (this.tournament == true){
+			switch (this.tournament_round){
+				case 0:
+					this.paddles[0] = new Paddle(
+						"player1",
+						this.board.center.x - this.board.width / 2 + 0.5,
+						this.board.center.y + 0.25,
+						this.board.center.z,
+						0.1,
+						0.5,
+						2,
+						0xff0000,
+						this.lifeNumber
+					);
+					this.paddles[1] = new Paddle(
+						"player2",
+						this.board.center.x + this.board.width / 2 - 0.5,
+						this.board.center.y + 0.25,
+						this.board.center.z,
+						0.1,
+						0.5,
+						2,
+						0x0000ff,
+						this.lifeNumber
+					);
+					break;
+				case 1:
+					this.paddles[0] = new Paddle(
+						"player3",
+						this.board.center.x - this.board.width / 2 + 0.5,
+						this.board.center.y + 0.25,
+						this.board.center.z,
+						0.1,
+						0.5,
+						2,
+						0x00FFFF,
+						this.lifeNumber
+					);
+					this.paddles[1] = new Paddle(
+						"player4",
+						this.board.center.x + this.board.width / 2 - 0.5,
+						this.board.center.y + 0.25,
+						this.board.center.z,
+						0.1,
+						0.5,
+						2,
+						0xFFFF00,
+						this.lifeNumber
+					);
+					break;
+				case 2:
+					this.paddles[0] = new Paddle(
+						this.tournament_winner[0].name,
+						this.board.center.x - this.board.width / 2 + 0.5,
+						this.board.center.y + 0.25,
+						this.board.center.z,
+						0.1,
+						0.5,
+						2,
+						this.tournament_winner[0].color,
+						this.lifeNumber
+					);
+					this.paddles[1] = new Paddle(
+						this.tournament_winner[1].name,
+						this.board.center.x + this.board.width / 2 - 0.5,
+						this.board.center.y + 0.25,
+						this.board.center.z,
+						0.1,
+						0.5,
+						2,
+						this.tournament_winner[1].color,
+						this.lifeNumber
+					);
+					this.tournament = false;
+					break;
+			}
+			this.paddles[0].addToScene(this.scene);
+			this.paddles[1].addToScene(this.scene);
+		}else if (this.playerNumber >= 2){
 			// Initialize paddles based on player number
 			this.paddles[0] = new Paddle(
 				"player1",
@@ -346,19 +427,19 @@ export class Game {
 		if (this.paddles){
 			if (this.paddles[0] && this.paddles[0].life > 0){
 				count++;
-				lastPaddle = this.paddles[0].name;
+				lastPaddle = this.paddles[0];
 			}
 			if (this.paddles[1] && this.paddles[1].life > 0){
 				count++;
-				lastPaddle = this.paddles[1].name;
+				lastPaddle = this.paddles[1];
 			}
 			if (this.paddles[2] && this.paddles[2].life > 0){
 				count++;
-				lastPaddle = this.paddles[2].name;
+				lastPaddle = this.paddles[2];
 			}
 			if (this.paddles[3] && this.paddles[3].life > 0){
 				count++;
-				lastPaddle = this.paddles[3].name;
+				lastPaddle = this.paddles[3];
 			}
 		}
 		if (count === 1) return lastPaddle;
@@ -430,5 +511,3 @@ export class Game {
 		this.renderer.render(this.scene, this.camera);
 	}
 }
-
-

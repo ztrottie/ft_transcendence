@@ -76,14 +76,26 @@ export class GameState {
 			case 'tournament':
 				this.resetState();
 				this.state.tournament = true;
+				game.tournament = true;
 				break;
 			case 'winner':
+				if (game.tournament){
+					switch (game.tournament_round){
+						case 0:
+							game.tournament_winner[0] = {...game.roundWinner}
+							break
+						case 1:
+							game.tournament_winner[1] = {...game.roundWinner}
+							break
+					}
+					game.tournament_round++;
+				}
 				this.state.winner = true;
 				game.ball.removeFromScene(game.scene);
 				game.ball = null;
 				game.playerNumber = 0
 				game.ballNumber = 0;
-				game.winnerText.update(game.roundWinner);
+				game.winnerText.update(game.roundWinner.name);
 				break;
 			default:
 				console.error('Etat inconnu:', newState);
@@ -93,10 +105,6 @@ export class GameState {
 			game.setupPaddles();
 			game.setupBall();
 		}
-	}
-
-	tournament(game) {
-		
 	}
  
 	resetState() {
