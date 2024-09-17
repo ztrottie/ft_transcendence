@@ -145,7 +145,7 @@ export class Game {
 			this.paddles[3] = null;
 		}
 
-		if (this.tournament == true){
+		if (this.tournament === true){
 			switch (this.tournament_round){
 				case 0:
 					this.paddles[0] = new Paddle(
@@ -204,7 +204,7 @@ export class Game {
 						0.1,
 						0.5,
 						2,
-						this.tournament_winner[0].color,
+						this.tournament_winner[0].col,
 						this.lifeNumber
 					);
 					this.paddles[1] = new Paddle(
@@ -215,14 +215,16 @@ export class Game {
 						0.1,
 						0.5,
 						2,
-						this.tournament_winner[1].color,
+						this.tournament_winner[1].col,
 						this.lifeNumber
 					);
-					this.tournament = false;
 					break;
+				default:
+					this.tournament_round = 0;
+					this.tournament_winner = [];
 			}
-			this.paddles[0].addToScene(this.scene);
-			this.paddles[1].addToScene(this.scene);
+			this.paddles[0]?.addToScene(this.scene);
+			this.paddles[1]?.addToScene(this.scene);
 		}else if (this.playerNumber >= 2){
 			// Initialize paddles based on player number
 			this.paddles[0] = new Paddle(

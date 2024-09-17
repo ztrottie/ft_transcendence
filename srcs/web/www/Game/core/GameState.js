@@ -75,20 +75,23 @@ export class GameState {
 				break;
 			case 'tournament':
 				this.resetState();
+				game.playerNumber = 2
 				this.state.tournament = true;
 				game.tournament = true;
+
 				break;
 			case 'winner':
 				if (game.tournament){
 					switch (game.tournament_round){
 						case 0:
-							game.tournament_winner[0] = {...game.roundWinner}
+							game.tournament_winner[0] = Object.assign({}, game.roundWinner)
 							break
 						case 1:
-							game.tournament_winner[1] = {...game.roundWinner}
+							game.tournament_winner[1] = Object.assign({}, game.roundWinner)
 							break
 					}
 					game.tournament_round++;
+
 				}
 				this.state.winner = true;
 				game.ball.removeFromScene(game.scene);
@@ -138,15 +141,9 @@ export class GameState {
 	}
 
 	update(game) {
-		if (this.isKeyPressed('Space') && !this.keysHandled['Space']) {
-			
-			if (this.state.idle){
-				this.setState(game.gameMode, game);
-			}else{
-				game.resetRound();
-			}
+		if (this.isKeyPressed('Space') && !this.keysHandled['Space'] && this.state.idle) {
+			this.setState(game.gameMode, game);
 			this.keysHandled['Space'] = true; // Mark the key as handled
-			console.log('Pressed Space');
 		}
 
 		if (this.isKeyPressed('KeyP') && !this.keysHandled['KeyP']) {
