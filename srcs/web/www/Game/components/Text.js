@@ -15,7 +15,7 @@ export class Text {
 
 	loadFont() {
 		const loader = new FontLoader();
-		loader.load('fonts/helvetiker_regular.typeface.json', (font) => {
+		loader.load('Game/fonts/helvetiker_regular.typeface.json', (font) => {
 			this.font = font;
 			this.createTextMesh();
 		});

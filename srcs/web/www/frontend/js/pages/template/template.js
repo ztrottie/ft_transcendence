@@ -1,5 +1,6 @@
+import { setPlayerName, setProperties } from "../../../../Game/components/utils.js";
 import { loadContent } from "../../api/fetch.js";
-import { changeLanguage } from "../../router.js";
+import { changeLanguage, game } from "../../router.js";
 
 function validateName(name) {
 	if (name == '' || name == ' ' || name == ' ')
@@ -102,7 +103,9 @@ export async function renderTemplate() {
 				elem.querySelector('h3[data-i18n="error_length"]').hidden = true;
 			}
 			else {
-				;//function send name and start game
+				setPlayerName(game, arrayName);
+				game.manager.setState(game.gameMode, game);
+				location.href = '#/game';
 			}
 		});
 	});
@@ -144,7 +147,7 @@ export async function renderTemplate() {
 			nbPlayer = 'reverse' + nbPlayer;
 		else
 			nbPlayer = 'normal' + nbPlayer;
-		//function(nbPlayer, nbLife, nbRound)
+		setProperties(game, nbLife, nbRound, nbPlayer)
 
 		// console.log('numberOfLife', nbLife);
 		// console.log('numberOfGame', nbRound);

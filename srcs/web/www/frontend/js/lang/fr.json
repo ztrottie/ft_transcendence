@@ -46,5 +46,7 @@
 	"zbeaumon": "Zachary Beaumont",
 	"ztrottie": "Zackary Trottier",
 	"enter_name": "Entrer un nom",
-	"info": "Ne pas toucher la balle"
+	"info": "Ne pas toucher la balle",
+	"space_to_play": "Espace pour jouer",
+	"win": "gagne"
 }
