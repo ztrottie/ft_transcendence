@@ -1,6 +1,6 @@
 
 all:
-	docker compose -f "./srcs/docker-compose.yml" -p transcendence up
+	docker compose -f "./srcs/docker-compose.yml" -p transcendence up -d
 	@echo "Pour te connecter a la DB, tu dois mettre le port: " && docker ps --filter "name=database" --format "{{.Ports}}" | grep '\->' | cut -d ':' -f 2 | cut -d '-' -f 1
 
 # 

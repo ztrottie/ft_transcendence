@@ -1,1 +1,18 @@
-{% csrf_token %}
+<form id="myForm" class="position-absolute top-50 start-50 translate-middle-x">
+	<div id="liveAlertPlaceholder"></div>
+	{% csrf_token %}
+	<label for="id_email" class="formStart"><span data-i18n="email"></span>:</label>
+	<input type="email" class="formStart" inputmode="email" name="email" autocapitalize="none" autocomplete="username" maxlength="255" required="true" id="id_email"><br>
+	<label for="id_password" class="formStart"><span data-i18n="password"></span>:</label>
+	<input type="password" class="formStart" autocomplete="current-password" name="password" maxlength="63" required="true" id="id_password"><br>
+	<div id="otp-field" class="otp-field">
+		<input type="text" maxlength="1" inputmode="numeric" class="otp-input">
+		<input type="text" maxlength="1" inputmode="numeric" class="otp-input">
+		<input type="text" maxlength="1" inputmode="numeric" class="otp-input">
+		<input type="text" maxlength="1" inputmode="numeric" class="otp-input">
+		<input type="text" maxlength="1" inputmode="numeric" class="otp-input">
+		<input type="text" maxlength="1" inputmode="numeric" class="otp-input">
+	</div>
+	<button type="submit" data-i18n="login" id="loginBtn"></button>
+	<p><span data-i18n="no_account"></span> <a href="#/signup" data-i18n="create_one"></a></p>
+</form>
