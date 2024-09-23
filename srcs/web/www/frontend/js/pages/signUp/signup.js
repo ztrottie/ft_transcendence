@@ -3,7 +3,7 @@ import { loadContent, postAuth, translationsCache } from '../../api/fetch.js';
 
 export async function renderSignup() {
 	try {
-		let file = await postAuth('https://127.0.0.1/api/token/verify/', {
+		let file = await postAuth(location.origin + '/api/token/verify/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ export async function renderSignup() {
 			},
 			body: formData
 		}
-		let file = await postAuth('https://127.0.0.1/api/accounts/signup/', options);
+		let file = await postAuth(location.origin + '/api/accounts/signup/', options);
 		if (file.ok)
 			location.href = '#/login';
 		else {
