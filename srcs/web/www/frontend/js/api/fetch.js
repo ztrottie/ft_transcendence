@@ -65,6 +65,7 @@ export async function getRequest(url, options = null) {
 }
 
 export const translationsCache = {};
+export let currentLang = document.documentElement.lang;
 let isLanguageChangePending = false;
 
 export const loadContentLang = async (id, lang, callback) => {
@@ -128,5 +129,6 @@ const applyTranslations = (id, translations, lang) => {
 			element.textContent = translations[key];
 		}
 	});
+	currentLang = lang;
 	document.documentElement.lang = lang;
 };

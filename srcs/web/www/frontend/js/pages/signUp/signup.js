@@ -1,3 +1,4 @@
+import { currentLang } from '../../api/fetch.js';
 import { loadContent, postAuth, translationsCache } from '../../api/fetch.js';
 
 export async function renderSignup() {
@@ -52,7 +53,7 @@ export async function renderSignup() {
 
 				alertPlaceholder.append(wrapper)
 			}
-			appendAlert(translationsCache[document.documentElement.lang]['error_register'], 'danger')
+			appendAlert(translationsCache[currentLang]['error_register'], 'danger')
 			registerBtn.setAttribute('data-bs-dismiss', 'alert');
 			registerBtn.setAttribute('data-bs-target', '#my-alert');
 		}

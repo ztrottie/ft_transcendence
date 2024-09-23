@@ -1,3 +1,4 @@
+import { currentLang } from '../../api/fetch.js';
 import { loadContent, postAuth, translationsCache } from '../../api/fetch.js';
 import { showFriendList } from '../../router.js';
 
@@ -86,7 +87,7 @@ async function handleLogin(data) {
 
 			alertPlaceholder.append(wrapper)
 		}
-		appendAlert(translationsCache[document.documentElement.lang]['error_login'], 'danger')
+		appendAlert(translationsCache[currentLang]['error_login'], 'danger')
 		logBtn.setAttribute('data-bs-dismiss', 'alert');
 		logBtn.setAttribute('data-bs-target', '#my-alert');
 	}
@@ -135,7 +136,7 @@ async function handleOTP(data) {
 
 			alertPlaceholder.append(wrapper)
 		}
-		appendAlert(translationsCache[document.documentElement.lang]['error_otp'], 'danger')
+		appendAlert(translationsCache[currentLang]['error_otp'], 'danger')
 		logBtn.setAttribute('data-bs-dismiss', 'alert');
 		logBtn.setAttribute('data-bs-target', '#my-alert');
 	}

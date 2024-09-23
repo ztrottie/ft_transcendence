@@ -8,6 +8,7 @@ import { renderHome } from "./pages/home/home.js";
 import { renderNotFound } from "./pages/error/error.js";
 
 import { Game } from '../../Game/core/Game.js';
+import { currentLang } from "./api/fetch.js";
 
 export const game = new Game();
 
@@ -109,7 +110,7 @@ function attachEventListeners() {
 			changeLanguage(button.dataset.lang);
 		}, { once: true });
 
-		if (button.dataset.lang == document.documentElement.lang) {
+		if (button.dataset.lang == currentLang) {
 			localStorage.setItem("lang", button.dataset.lang);
 			button.disabled = true;
 			button.classList.add("btn-primary");
