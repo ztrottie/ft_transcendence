@@ -1,0 +1,61 @@
+html, body {
+	overflow: hidden;
+}
+
+.infiniteModal {
+	.modal-dialog {
+		max-width: none !important;
+	}
+}
+
+.modal-backdrop {
+	display: none !important;
+}
+
+.modal-dialog-scrollable {
+	max-height: 65%;
+}
+
+.friendBtn {
+	width: 30% !important;
+	.modal-body {
+		height: 1000px;
+	}
+}
+
+.miniLogo {
+	width: 32px;
+	height: 32px;
+}
+
+.paddle.modal-body {
+	height: 500px;
+}
+
+.brian {
+	color: #cbcbcb !important;
+	
+}
+
+.brian::placeholder {
+	color: #cbcbcb !important;
+}
+
+.otp-input {
+	width: 40px;
+	border: none;
+	border-radius: 15%;
+	border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+	margin: 0 10px;
+	text-align: center;
+	font-size: 36px;
+	-webkit-border-radius: 15%;
+	-moz-border-radius: 15%;
+	-ms-border-radius: 15%;
+	-o-border-radius: 15%;
+}
+
+.otp-input:focus {
+	border-bottom: 3px solid orange;
+	outline: none;
+}

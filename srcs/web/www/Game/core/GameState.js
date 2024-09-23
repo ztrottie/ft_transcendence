@@ -1,3 +1,4 @@
+import { currentLang, translationsCache } from "../../frontend/js/api/fetch.js";
 import { Text } from "../components/Text.js";
 
 export class GameState {
@@ -98,7 +99,7 @@ export class GameState {
 				game.ball = null;
 				game.playerNumber = 0
 				game.ballNumber = 0;
-				game.winnerText.update(game.roundWinner.name + ' win');
+				game.winnerText.update(game.roundWinner.name + ' ' + translationsCache[currentLang]["win"]);
 				break;
 			default:
 				console.error('Etat inconnu:', newState);
@@ -141,7 +142,7 @@ export class GameState {
 	}
 
 	update(game) {
-		if (this.isKeyPressed('Space') && !this.keysHandled['Space'] && this.state.idle) {
+		if (location.hash == "#/game" && this.isKeyPressed('Space') && !this.keysHandled['Space'] && this.state.idle) {
 			this.setState(game.gameMode, game);
 			this.keysHandled['Space'] = true; // Mark the key as handled
 		}

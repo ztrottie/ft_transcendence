@@ -6,6 +6,7 @@ import { Board } from "./Board.js";
 import { Paddle } from "../components/Paddle.js";
 import { GameState } from "./GameState.js";
 import { Text } from "../components/Text.js";
+import { currentLang, translationsCache } from "../../frontend/js/api/fetch.js";
 
 
 export class Game {
@@ -459,7 +460,8 @@ export class Game {
 
 	resetGame(){
 		this.resetRound();
-		console.log("Game reset");
+		this.playerName = [];
+		this.tournament_winner = [];
 	}
 	
 	onWindowResize() {
@@ -475,9 +477,8 @@ export class Game {
 	animate() {
 		requestAnimationFrame(() => this.animate());
 
-
-		if (this.manager.state.idle)
-			this.spaceText.update("Space to play");
+		if (this.manager.state.idle && location.hash == "#/game")
+			this.spaceText.update(translationsCache[currentLang]["space_to_play"]);
 		else
 			this.spaceText.update("");
 
