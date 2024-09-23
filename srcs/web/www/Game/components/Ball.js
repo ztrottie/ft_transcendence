@@ -1,6 +1,6 @@
 import * as THREE from "three";
 export class Ball {
-	constructor(_x, _y, _z) {
+	constructor(_x, _y, _z, game) {
 		// Properties
 		this.radius = 0.2;
 		this.width = this.radius * 2;
@@ -15,12 +15,12 @@ export class Ball {
 		this.mesh.position.set(_x, _y, _z);
 		
 		// Light
-		this.light = new THREE.PointLight(0xffff00, 1, 2);
+		this.light = new THREE.PointLight(0xffff00, 1, 10);
 		this.light.position.set(_x, _y + 2, _z);
 
 		//physics
 		this.minSpeed = 0.01;
-		this.maxSpeed = 0.1;
+		this.maxSpeed = game.ballMaxSpeed;
 		this.speed = 0;
 		this.acceleration = 0.001;
 		this.friction = 0.0;
@@ -29,7 +29,7 @@ export class Ball {
 		this.nextPosition = new THREE.Vector3(1, 0, 1);
 
 		// Cooldown
-		this.cooldown = 1500; // 1.5 seconds
+		this.cooldown = 3000; // 3 seconds
 		this.cooldownTimer = 0;
 	}
 	
@@ -77,11 +77,17 @@ export class Ball {
 			pos.z + halfDepth1 > obj2.mesh.position.z - halfDepth2;
 	}
 
-	checkPaddleCollision(paddle) {
+	checkPaddleCollision(game, paddle) {
 		this.lastPaddle = paddle.name;
 		this.nextPosition.copy(this.mesh.position).add(this.direction.clone().normalize().multiplyScalar(this.speed));
 	
 		if (paddle.life > 0 && this.collides(this.nextPosition, paddle)) {
+
+			if (game.reverse){
+				if (paddle.life > 0) this.reset();
+				if (!game.manager.state.idle && paddle.life > 0) paddle.life--;
+				return;
+			}
 	
 			// Add some randomness to the direction after collision
 			const randomFactor = 0.4;
@@ -166,6 +172,88 @@ export class Ball {
 		this.nextPosition = new THREE.Vector3().addVectors(this.mesh.position, this.direction.clone().normalize().multiplyScalar(this.speed));
 	}
 
+	reverseColision(game, board){
+		const gap = this.radius * 2 + 0.08;
+		const side = board.sideTouched(this.mesh.position, gap);
+		if (side) {
+			switch (side) {
+				case "top":
+					this.direction.z *= -1;
+					const btop = board.center.z - board.depth / 2;
+					this.mesh.position.z = btop + gap ;
+					if (!game.reverse && game.paddles[2] && game.paddles[2].life > 0) this.reset();
+					if (!game.reverse && !game.manager.state.idle && game.paddles[2] && game.paddles[2].life > 0) game.paddles[2].life--;
+					break;
+				case "bottom":
+					this.direction.z *= -1;
+					const bbot = board.center.z + board.depth / 2;
+					this.mesh.position.z = bbot - gap;
+					if (!game.reverse && game.paddles[3] && game.paddles[3].life > 0) this.reset();
+					if (!game.reverse && !game.manager.state.idle && game.paddles[3] && game.paddles[3].life > 0) game.paddles[3].life--;
+					break;
+				case "left":
+					this.direction.x *= -1;
+					const bleft = board.center.x - board.width / 2;
+					this.mesh.position.x = bleft + gap;
+					if (!game.reverse && game.paddles[0] && game.paddles[0].life > 0) this.reset();
+					if (!game.reverse && !game.manager.state.idle && game.paddles[0] && game.paddles[0].life > 0) game.paddles[0].life--;
+					break;
+				case "right":
+					this.direction.x *= -1;
+					const bright = board.center.x + board.width / 2;
+					this.mesh.position.x = bright - gap;
+					if (!game.reverse && game.paddles[1] && game.paddles[1].life > 0) this.reset(); // wall hit
+					if (!game.reverse && !game.manager.state.idle && game.paddles[1] && game.paddles[1].life > 0) game.paddles[1].life--;
+					break;
+				default:
+					this.direction.x *= -1;
+					this.direction.z *= -1;
+					break;
+			}
+		}
+	}
+
+	normalColision(game, board){
+		const gap = this.radius * 2 + 0.08;
+		const side = board.sideTouched(this.mesh.position, gap);
+		if (side) {
+			switch (side) {
+				case "top":
+					this.direction.z *= -1;
+					const btop = board.center.z - board.depth / 2;
+					this.mesh.position.z = btop + gap ;
+					if (game.paddles[2] && game.paddles[2].life > 0) this.reset();
+					if (!game.manager.state.idle && game.paddles[2] && game.paddles[2].life > 0) game.paddles[2].life--;
+					break;
+				case "bottom":
+					this.direction.z *= -1;
+					const bbot = board.center.z + board.depth / 2;
+					this.mesh.position.z = bbot - gap;
+					if (game.paddles[3] && game.paddles[3].life > 0) this.reset();
+					if (!game.manager.state.idle && game.paddles[3] && game.paddles[3].life > 0) game.paddles[3].life--;
+					break;
+				case "left":
+					this.direction.x *= -1;
+					const bleft = board.center.x - board.width / 2;
+					this.mesh.position.x = bleft + gap;
+					if (game.paddles[0] && game.paddles[0].life > 0) this.reset();
+					if (!game.manager.state.idle && game.paddles[0] && game.paddles[0].life > 0) game.paddles[0].life--;
+					break;
+				case "right":
+					this.direction.x *= -1;
+					const bright = board.center.x + board.width / 2;
+					this.mesh.position.x = bright - gap;
+					if (game.paddles[1] && game.paddles[1].life > 0) this.reset(); // wall hit
+					if (!game.manager.state.idle && game.paddles[1] && game.paddles[1].life > 0) game.paddles[1].life--;
+					break;
+				default:
+					this.direction.x *= -1;
+					this.direction.z *= -1;
+					break;
+			}
+		}
+	}
+
 	update(game, board) {
 		
 		const currentTime = Date.now();
@@ -176,37 +264,11 @@ export class Ball {
 		this.applyFriction();
 		this.updatePosition();
 		this.light.position.copy(this.mesh.position);
-		const gap = this.radius*2 + 0.08;
-		const side = board.sideTouched(this.mesh.position, gap);
-		if (side) {
-			if (side === "top"){
-				this.direction.z *= -1;
-				const btop = board.center.z - board.depth / 2;
-				this.mesh.position.z = btop + gap ;
-				if (game.paddle3 && game.paddle3.life > 0) this.reset();
-				if (!game.idle && game.paddle3) game.paddle3.life--;
-			}else if (side === "bottom") {
-				this.direction.z *= -1;
-				const btop = board.center.z + board.depth / 2;
-				this.mesh.position.z = btop - gap;
-				if (game.paddle4 && game.paddle4.life > 0) this.reset();
-				if (!game.idle && game.paddle4) game.paddle4.life--;
-			} else if (side === "left"){
-				this.direction.x *= -1;
-				const bleft = board.center.x - board.width / 2;
-				this.mesh.position.x = bleft + gap;
-				if (game.paddle1 && game.paddle1.life > 0) this.reset();
-				if (!game.idle && game.paddle1) game.paddle1.life--;
-			}else if (side === "right") {
-				this.direction.x *= -1;
-				const bright = board.center.x + board.width / 2;
-				this.mesh.position.x = bright - gap;
-				if (game.paddle2 && game.paddle2.life > 0) this.reset();
-				if (!game.idle && game.paddle2) game.paddle2.life--;
-			} else {
-				this.direction.x *= -1;
-				this.direction.z *= -1;
-			}
+		
+		if (game.reverse){
+			this.reverseColision(game, board);
+		}else{
+			this.normalColision(game, board);
 		}
 	}
 }
