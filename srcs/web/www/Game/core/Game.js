@@ -23,25 +23,26 @@ export class Game {
 		
 		// Properties
 		this.lifeNumber = 1;
-		this.roundNumber = 1;
+		this.roundNumber = 2;
 		this.roundPlay = 0;
 		this.playerNumber = 2;
-		this.gameMode = 'tournament';
+		this.gameMode = 'normal1v1';
 		this.ballMaxSpeed = 0.1;
 		this.ballNumber = 1;
 		this.roundWinner;
 		this.reverse = false;
-		this.tournament = true;
+		this.tournament = false;
 		this.tournament_round = 0;
 		this.tournament_winner = []
 		
 		// Players
-		this.players = [];
+		this.playerName = [];
 		
 		// Board
 		this.board = new Board(4, 2, 0, this.scene);
 		this.board.addToScene(this.scene);
 		this.winnerText = new Text(this.scene, this.board.center, "");
+		this.spaceText = new Text(this.scene, new THREE.Vector3(this.board.center.x, this.board.center.y, this.board.center.z + 3), "Space to continue");
 		
 		//paddles
 		this.paddles = [];
@@ -149,7 +150,7 @@ export class Game {
 			switch (this.tournament_round){
 				case 0:
 					this.paddles[0] = new Paddle(
-						"player1",
+						this.playerName && this.playerName[0] ? this.playerName[0] : "player1",
 						this.board.center.x - this.board.width / 2 + 0.5,
 						this.board.center.y + 0.25,
 						this.board.center.z,
@@ -160,7 +161,7 @@ export class Game {
 						this.lifeNumber
 					);
 					this.paddles[1] = new Paddle(
-						"player2",
+						this.playerName && this.playerName[1] ? this.playerName[1]: "player2",
 						this.board.center.x + this.board.width / 2 - 0.5,
 						this.board.center.y + 0.25,
 						this.board.center.z,
@@ -173,7 +174,7 @@ export class Game {
 					break;
 				case 1:
 					this.paddles[0] = new Paddle(
-						"player3",
+						this.playerName && this.playerName[2] ? this.playerName[2] : "player3",
 						this.board.center.x - this.board.width / 2 + 0.5,
 						this.board.center.y + 0.25,
 						this.board.center.z,
@@ -184,7 +185,7 @@ export class Game {
 						this.lifeNumber
 					);
 					this.paddles[1] = new Paddle(
-						"player4",
+						this.playerName && this.playerName[3] ? this.playerName[3] : "player4",
 						this.board.center.x + this.board.width / 2 - 0.5,
 						this.board.center.y + 0.25,
 						this.board.center.z,
@@ -228,7 +229,7 @@ export class Game {
 		}else if (this.playerNumber >= 2){
 			// Initialize paddles based on player number
 			this.paddles[0] = new Paddle(
-				"player1",
+				this.playerName && this.playerName[0] ? this.playerName[0] : "player1",
 				this.board.center.x - this.board.width / 2 + 0.5,
 				this.board.center.y + 0.25,
 				this.board.center.z,
@@ -239,7 +240,7 @@ export class Game {
 				this.lifeNumber
 			);
 			this.paddles[1] = new Paddle(
-				"player2",
+				this.playerName && this.playerName[1] ? this.playerName[1] : "player2",
 				this.board.center.x + this.board.width / 2 - 0.5,
 				this.board.center.y + 0.25,
 				this.board.center.z,
@@ -256,7 +257,7 @@ export class Game {
 		}
 		if (this.playerNumber >= 3) {
 			this.paddles[2] = new Paddle(
-				"player3",
+				this.playerName && this.playerName[2] ? this.playerName[2] : "player3",
 				this.board.center.x,
 				this.board.center.y + 0.25,
 				this.board.center.z - this.board.depth / 2 + 0.5,
@@ -274,7 +275,7 @@ export class Game {
 	
 		if (this.playerNumber === 4) {
 			this.paddles[3] = new Paddle(
-				"player4",
+				this.playerName && this.playerName[3] ? this.playerName[3] : "player4",
 				this.board.center.x,
 				this.board.center.y + 0.25,
 				this.board.center.z + this.board.depth / 2 - 0.5,
@@ -473,6 +474,12 @@ export class Game {
 
 	animate() {
 		requestAnimationFrame(() => this.animate());
+
+
+		if (this.manager.state.idle)
+			this.spaceText.update("Space to play");
+		else
+			this.spaceText.update("");
 
 		// Pause
 		if (this.manager.state.pause){

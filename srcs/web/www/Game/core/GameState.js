@@ -78,7 +78,7 @@ export class GameState {
 				game.playerNumber = 2
 				this.state.tournament = true;
 				game.tournament = true;
-
+				game.ballMaxSpeed = 0.2;
 				break;
 			case 'winner':
 				if (game.tournament){
@@ -98,7 +98,7 @@ export class GameState {
 				game.ball = null;
 				game.playerNumber = 0
 				game.ballNumber = 0;
-				game.winnerText.update(game.roundWinner.name);
+				game.winnerText.update(game.roundWinner.name + ' win');
 				break;
 			default:
 				console.error('Etat inconnu:', newState);
@@ -146,17 +146,17 @@ export class GameState {
 			this.keysHandled['Space'] = true; // Mark the key as handled
 		}
 
-		if (this.isKeyPressed('KeyP') && !this.keysHandled['KeyP']) {
-			this.setState('pause', game);
-			this.keysHandled['KeyP'] = true; // Mark the key as handled
-			console.log('Pressed P pause:', this.state.pause);
-		}
+		// if (this.isKeyPressed('KeyP') && !this.keysHandled['KeyP']) {
+		// 	this.setState('pause', game);
+		// 	this.keysHandled['KeyP'] = true; // Mark the key as handled
+		// 	console.log('Pressed P pause:', this.state.pause);
+		// }
 
-		if (this.isKeyPressed('KeyR') && !this.keysHandled['KeyR']) {
-			window.location.reload();
-			this.keysHandled['KeyR'] = true; // Mark the key as handled
-			console.log('Pressed R (reset)');
-		}
+		// if (this.isKeyPressed('KeyR') && !this.keysHandled['KeyR']) {
+		// 	window.location.reload();
+		// 	this.keysHandled['KeyR'] = true; // Mark the key as handled
+		// 	console.log('Pressed R (reset)');
+		// }
 		
 		// Update paddles based on key
 		if (this.state.idle == false){
