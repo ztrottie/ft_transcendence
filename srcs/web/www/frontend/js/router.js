@@ -79,7 +79,7 @@ async function isLogin() {
 			document.querySelector('.login_btn').hidden = true
 		}
 	} catch(error) {
-		console.log('allo')
+		console.error(error)
 	}
 }
 

@@ -35,7 +35,7 @@ export class GameState {
 		if (newState != 'idle' && this.state.idle){
 			game.setIdle();
 		}
-		if (newState != 'winner' && newState != 'pause'  && newState != 'idle'){
+		if (newState != 'winner' && newState != 'pause' && newState != 'idle'){
 			game.ballNumber = 1;
 			game.winnerText.update("");
 		}
@@ -142,59 +142,59 @@ export class GameState {
 	}
 
 	update(game) {
-		if (location.hash == "#/game" && this.isKeyPressed('Space') && !this.keysHandled['Space'] && this.state.idle) {
-			this.setState(game.gameMode, game);
-			this.keysHandled['Space'] = true; // Mark the key as handled
-		}
-
-		// if (this.isKeyPressed('KeyP') && !this.keysHandled['KeyP']) {
-		// 	this.setState('pause', game);
-		// 	this.keysHandled['KeyP'] = true; // Mark the key as handled
-		// 	console.log('Pressed P pause:', this.state.pause);
-		// }
-
-		// if (this.isKeyPressed('KeyR') && !this.keysHandled['KeyR']) {
-		// 	window.location.reload();
-		// 	this.keysHandled['KeyR'] = true; // Mark the key as handled
-		// 	console.log('Pressed R (reset)');
-		// }
-		
-		// Update paddles based on key
-		if (this.state.idle == false){
-			if (game.playerNumber >= 2){
-
-				//player 1
-				if (this.isKeyPressed('KeyW')) {
-					game.paddles[0].move("up");
-				}
-				if (this.isKeyPressed('KeyS')) {
-					game.paddles[0].move("down");
-				}
-				
-				//player 2
-				if (this.isKeyPressed('ArrowUp')) {
-					game.paddles[1].move("up");
-				}
-				if (this.isKeyPressed('ArrowDown')) {
-					game.paddles[1].move("down");
-				}
+		if (location.hash == "#/game" ){
+			if (this.isKeyPressed('Space') && !this.keysHandled['Space'] && this.state.idle) {
+				this.setState(game.gameMode, game);
+				this.keysHandled['Space'] = true; // Mark the key as handled
 			}
-			if (game.playerNumber == 4){
 
-				//player 3
-				if (this.isKeyPressed('KeyN')) {
-					game.paddles[2].move("left");
-				}
-				if (this.isKeyPressed('KeyM')) {
-					game.paddles[2].move("right");
-				}
+			// if (this.isKeyPressed('KeyP') && !this.keysHandled['KeyP']) {
+			// 	this.setState('pause', game);
+			// 	this.keysHandled['KeyP'] = true; // Mark the key as handled
+			// }
+
+			// if (this.isKeyPressed('KeyR') && !this.keysHandled['KeyR']) {
+			// 	window.location.reload();
+			// 	this.keysHandled['KeyR'] = true; // Mark the key as handled
+			// }
+			
+			// Update paddles based on key
+			if (this.state.idle == false){
+				if (game.playerNumber >= 2){
+
+					//player 1
+					if (this.isKeyPressed('KeyW')) {
+						game.paddles[0].move("up");
+					}
+					if (this.isKeyPressed('KeyS')) {
+						game.paddles[0].move("down");
+					}
 					
-				//player 4
-				if (this.isKeyPressed('KeyX')) {
-					game.paddles[3].move("left");
+					//player 2
+					if (this.isKeyPressed('ArrowUp')) {
+						game.paddles[1].move("up");
+					}
+					if (this.isKeyPressed('ArrowDown')) {
+						game.paddles[1].move("down");
+					}
 				}
-				if (this.isKeyPressed('KeyC')) {
-					game.paddles[3].move("right");
+				if (game.playerNumber == 4){
+
+					//player 3
+					if (this.isKeyPressed('KeyN')) {
+						game.paddles[2].move("left");
+					}
+					if (this.isKeyPressed('KeyM')) {
+						game.paddles[2].move("right");
+					}
+						
+					//player 4
+					if (this.isKeyPressed('KeyX')) {
+						game.paddles[3].move("left");
+					}
+					if (this.isKeyPressed('KeyC')) {
+						game.paddles[3].move("right");
+					}
 				}
 			}
 		}

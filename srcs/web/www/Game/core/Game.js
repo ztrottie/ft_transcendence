@@ -227,71 +227,69 @@ export class Game {
 			}
 			this.paddles[0]?.addToScene(this.scene);
 			this.paddles[1]?.addToScene(this.scene);
-		}else if (this.playerNumber >= 2){
-			// Initialize paddles based on player number
-			this.paddles[0] = new Paddle(
-				this.playerName && this.playerName[0] ? this.playerName[0] : "player1",
-				this.board.center.x - this.board.width / 2 + 0.5,
-				this.board.center.y + 0.25,
-				this.board.center.z,
-				0.1,
-				0.5,
-				2,
-				0xff0000,
-				this.lifeNumber
-			);
-			this.paddles[1] = new Paddle(
-				this.playerName && this.playerName[1] ? this.playerName[1] : "player2",
-				this.board.center.x + this.board.width / 2 - 0.5,
-				this.board.center.y + 0.25,
-				this.board.center.z,
-				0.1,
-				0.5,
-				2,
-				0x0000ff,
-				this.lifeNumber
-			);
+		}else {
+			if (this.playerNumber >= 2){
+				// Initialize paddles based on player number
+				this.paddles[0] = new Paddle(
+					this.playerName && this.playerName[0] ? this.playerName[0] : "player1",
+					this.board.center.x - this.board.width / 2 + 0.5,
+					this.board.center.y + 0.25,
+					this.board.center.z,
+					0.1,
+					0.5,
+					2,
+					0xff0000,
+					this.lifeNumber
+				);
+				this.paddles[1] = new Paddle(
+					this.playerName && this.playerName[1] ? this.playerName[1] : "player2",
+					this.board.center.x + this.board.width / 2 - 0.5,
+					this.board.center.y + 0.25,
+					this.board.center.z,
+					0.1,
+					0.5,
+					2,
+					0x0000ff,
+					this.lifeNumber
+				);
+			
+				// Add paddles to scene based on player number
+				this.paddles[0].addToScene(this.scene);
+				this.paddles[1].addToScene(this.scene);
+			}
+			if (this.playerNumber >= 3) {
+				this.paddles[2] = new Paddle(
+					this.playerName && this.playerName[2] ? this.playerName[2] : "player3",
+					this.board.center.x,
+					this.board.center.y + 0.25,
+					this.board.center.z - this.board.depth / 2 + 0.5,
+					2,
+					0.5,
+					0.1,
+					0x00FFFF,
+					this.lifeNumber,
+					"horizontal"
+				);
+				this.paddles[2].addToScene(this.scene);
+			}
 		
-			// Add paddles to scene based on player number
-			this.paddles[0].addToScene(this.scene);
-			this.paddles[1].addToScene(this.scene);
+			if (this.playerNumber === 4) {
+				this.paddles[3] = new Paddle(
+					this.playerName && this.playerName[3] ? this.playerName[3] : "player4",
+					this.board.center.x,
+					this.board.center.y + 0.25,
+					this.board.center.z + this.board.depth / 2 - 0.5,
+					2,
+					0.5,
+					0.1,
+					0xFFFF00,
+					this.lifeNumber,
+					"horizontal"
+				);
+				this.paddles[3].addToScene(this.scene);
+			}
 		}
-		if (this.playerNumber >= 3) {
-			this.paddles[2] = new Paddle(
-				this.playerName && this.playerName[2] ? this.playerName[2] : "player3",
-				this.board.center.x,
-				this.board.center.y + 0.25,
-				this.board.center.z - this.board.depth / 2 + 0.5,
-				2,
-				0.5,
-				0.1,
-				0x00FFFF,
-				this.lifeNumber,
-				"horizontal"
-			);
-			this.paddles[2].addToScene(this.scene);
-		} else {
-			this.paddles[2] = null;
-		}
-	
-		if (this.playerNumber === 4) {
-			this.paddles[3] = new Paddle(
-				this.playerName && this.playerName[3] ? this.playerName[3] : "player4",
-				this.board.center.x,
-				this.board.center.y + 0.25,
-				this.board.center.z + this.board.depth / 2 - 0.5,
-				2,
-				0.5,
-				0.1,
-				0xFFFF00,
-				this.lifeNumber,
-				"horizontal"
-			);
-			this.paddles[3].addToScene(this.scene);
-		} else {
-			this.paddles[3] = null;
-		}
-	}	
+	}
 
 	isInSafeZone(x, y, z, origin, range = 10) {
 		const safeZoneSize = range;
@@ -455,13 +453,18 @@ export class Game {
 		this.setupBall();
 		this.roundPlay++;
 		this.manager.setState("idle", this);
-		console.log("Round reset");
 	}
 
 	resetGame(){
 		this.resetRound();
 		this.playerName = [];
 		this.tournament_winner = [];
+		this.roundWinner = "";
+		this.reverse = false;
+		this.tournament = false;
+		this.tournament_round = 0;
+		this.roundPlay = 0;
+		this.manager.state.winner = false;
 	}
 	
 	onWindowResize() {
@@ -476,11 +479,15 @@ export class Game {
 
 	animate() {
 		requestAnimationFrame(() => this.animate());
+		if (location.hash != "#/game" && !this.manager.state.idle){
+			// this.manager.setState("idle", this);
+		}
 
 		if (this.manager.state.idle && location.hash == "#/game")
-			this.spaceText.update(translationsCache[currentLang]["space_to_play"]);
+			this.spaceText.update(translationsCache?.[currentLang]?.["space_to_play"] || " ");
 		else
 			this.spaceText.update("");
+
 
 		// Pause
 		if (this.manager.state.pause){
