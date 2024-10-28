@@ -30,14 +30,17 @@ export class GameState {
 	// Set the current state
 	setState(newState, game) {
 		
-		this.last = this.state.current;
-		this.current = newState;
+		this.state.last = this.state.current;
+		this.state.current = newState;
 		if (newState != 'idle' && this.state.idle){
 			game.setIdle();
 		}
 		if (newState != 'winner' && newState != 'pause' && newState != 'idle'){
 			game.ballNumber = 1;
 			game.winnerText.update("");
+		}
+		if (newState != "idle" ){
+			game.reverse = false;
 		}
 		switch (newState) {
 			case 'idle':
@@ -62,24 +65,26 @@ export class GameState {
 				break;
 			case 'reverse1v1':
 				this.resetState();
+				game.reverse = true;
 				this.state.reverse1v1 = true;
 				game.playerNumber = 2;
 				game.reverse = true;
-				game.ballMaxSpeed = 0.2;
+				game.ballMaxSpeed = 0.15;
 				break;
 			case 'reverse4p':
 				this.resetState();
+				game.reverse = true;
 				this.state.reverse4p = true;
 				game.playerNumber = 4;
 				game.reverse = true;
-				game.ballMaxSpeed = 0.2;
+				game.ballMaxSpeed = 0.15;
 				break;
 			case 'tournament':
 				this.resetState();
 				game.playerNumber = 2
 				this.state.tournament = true;
 				game.tournament = true;
-				game.ballMaxSpeed = 0.2;
+				game.ballMaxSpeed = 0.15;
 				break;
 			case 'winner':
 				if (game.tournament){
@@ -95,7 +100,7 @@ export class GameState {
 
 				}
 				this.state.winner = true;
-				game.ball.removeFromScene(game.scene);
+				game.ball?.removeFromScene(game.scene);
 				game.ball = null;
 				game.playerNumber = 0
 				game.ballNumber = 0;
@@ -144,8 +149,18 @@ export class GameState {
 	update(game) {
 		if (location.hash == "#/game" ){
 			if (this.isKeyPressed('Space') && !this.keysHandled['Space'] && this.state.idle) {
-				this.setState(game.gameMode, game);
-				this.keysHandled['Space'] = true; // Mark the key as handled
+				if (this.state.current == "winner" && !game.tournament){
+					game.resetGame();
+					location.href = "#";
+					console.log("test", game.tournament_round);
+				}else if(this.state.current == "winner" && game.tournament && game.tournament_round == 0){
+					game.resetGame();
+					location.href = "#";
+					console.log("test11", game.tournament_round);
+				}else{
+					this.setState(game.gameMode, game);
+					this.keysHandled['Space'] = true; // Mark the key as handled
+				}
 			}
 
 			// if (this.isKeyPressed('KeyP') && !this.keysHandled['KeyP']) {

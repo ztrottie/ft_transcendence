@@ -456,15 +456,15 @@ export class Game {
 	}
 
 	resetGame(){
+		this.manager.state.winner = false;
+		this.manager.setState(this.gameMode, this);
 		this.resetRound();
 		this.playerName = [];
 		this.tournament_winner = [];
 		this.roundWinner = "";
-		this.reverse = false;
 		this.tournament = false;
 		this.tournament_round = 0;
 		this.roundPlay = 0;
-		this.manager.state.winner = false;
 	}
 	
 	onWindowResize() {
@@ -488,7 +488,6 @@ export class Game {
 		else
 			this.spaceText.update("");
 
-
 		// Pause
 		if (this.manager.state.pause){
 			this.manager.update(this);
@@ -507,6 +506,7 @@ export class Game {
 			this.roundPlay = 0;
 			this.manager.setState("winner", this);
 			this.renderer.render(this.scene, this.camera);
+			// location.href = "#";
 			return;
 		}
 		// Check for the winner of the round	
