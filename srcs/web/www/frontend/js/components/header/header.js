@@ -15,7 +15,7 @@ export async function renderHeader() {
 					'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
 				},
 			}
-			await postAuth('https://127.0.0.1/api/accounts/logout/', options)
+			await postAuth(location.origin + '/api/accounts/logout/', options)
 			document.querySelector('.logout_btn').hidden = true
 			document.querySelector('.login_btn').hidden = false
 			sessionStorage.removeItem('access_token')

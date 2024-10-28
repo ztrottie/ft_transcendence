@@ -1,3 +1,4 @@
+import { currentLang } from '../../api/fetch.js';
 import { loadContent, postAuth, translationsCache } from '../../api/fetch.js';
 import { showFriendList } from '../../router.js';
 
@@ -69,7 +70,7 @@ async function handleLogin(data) {
 		body: formData
 	}
 	let logBtn = document.getElementById('loginBtn');
-	let file = await postAuth('https://127.0.0.1/api/accounts/login/', options);
+	let file = await postAuth(location.origin + '/api/accounts/login/', options);
 	if (file.ok) {
 		elementForm(true);
 		loginForm = handleOTP;
@@ -86,7 +87,7 @@ async function handleLogin(data) {
 
 			alertPlaceholder.append(wrapper)
 		}
-		appendAlert(translationsCache[document.documentElement.lang]['error_login'], 'danger')
+		appendAlert(translationsCache[currentLang]['error_login'], 'danger')
 		logBtn.setAttribute('data-bs-dismiss', 'alert');
 		logBtn.setAttribute('data-bs-target', '#my-alert');
 	}
@@ -114,7 +115,7 @@ async function handleOTP(data) {
 		body: formData
 	}
 	let logBtn = document.getElementById('loginBtn');
-	let file = await postAuth('https://127.0.0.1/api/accounts/verify/', options);
+	let file = await postAuth(location.origin + '/api/accounts/verify/', options);
 	if (file.ok) {
 		document.querySelector('.logout_btn').hidden = false;
 		document.querySelector('.login_btn').hidden = true;
@@ -135,7 +136,7 @@ async function handleOTP(data) {
 
 			alertPlaceholder.append(wrapper)
 		}
-		appendAlert(translationsCache[document.documentElement.lang]['error_otp'], 'danger')
+		appendAlert(translationsCache[currentLang]['error_otp'], 'danger')
 		logBtn.setAttribute('data-bs-dismiss', 'alert');
 		logBtn.setAttribute('data-bs-target', '#my-alert');
 	}
@@ -144,7 +145,7 @@ async function handleOTP(data) {
 
 export async function renderLogin() {
 	try {
-		let file = await postAuth('https://127.0.0.1/api/token/verify/', {
+		let file = await postAuth(location.origin + '/api/token/verify/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

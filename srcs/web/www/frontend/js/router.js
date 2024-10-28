@@ -8,6 +8,7 @@ import { renderHome } from "./pages/home/home.js";
 import { renderNotFound } from "./pages/error/error.js";
 
 import { Game } from '../../Game/core/Game.js';
+import { currentLang } from "./api/fetch.js";
 
 export const game = new Game();
 
@@ -67,7 +68,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 async function isLogin() {
 	try {
-		let file = await postAuth('https://127.0.0.1/api/user/user_login/', {
+		let file = await postAuth(location.origin + '/api/user/user_login/', {
 			method: 'POST',
 			headers: {
 				'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`
@@ -78,7 +79,7 @@ async function isLogin() {
 			document.querySelector('.login_btn').hidden = true
 		}
 	} catch(error) {
-		console.log('allo')
+		console.error(error)
 	}
 }
 
@@ -109,7 +110,7 @@ function attachEventListeners() {
 			changeLanguage(button.dataset.lang);
 		}, { once: true });
 
-		if (button.dataset.lang == document.documentElement.lang) {
+		if (button.dataset.lang == currentLang) {
 			localStorage.setItem("lang", button.dataset.lang);
 			button.disabled = true;
 			button.classList.add("btn-primary");
@@ -123,7 +124,7 @@ function attachEventListeners() {
 
 export async function showFriendList() {
 	try {
-		const userList = await getRequest('https://127.0.0.1/api/user/user_list/', {method: 'GET', headers: {'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`}});
+		const userList = await getRequest(location.origin + '/api/user/user_list/', {method: 'GET', headers: {'Authorization': `Bearer ${sessionStorage.getItem('access_token')}`}});
 		const nbOfUsers = userList['length'];
 		let divUser = document.getElementById('friendList');
 		if (divUser.childElementCount === nbOfUsers)
@@ -134,7 +135,7 @@ export async function showFriendList() {
 		for (let i = 0; i < nbOfUsers; i++) {
 			let card = document.createElement('div');
 			let cardBody = document.createElement('div');
-			let friendName = await getInfo('https://127.0.0.1/api/user/user_details/', userList[i]['id']);
+			let friendName = await getInfo(location.origin + '/api/user/user_details/', userList[i]['id']);
 			if (!friendName.id) {
 				while (divUser.hasChildNodes())
 					divUser.removeChild(divUser.firstChild);
