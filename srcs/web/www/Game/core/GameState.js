@@ -105,6 +105,7 @@ export class GameState {
 				game.playerNumber = 0
 				game.ballNumber = 0;
 				game.winnerText.update(game.roundWinner.name + ' ' + translationsCache[currentLang]["win"]);
+				game.roundWinnerName = game.roundWinner.name;
 				break;
 			default:
 				console.error('Etat inconnu:', newState);

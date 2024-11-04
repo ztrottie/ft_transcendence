@@ -30,7 +30,8 @@ export class Game {
 		this.gameMode = 'normal1v1';
 		this.ballMaxSpeed = 0.1;
 		this.ballNumber = 1;
-		this.roundWinner;
+		this.roundWinner = {};
+		this.roundWinnerName = "";
 		this.reverse = false;
 		this.tournament = false;
 		this.tournament_round = 0;
@@ -461,7 +462,7 @@ export class Game {
 		this.resetRound();
 		this.playerName = [];
 		this.tournament_winner = [];
-		this.roundWinner = "";
+		this.roundWinner = {};
 		this.tournament = false;
 		this.tournament_round = 0;
 		this.roundPlay = 0;
@@ -483,9 +484,12 @@ export class Game {
 			// this.manager.setState("idle", this);
 		}
 
-		if (this.manager.state.idle && location.hash == "#/game")
+		if (this.manager.state.idle && location.hash == "#/game"){
 			this.spaceText.update(translationsCache?.[currentLang]?.["space_to_play"] || " ");
-		else
+			if (this.manager.state.winner == true && this.roundWinnerName != ""){
+				this.winnerText.update(this.roundWinnerName + ' ' + translationsCache[currentLang]["win"]);
+			}	
+		}else
 			this.spaceText.update("");
 
 		// Pause
