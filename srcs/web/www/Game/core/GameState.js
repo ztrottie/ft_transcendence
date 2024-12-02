@@ -116,7 +116,7 @@ export class GameState {
 			game.setupBall();
 		}
 	}
- 
+
 	resetState() {
 		this.state = {
 			idle: false,
@@ -153,11 +153,9 @@ export class GameState {
 				if (this.state.current == "winner" && !game.tournament){
 					game.resetGame();
 					location.href = "#";
-					console.log("test", game.tournament_round);
 				}else if(this.state.current == "winner" && game.tournament && game.tournament_round == 0){
 					game.resetGame();
 					location.href = "#";
-					console.log("test11", game.tournament_round);
 				}else{
 					this.setState(game.gameMode, game);
 					this.keysHandled['Space'] = true; // Mark the key as handled
