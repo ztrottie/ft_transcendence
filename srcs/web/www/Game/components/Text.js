@@ -15,7 +15,7 @@ export class Text {
 
 	loadFont() {
 		const loader = new FontLoader();
-		loader.load('Game/fonts/helvetiker_regular.typeface.json', (font) => {
+		loader.load('Game/fonts/Noto_Sans_JP_Semibold.typeface.json', (font) => {
 			this.font = font;
 			this.createTextMesh();
 		});
