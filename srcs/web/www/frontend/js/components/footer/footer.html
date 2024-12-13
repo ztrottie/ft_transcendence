@@ -1,0 +1,193 @@
+<button type="button" data-bs-toggle="modal" data-bs-target="#setting" class="position-absolute bottom-0 start-0">
+	<img src="/frontend/img/gear-wide-connected.svg" alt="gear wide connected" class="miniLogo">
+	<br>
+	<span data-i18n="setting"></span>
+</button>
+
+<button type="button" data-bs-toggle="modal" data-bs-target="#friend" class="friendBtn text-center position-absolute bottom-0 end-0">
+	<img src="/frontend/img/people.svg" alt="people" class="miniLogo">
+	<br>
+	<span data-i18n="user_list"></span>
+</button>
+
+<!-- setting modal -->
+<div class="modal" id="setting" tabindex="-1" data-bs-backdrop="none" aria-labelledby="setting" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" data-i18n="setting"></h5>
+				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+			</div> 
+			<div class="modal-body">
+				<div>
+					<ul class="nav nav-tabs d-flex justify-content-between">
+						<li>
+							<button type="button" class="nav-link active" data-i18n="language">language</button>
+						</li>
+						<li>
+							<button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#about" data-i18n="about">about</button>
+						</li>
+						<li>
+							<button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#contact" data-i18n="contact">contact</button>
+						</li>
+					</ul>
+				</div>
+				<br>
+				<div class="d-flex justify-content-around list-unstyled">
+					<li><button type="button" class="lang-btn btn" data-lang="en" data-i18n="language_english"></button></li>
+					<li><button type="button" class="lang-btn btn" data-lang="fr" data-i18n="language_french"></button></li>
+					<li><button type="button" class="lang-btn btn" data-lang="ja" data-i18n="language_japanese"></button></li>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<!-- about modal -->
+<div class="modal" id="about" tabindex="-1" data-bs-backdrop="none" aria-labelledby="about" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" data-i18n="setting"></h5>
+				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+			</div> 
+			<div class="modal-body">
+				<div>
+					<ul class="nav nav-tabs d-flex justify-content-between ">
+						<li>
+							<button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#setting" data-i18n="language">language</button>
+						</li>
+						<li>
+							<button type="button" class="nav-link active" data-i18n="about">about</button>
+						</li>
+						<li>
+							<button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#contact" data-i18n="contact">contact</button>
+						</li>
+					</ul>
+					<h1 data-i18n="Sainte-Viagra" class="text-center"></h1>
+				</div>
+				<br>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<!-- Contact modal -->
+<div class="modal" id="contact" tabindex="-1" data-bs-backdrop="none" aria-labelledby="contact" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" data-i18n="setting">Setting</h5>
+				<button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+			</div> 
+			<div class="modal-body">
+				<div>
+					<ul class="nav nav-tabs d-flex justify-content-between ">
+						<li class="nav-item ">
+							<button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#setting" data-i18n="language">language</button>
+						</li>
+						<li>
+							<button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#about" data-i18n="about">about</button>
+						</li>
+						<li class="nav-item ">
+							<button type="button" class="nav-link active" data-i18n="contact">contact</button>
+						</li>
+					</ul>
+				</div>
+				<br>
+				<div>
+					<span>
+						<span data-i18n="ztrottie"></span> (ztrottie)
+						<a href="https://www.linkedin.com/in/zackary-trottier-4962762b9/" target="_blank" class="nav-link float-end" translate="no">
+							<img src="/frontend/img/linkedin.svg" alt="linkedin logo">
+						</a>
+						<a href="https://github.com/ztrottie" target="_blank" class="nav-link float-end me-1" translate="no">
+							<img src="/frontend/img/github.svg" alt="github logo">
+						</a>
+					</span>
+					<br>
+					<span>
+						<span data-i18n="rapelcha"></span> (rapelcha)
+						<a href="https://www.linkedin.com/in/rapha%C3%ABl-pelchat-4a42772b9/" target="_blank" class="nav-link float-end" translate="no">
+							<img src="/frontend/img/linkedin.svg" alt="linkedin logo">
+						</a>
+						<a href="https://github.com/Croutonnet" target="_blank" class="nav-link float-end me-1" translate="no">
+							<img src="/frontend/img/github.svg" alt="github logo">
+						</a>
+					</span>
+					<br>
+					<span>
+						<span data-i18n="oboucher"></span> (oboucher)
+						<a href="https://www.linkedin.com/in/olivier-boucher-8047262b7/" target="_blank" class="nav-link float-end" translate="no">
+							<img src="/frontend/img/linkedin.svg" alt="linkedin logo">
+						</a>
+						<a href="https://github.com/axhar005" target="_blank" class="nav-link float-end me-1" translate="no">
+							<img src="/frontend/img/github.svg" alt="github logo">
+						</a>
+					</span>
+					<br>
+					<span>
+						<span data-i18n="wdelaros"></span> (wdelaros)
+						<a href="https://www.linkedin.com/in/william-delarosbil-2757582b9/" target="_blank" class="nav-link float-end" translate="no">
+							<img src="/frontend/img/linkedin.svg" alt="linkedin logo">
+						</a>
+						<a href="https://github.com/wdelaros" target="_blank" class="nav-link float-end me-1" translate="no">
+							<img src="/frontend/img/github.svg" alt="github logo">
+						</a>
+					</span>
+					<br>
+					<span>
+						<span data-i18n="zbeaumon"></span> (zbeaumon)
+						<a href="https://www.linkedin.com/in/zachary-beaumont-6382782b9/" target="_blank" class="nav-link float-end" translate="no">
+							<img src="/frontend/img/linkedin.svg" alt="linkedin logo">
+						</a>
+						<a href="https://github.com/selfix123" target="_blank" class="nav-link float-end me-1" translate="no">
+							<img src="/frontend/img/github.svg" alt="github logo">
+						</a>
+					</span>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<!-- friend list modal -->
+<div class="modal infiniteModal" id="friend" data-bs-backdrop="none" tabindex="-1" aria-labelledby="friend" aria-hidden="true">
+	<div class="friendBtn modal-dialog modal-dialog-scrollable position-absolute bottom-0 end-0 mb-0 me-0">
+		<div class="modal-content rounded-0 border">
+			<div class="modal-header d-flex justify-content-between">
+				<h6 class="modal-title" data-i18n="user_list"></h6>
+				<!-- <button type="button" data-bs-toggle="modal" data-bs-target="#addFriendModal" class="btn">
+					<img src="/frontend/img/person-fill-add.svg" alt="person fill add">
+				</button> -->
+			</div> 
+			<div class="modal-body">
+				<div id="friendList"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<!-- add friend modal
+<div class="modal infiniteModal" id="addFriendModal" data-bs-backdrop="none" tabindex="-1" aria-labelledby="addFriendModal" aria-hidden="true">
+	<div class="friendBtn modal-dialog modal-dialog-scrollable position-absolute bottom-0 end-0 mb-0 me-0">
+		<div class="modal-content rounded-0 border">
+			<div class="modal-header d-flex justify-content-between">
+				<h6 class="modal-title" data-i18n="add_friend"></h6>
+				<button type="button" data-bs-toggle="modal" data-bs-target="#friend" class="btn">
+					<img src="/frontend/img/people-fill.svg" alt="people fill">
+				</button>
+			</div> 
+			<div class="modal-body">
+				<div id="addFriend"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+		</div>
+	</div> 
+</div> -->

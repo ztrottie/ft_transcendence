@@ -1,0 +1,30 @@
+name: backend-test.yml
+
+on:
+  pull_request:
+    branches: [ "main", "Develop" ]
+  push:
+    branches: [ "backend-*", "devops-*" ]
+
+jobs:
+  backend_testing:
+    name: backend-testing
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: stopping all container
+      run: make fclean
+      
+    - name: start ft_transcendence
+      run: make test
+
+    - name: test container up
+      run: ./buildTest.sh
+
+    - name: test backend
+      run: ./backend_tests.sh
+
+    - name: clean dockers
+      run: make fclean

@@ -1,22 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ft_transcendence</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  </head>
-  <body>
-    <h1>Hello, world! testing ci/cd again raph est beau</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at est a dui luctus tincidunt. Quisque ac aliquet tortor. Vestibulum ac nibh maximus, consequat arcu nec, condimentum massa. Pellentesque non mattis arcu. Aenean non gravida sem. Phasellus id mattis libero, a convallis lectus. Donec lacus magna, facilisis quis sollicitudin eget, vehicula at elit.
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/frontend/css/style.css" defer>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" defer>
+		<title>Transcendence</title>
 
-      Sed leo arcu, vulputate tincidunt justo at, imperdiet rhoncus felis. Cras dapibus rhoncus felis, nec convallis est venenatis at. Praesent a fermentum elit. Aenean efficitur lectus vitae libero gravida mollis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean at lacus at neque pulvinar commodo nec eu augue. Pellentesque est nisl, blandit ac felis eu, tristique elementum sapien. Quisque lacus erat, gravida sed mauris at, vehicula porta urna. Suspendisse at velit auctor, gravida lorem ut, euismod nisl. Nullam condimentum egestas neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat nunc mauris, vitae auctor massa aliquam non. Quisque malesuada tempor ligula, sed gravida urna porttitor vitae.
-      
-      Vestibulum leo ante, ultrices non venenatis ut, rhoncus a leo. Quisque mattis odio non suscipit volutpat. Nulla quis augue venenatis, porttitor mauris ac, pharetra tortor. Pellentesque porta vel sem et vestibulum. Quisque euismod sapien ut lacus tempor tincidunt. Ut mattis leo a tincidunt malesuada. Ut id justo a lorem lacinia fermentum. Etiam sollicitudin felis in euismod fringilla. Nullam gravida sagittis fermentum. Nam a urna eu odio lobortis porta. Suspendisse pellentesque vitae lacus eu porttitor.
-      
-      Pellentesque ac mollis dolor, nec dictum nisi. Morbi velit est, pulvinar vitae sapien auctor, cursus gravida enim. Morbi et molestie nunc, eu auctor ante. Duis tempor, ligula sit amet consequat interdum, lorem turpis mollis mi, non maximus magna felis ut quam. Duis varius elementum sapien sit amet venenatis. Etiam mattis magna blandit lacus bibendum, eu finibus diam pulvinar. Aliquam ac dapibus erat.
-      
-      Sed at est quis felis dapibus iaculis. Pellentesque bibendum vitae lorem a convallis. Suspendisse commodo condimentum enim non commodo. Proin sem quam, gravida et nulla sit amet, tristique feugiat ligula. Quisque a varius neque. Nulla facilisi. Cras vel congue nunc. Fusce feugiat elit dignissim nulla porttitor facilisis. Curabitur varius rhoncus arcu, eleifend efficitur dolor ullamcorper eget. In sed mauris non purus tincidunt volutpat quis eget arcu. Aenean et gravida ipsum. Cras lacinia neque at magna efficitur, sit amet ornare nibh pretium. In et luctus purus, vitae blandit justo.</p>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  </body>
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://unpkg.com/three@0.149.0/build/three.module.js",
+					"three/examples/jsm/controls/OrbitControls": "https://unpkg.com/three@0.149.0/examples/jsm/controls/OrbitControls.js",
+					"three/examples/jsm/helpers/RectAreaLightHelper": "https://unpkg.com/three@0.149.0/examples/jsm/helpers/RectAreaLightHelper.js",
+					"three/examples/jsm/loaders/FontLoader": "https://unpkg.com/three@0.149.0/examples/jsm/loaders/FontLoader.js",
+					"three/examples/jsm/geometries/TextGeometry": "https://unpkg.com/three@0.149.0/examples/jsm/geometries/TextGeometry.js"
+				}
+			}
+		</script>
+		<script type="module" src="/frontend/js/router.js" defer></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+	</head>
+	<body id="body">
+		<header id="header"></header>
+		<main id="content"></main>
+		<footer id="footer"></footer>
+	</body>
 </html>

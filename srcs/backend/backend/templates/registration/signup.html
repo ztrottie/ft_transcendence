@@ -1,0 +1,16 @@
+<form id="myForm" class="position-absolute top-50 start-50 translate-middle-x">
+	<div id="liveAlertPlaceholder"></div>
+	{% csrf_token %}
+	<label for="id_name"><span data-i18n="name"></span>:</label>
+	<input type="text" autocomplete="name" name="name" a maxlength="80" required="true" id="id_name"><br>
+	<label for="id_email"><span data-i18n="email"></span>:</label>
+	<input type="email" autocomplete="email" name="email" maxlength="254" required="true" id="id_email"><br>
+	<label for="id_login42"><span data-i18n="login42"></span>:</label>
+	<input type="text" name="login42" maxlength="80" required="true" id="id_login42"><br>
+	<label for="id_password"><span data-i18n="password"></span>:</label>
+	<input type="password" name="password" autocomplete="off" required="true" id="id_password"><br>
+	<label for="id_password_2"><Span data-i18n="confirm_password"></Span>:</label>
+	<input type="password" name="password_2" autocomplete="off" required="true" id="id_password_2"><br>
+	<button type="submit" data-i18n="register" id="registerBtn"></button>
+	<p><span data-i18n="already_account"></span> <a href="#/login" data-i18n="login"></a></p>
+</form>
